@@ -5,8 +5,8 @@ import { getCategory, getStatistic } from './api.js';
 import {
     stockFilterMap,
     sortOptionMap,
-    initializeSelect2
-} from './utils.js';
+} from './constants.js';
+import { initializeSelect2 } from '../utils.js';
 import {
     filterInitialize,
     loadProducts,

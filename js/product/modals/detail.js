@@ -1,4 +1,5 @@
-import { formatCurrency, formatDateTime, badgeStockMap } from '../utils.js';
+import { formatCurrency, formatDateTime } from '../../utils.js';
+import { badgeStockMap } from '../constants.js';
 
 export const renderDetailProduct = (productDetails) => {
     return `

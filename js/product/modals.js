@@ -5,12 +5,18 @@
 import { renderDetailProduct } from './modals/detail.js';
 import { renderEditProduct } from './modals/edit.js';
 import { renderAddModal } from './modals/add.js';
+import { renderDeleteProduct } from './modals/delete.js';
+
+import { addProduct, updateProduct, deleteProduct } from './api.js';
+import { loadProducts } from './product.js';
 import {
     showNotification,
     setupFroalaEditor,
     formatDateForInput,
-    setupSelect2
-} from './utils.js';
+    setupSelect2,
+    showLoadingOverlay,
+    hideLoadingOverlay
+} from '../utils.js';
 
 
 /**
@@ -96,7 +102,6 @@ const setupImagePreview = (inputId, previewElement) => {
     }
 };
 
-
 /**
  * Modal thêm sản phẩm mới
  * @returns {Modal}
@@ -109,7 +114,7 @@ export const addProductModal = () => {
 
     // Thiết lập sự kiện cho nút lưu
     document.getElementById('saveProductBtn').addEventListener('click', function () {
-        handleAddProduct();
+        handleAddProduct(modal);
     });
 
     // Thiết lập xem trước hình ảnh
@@ -134,7 +139,6 @@ export const productDetailModal = (productDetails) => {
 
     // Xử lý nút edit
     document.getElementById('editFromViewBtn').addEventListener('click', function () {
-        const productId = productDetails.id;
         modal.hide();
         editProductModal(productDetails);
     });
@@ -163,7 +167,7 @@ export const editProductModal = (productDetails) => {
 
     // Thiết lập sự kiện cho nút cập nhật
     document.getElementById('updateProductBtn').addEventListener('click', function () {
-        handleUpdateProduct(productDetails.id);
+        handleUpdateProduct(productDetails.id, modal);
     });
 
     // Thiết lập xem trước hình ảnh
@@ -186,12 +190,39 @@ export const editProductModal = (productDetails) => {
 };
 
 /**
- * Hàm xử lý việc thêm sản phẩm mới
+ * Modal xác nhận xóa sản phẩm
+ * @param {Object} productDetails - Thông tin sản phẩm
+ * @returns {Modal}
  */
-const handleAddProduct = () => {
+export const deleteProductModal = (productDetails) => {
+    
+    const modal = createAndShowModal('deleteProductModal', renderDeleteProduct(productDetails));
+
+    // Thiết lập sự kiện cho nút xóa
+    document.getElementById('confirmDeleteBtn').addEventListener('click', function() {
+        handleDeleteProduct(productDetails.id, modal);
+    });
+
+    return modal;
+};
+
+/**
+ * Hàm xử lý việc thêm sản phẩm mới
+ * @param {Modal} modal - Modal Bootstrap instance
+ */
+const handleAddProduct = async (modal) => {
     // Lấy form
     const form = document.getElementById('addProductForm');
 
+    // Kiểm tra form
+    console.log('Form exists:', !!form);
+    console.log(form);
+
+    // Debug: Kiểm tra tất cả các trường input
+    const inputs = form.querySelectorAll('input, select, textarea');
+    inputs.forEach(input => {
+        console.log(`Input ${input.id || input.name}: value='${input.value}', name='${input.name || 'NO_NAME'}'`);
+    });
     // Kiểm tra tính hợp lệ của form
     if (!form.checkValidity()) {
         form.reportValidity();
@@ -200,6 +231,7 @@ const handleAddProduct = () => {
 
     // Tạo FormData
     const formData = new FormData(form);
+    console.log(formData);
 
     // Lấy nội dung từ Froala Editor nếu có
     if (typeof FroalaEditor !== 'undefined') {
@@ -209,56 +241,38 @@ const handleAddProduct = () => {
         }
     }
 
-    // Thực hiện gửi request thêm mới
-    addProduct(formData);
-};
+    // Hiển thị loading
+    showLoadingOverlay();
 
-/**
- * Gửi request API thêm sản phẩm mới
- * @param {FormData} formData Dữ liệu form
- */
-const addProduct = async (formData) => {
     try {
-        showLoadingOverlay();
+        // Gọi API thêm sản phẩm
+        const result = await addProduct(formData);
 
-        // Gửi request
-        const response = await fetch('/admin/productManager/create', {
-            method: 'POST',
-            body: formData
-        });
-
-        // Xử lý kết quả
-        if (response.ok) {
-            const result = await response.json();
-
+        if (result.success) {
             // Ẩn modal
-            const modal = bootstrap.Modal.getInstance(document.getElementById('addProductModal'));
             modal.hide();
-
+            
             // Hiển thị thông báo thành công
-            showNotification('Thêm sản phẩm thành công!', 'success');
-
+            showNotification(result.message, 'success');
+            
             // Tải lại danh sách sản phẩm
-            if (typeof loadProducts === 'function') {
-                loadProducts();
-            }
+            loadProducts();
         } else {
-            const errorData = await response.json();
-            showNotification(`Lỗi: ${errorData.message || 'Không thể thêm sản phẩm!'}`, 'error');
+            // Hiển thị thông báo lỗi
+            showNotification(result.message, 'error');
         }
-    } catch (error) {
-        console.error('Lỗi thêm sản phẩm:', error);
-        showNotification('Đã xảy ra lỗi khi thêm sản phẩm!', 'error');
     } finally {
+        // Ẩn loading dù thành công hay thất bại
         hideLoadingOverlay();
     }
 };
 
 /**
  * Hàm xử lý việc cập nhật sản phẩm
- * @param {number} productId ID của sản phẩm cần cập nhật
+ * @param {number} productId - ID của sản phẩm cần cập nhật
+ * @param {Modal} modal - Modal Bootstrap instance
  */
-const handleUpdateProduct = (productId) => {
+const handleUpdateProduct = async (productId, modal) => {
     // Lấy form
     const form = document.getElementById('editProductForm');
 
@@ -285,75 +299,60 @@ const handleUpdateProduct = (productId) => {
         }
     }
 
-    // Thực hiện gửi request cập nhật
-    updateProduct(formData, productId);
-};
+    // Hiển thị loading
+    showLoadingOverlay();
 
-/**
- * Gửi request API cập nhật sản phẩm
- * @param {FormData} formData Dữ liệu form
- * @param {number} productId ID sản phẩm
- */
-const updateProduct = async (formData, productId) => {
     try {
-        showLoadingOverlay();
+        // Gọi API cập nhật sản phẩm
+        const result = await updateProduct(formData, productId);
 
-        // Gửi request
-        const response = await fetch(`/admin/productManager/update/${productId}`, {
-            method: 'POST',
-            body: formData
-        });
-
-        // Xử lý kết quả
-        if (response.ok) {
-            const result = await response.json();
-
+        if (result.success) {
             // Ẩn modal
-            const modal = bootstrap.Modal.getInstance(document.getElementById('editProductModal'));
             modal.hide();
-
+            
             // Hiển thị thông báo thành công
-            showNotification('Cập nhật sản phẩm thành công!', 'success');
-
+            showNotification(result.message, 'success');
+            
             // Tải lại danh sách sản phẩm
-            if (typeof loadProducts === 'function') {
-                loadProducts();
-            }
+            loadProducts();
         } else {
-            const errorData = await response.json();
-            showNotification(`Lỗi: ${errorData.message || 'Không thể cập nhật sản phẩm!'}`, 'error');
+            // Hiển thị thông báo lỗi
+            showNotification(result.message, 'error');
         }
-    } catch (error) {
-        console.error('Lỗi cập nhật sản phẩm:', error);
-        showNotification('Đã xảy ra lỗi khi cập nhật sản phẩm!', 'error');
     } finally {
+        // Ẩn loading dù thành công hay thất bại
         hideLoadingOverlay();
     }
 };
 
 /**
- * Hiển thị overlay loading
+ * Hàm xử lý việc xóa sản phẩm
+ * @param {number} productId - ID của sản phẩm cần xóa
+ * @param {Modal} modal - Modal Bootstrap instance
  */
-const showLoadingOverlay = () => {
-    const loadingOverlay = document.createElement('div');
-    loadingOverlay.className = 'position-fixed top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center';
-    loadingOverlay.id = 'modalLoadingOverlay';
-    loadingOverlay.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
-    loadingOverlay.style.zIndex = '9999';
-    loadingOverlay.innerHTML = `
-        <div class="spinner-border text-light" role="status">
-            <span class="visually-hidden">Đang xử lý...</span>
-        </div>
-    `;
-    document.body.appendChild(loadingOverlay);
-};
+const handleDeleteProduct = async (productId, modal) => {
+    // Hiển thị loading
+    showLoadingOverlay();
 
-/**
- * Ẩn overlay loading
- */
-const hideLoadingOverlay = () => {
-    const loadingOverlay = document.getElementById('modalLoadingOverlay');
-    if (loadingOverlay) {
-        document.body.removeChild(loadingOverlay);
+    try {
+        // Gọi API xóa sản phẩm
+        const result = await deleteProduct(productId);
+
+        if (result.success) {
+            // Ẩn modal
+            modal.hide();
+            
+            // Hiển thị thông báo thành công
+            showNotification(result.message, 'success');
+            
+            // Tải lại danh sách sản phẩm
+            loadProducts();
+        } else {
+            // Hiển thị thông báo lỗi
+            showNotification(result.message, 'error');
+        }
+    } finally {
+        // Ẩn loading dù thành công hay thất bại
+        hideLoadingOverlay();
     }
 };

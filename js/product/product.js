@@ -3,11 +3,12 @@
 // ==========================================================
 
 import {getProducts} from './api.js';
-import {showLoading, hideLoading, formatCurrency} from './utils.js';
+import {showLoading, hideLoading, formatCurrency} from '../utils.js';
 import {
     productDetailModal,
     addProductModal,
-    editProductModal
+    editProductModal,
+    deleteProductModal
 } from './modals.js';
 
 // Filter state
@@ -165,7 +166,7 @@ export const addButtonEventListeners = () => {
     document.querySelectorAll('[data-action="delete"]').forEach(button => {
         button.addEventListener('click', function () {
             const productId = this.getAttribute('data-product-id');
-            console.log('Delete product:', productId);
+            deleteProduct(productId);
         });
     });
 };
@@ -185,6 +186,14 @@ export const editProduct = (productId) => {
         editProductModal(productDetails);
     }
 };
+
+export const deleteProduct = (productId) => {
+    console.log('Delete product:', productId);
+    const productDetails = filterInitialize.data.find(product => product.id == productId);
+    if(productDetails) {
+        deleteProductModal(productDetails);
+    }
+}
 
 export const loadProducts = async () => {
     try {

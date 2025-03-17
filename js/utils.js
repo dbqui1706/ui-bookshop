@@ -1,27 +1,3 @@
-export const stockFilterMap = {
-    DEFAULT: "Tất cả",
-    AVAILABLE: "Còn hàng",
-    ALMOST_OUT_OF_STOCK: "Sắp hết",
-    OUT_OF_STOCK: "Hết hàng"
-};
-
-export const badgeStockMap = {
-    'AVAILABLE': `<span class="badge bg-success">Còn hàng</span>`,
-    'ALMOST_OUT_OF_STOCK': `<span class="badge bg-warning text-dark">Sắp hết</span>`,
-    'OUT_OF_STOCK': `<span class="badge bg-danger">Hết hàng</span>`
-};
-
-export const sortOptionMap = {
-    DEFAULT: "Mặc định",
-    PRICE_ASC: "Giá tăng dần",
-    PRICE_DESC: "Giá giảm dần",
-    NAME_ASC: "Tên A-Z",
-    NAME_DESC: "Tên Z-A",
-    POPULARITY_ASC: "Phổ biến nhất",
-    CREATED_AT_ASC: "Cũ nhất",
-    CREATED_AT_DESC: "Mới nhất"
-};
-
 export const formatCurrency = (price) => {
     if (typeof price !== 'number' || isNaN(price)) {
         console.error('Giá trị không hợp lệ:', price);
@@ -177,5 +153,33 @@ export const setupSelect2 = (selectId, parentSelector) => {
             dropdownParent: $(parentSelector),
             width: '100%'
         });
+    }
+};
+
+
+/**
+ * Hiển thị overlay loading
+ */
+export const showLoadingOverlay = () => {
+    const loadingOverlay = document.createElement('div');
+    loadingOverlay.className = 'position-fixed top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center';
+    loadingOverlay.id = 'modalLoadingOverlay';
+    loadingOverlay.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
+    loadingOverlay.style.zIndex = '9999';
+    loadingOverlay.innerHTML = `
+        <div class="spinner-border text-light" role="status">
+            <span class="visually-hidden">Đang xử lý...</span>
+        </div>
+    `;
+    document.body.appendChild(loadingOverlay);
+};
+
+/**
+ * Ẩn overlay loading
+ */
+export const hideLoadingOverlay = () => {
+    const loadingOverlay = document.getElementById('modalLoadingOverlay');
+    if (loadingOverlay) {
+        document.body.removeChild(loadingOverlay);
     }
 };
