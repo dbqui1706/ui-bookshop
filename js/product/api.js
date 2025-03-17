@@ -91,3 +91,17 @@ export const getProducts = async (filter) => {
        return { products: [], currentPage: 1, totalPages: 1, totalProducts: 0 };
    }
 };
+
+export const createProduct = async (product) => {
+   try {
+       const response = await fetch(API_URLS.PRODUCTS, {
+           method: "POST",
+           headers: headers,
+           body: JSON.stringify(product),
+       });
+       return response.status === 200;
+   } catch (error) {
+       console.log(error);
+       return false;
+   }
+}

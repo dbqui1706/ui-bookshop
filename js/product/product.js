@@ -160,6 +160,14 @@ export const addButtonEventListeners = () => {
             editProduct(productId);
         });
     });
+
+    // Nút xóa sản phẩm
+    document.querySelectorAll('[data-action="delete"]').forEach(button => {
+        button.addEventListener('click', function () {
+            const productId = this.getAttribute('data-product-id');
+            console.log('Delete product:', productId);
+        });
+    });
 };
 
 export const viewProduct = (productId) => {
