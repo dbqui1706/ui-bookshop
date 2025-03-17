@@ -153,7 +153,13 @@ export const addButtonEventListeners = () => {
         });
     }
 
-    // Các nút khác có thể thêm sau
+     // Nút chỉnh sửa sản phẩm
+     document.querySelectorAll('[data-action="edit"]').forEach(button => {
+        button.addEventListener('click', function () {
+            const productId = this.getAttribute('data-product-id');
+            editProduct(productId);
+        });
+    });
 };
 
 export const viewProduct = (productId) => {
@@ -164,6 +170,13 @@ export const viewProduct = (productId) => {
     }
 };
 
+export const editProduct = (productId) => {
+    console.log('Edit product:', productId);
+    const productDetails = filterInitialize.data.find(product => product.id == productId);
+    if (productDetails) {
+        editProductModal(productDetails);
+    }
+};
 
 export const loadProducts = async () => {
     try {

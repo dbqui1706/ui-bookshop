@@ -2,296 +2,30 @@
 // modals.js - Module quản lý các modal
 // ==========================================================
 
-import { formatCurrency, formatDateTime, badgeStockMap } from './utils.js';
-
-export const addProductModal = () => {
-    // Kiểm tra nếu modal đã tồn tại, xóa đi để tạo mới
-    const existingModal = document.getElementById('addProductModal');
-    if (existingModal) {
-        existingModal.remove();
-    }
-
-    // Render HTML modal
-    const modalHTML = `
-     <div class="modal fade" id="addProductModal" tabindex="-1" aria-labelledby="addProductModalLabel"
-             aria-hidden="true">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <div class="modal-header bg-primary text-white">
-                        <h5 class="modal-title" id="addProductModalLabel">
-                            Thêm sản phẩm mới
-                        </h5>
-                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
-                                aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <form id="addProductForm" method="POST"
-                              action="/admin/productManager/create"
-                              enctype="multipart/form-data">
-                            <!-- Thông báo thành công/lỗi -->
-                            <div id="successMessage" class="alert alert-success mb-3" role="alert"
-                                 style="display: none"></div>
-                            <div id="errorMessage" class="alert alert-danger mb-3" role="alert"
-                                 style="display: none"></div>
-                            <div class="row mb-3">
-                                <div class="col-md-6">
-                                    <label for="product-name" class="form-label">Tên sách <span
-                                            class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" id="product-name" name="name" required/>
-                                    <div class="invalid-feedback"></div>
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="product-category" class="form-label">Thể loại <span class="text-danger">*</span></label>
-                                    <select class="form-select" id="product-category" name="category" required>
-                                        <option value="" selected disabled>
-                                            Chọn một thể loại...
-                                        </option>
-                                        <!-- Danh sách thể loại sẽ được tải động -->
-                                    </select>
-                                    <div class="invalid-feedback"></div>
-                                </div>
-                            </div>
-                            <div class="row mb-3">
-                                <div class="col-md-6">
-                                    <label for="product-price" class="form-label">Giá gốc <span
-                                            class="text-danger">*</span></label>
-                                    <div class="input-group">
-                                        <input type="number" class="form-control" id="product-price" name="price"
-                                               min="0" step="500" required/>
-                                        <span class="input-group-text">₫</span>
-                                        <div class="invalid-feedback"></div>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="product-discount" class="form-label">Khuyến mãi <span
-                                            class="text-danger">*</span></label>
-                                    <div class="input-group">
-                                        <input type="number" class="form-control" id="product-discount" name="discount"
-                                               min="0" max="100" value="0" required/>
-                                        <span class="input-group-text">%</span>
-                                        <div class="invalid-feedback"></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row mb-3">
-                                <div class="col-md-6">
-                                    <label for="product-quantity" class="form-label">Tồn kho <span
-                                            class="text-danger">*</span></label>
-                                    <input type="number" class="form-control" id="product-quantity" name="quantity"
-                                           min="0" required/>
-                                    <div class="invalid-feedback"></div>
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="product-totalBuy" class="form-label">Lượt mua <span class="text-danger">*</span></label>
-                                    <input type="number" class="form-control" id="product-totalBuy" name="totalBuy"
-                                           min="0" value="0" required/>
-                                    <div class="invalid-feedback"></div>
-                                </div>
-                            </div>
-                            <div class="row mb-3">
-                                <div class="col-md-6">
-                                    <label for="product-author" class="form-label">Tác giả <span
-                                            class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" id="product-author" name="author" required/>
-                                    <div class="invalid-feedback"></div>
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="product-pages" class="form-label">Số trang <span
-                                            class="text-danger">*</span></label>
-                                    <input type="number" class="form-control" id="product-pages" name="pages" min="1"
-                                           required/>
-                                    <div class="invalid-feedback"></div>
-                                </div>
-                            </div>
-                            <div class="row mb-3">
-                                <div class="col-md-6">
-                                    <label for="product-publisher" class="form-label">Nhà xuất bản <span
-                                            class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" id="product-publisher" name="publisher"
-                                           required/>
-                                    <div class="invalid-feedback"></div>
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="product-yearPublishing" class="form-label">Năm xuất bản <span
-                                            class="text-danger">*</span></label>
-                                    <input type="number" class="form-control" id="product-yearPublishing"
-                                           name="yearPublishing" min="1901" max="2099" required/>
-                                    <div class="invalid-feedback"></div>
-                                </div>
-                            </div>
-                            <div class="row mb-3">
-                                <div class="col-md-6">
-                                    <label for="product-startsAt" class="form-label">Ngày bắt đầu khuyến mãi</label>
-                                    <input type="datetime-local" class="form-control" id="product-startsAt"
-                                           name="startsAt"/>
-                                    <div class="invalid-feedback"></div>
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="product-endsAt" class="form-label">Ngày kết thúc khuyến mãi</label>
-                                    <input type="datetime-local" class="form-control" id="product-endsAt"
-                                           name="endsAt"/>
-                                    <div class="invalid-feedback"></div>
-                                </div>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Mô tả sách</label>
-                                <div id="editor-container">
-                                    <div id="froala-editor"></div>
-                                </div>
-                                <div class="invalid-feedback"></div>
-                            </div>
-                            <div class="mb-3">
-                                <label for="product-imageName" class="form-label">Hình sản phẩm</label>
-                                <input type="file" class="form-control" id="product-imageName" name="image"
-                                       accept="image/*"/>
-                                <div class="mt-2" id="imagePreview" style="display: none">
-                                    <img src="" alt="Preview" class="img-thumbnail" style="max-height: 200px"/>
-                                </div>
-                            </div>
-                            <div class="row mb-3">
-                                <div class="col-md-6">
-                                    <label class="form-label d-block">Cho phép giao dịch?
-                                        <span class="text-danger">*</span></label>
-                                    <div class="form-check d-inline-block me-4">
-                                        <input class="form-check-input" type="radio" name="shop" id="product-shop-yes"
-                                               value="1" checked required/>
-                                        <label class="form-check-label" for="product-shop-yes">Có</label>
-                                    </div>
-                                    <div class="form-check d-inline-block">
-                                        <input class="form-check-input" type="radio" name="shop" id="product-shop-no"
-                                               value="0" required/>
-                                        <label class="form-check-label" for="product-shop-no">Không</label>
-                                    </div>
-                                    <div class="invalid-feedback"></div>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                            Hủy
-                        </button>
-                        <button type="button" class="btn btn-warning" id="resetFormBtn">
-                            <i class="bi bi-arrow-counterclockwise me-1"></i> Mặc định
-                        </button>
-                        <button type="button" class="btn btn-primary" id="saveProductBtn">
-                            <i class="bi bi-save me-1"></i> Thêm sản phẩm
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    `;
-
-    // Tạo một phần tử div và đặt HTML modal vào đó
-    // Tạo một phần tử div và đặt HTML modal vào đó
-    const modalElement = document.createElement('div');
-    modalElement.innerHTML = modalHTML;
-
-    // Thêm modal vào body
-    document.body.appendChild(modalElement.firstElementChild);
-
-    // Khởi tạo và hiển thị modal
-    const modal = new bootstrap.Modal(document.getElementById('addProductModal'));
-    modal.show();
-    return modal;
-}
+import { renderDetailProduct } from './modals/detail.js';
+import { renderEditProduct } from './modals/edit.js';
+import { renderAddModal } from './modals/add.js';
+import {
+    showNotification,
+    setupFroalaEditor,
+    formatDateForInput,
+    setupSelect2
+} from './utils.js';
 
 
 /**
- * Modal hiển thị chi tiết sản phẩm
- * @param productDetails
- * @returns {Modal}
+ * Hàm tiện ích để tạo và hiển thị modal
+ * @param {string} modalId - ID của modal
+ * @param {string} modalHTML - Nội dung HTML của modal
+ * @returns {Modal} - Đối tượng modal Bootstrap
  */
-export const productDetailModal = (productDetails) => {
+const createAndShowModal = (modalId, modalHTML) => {
     // Kiểm tra nếu modal đã tồn tại, xóa đi để tạo mới
-    const existingModal = document.getElementById('viewProductModal');
+    const existingModal = document.getElementById(modalId);
     if (existingModal) {
         existingModal.remove();
     }
 
-    // Render HTML modal
-    const modalHTML = `
-     <div class="modal fade" id="viewProductModal" tabindex="-1" aria-labelledby="viewProductModalLabel" aria-hidden="true">
-         <div class="modal-dialog modal-lg">
-             <div class="modal-content">
-                 <div class="modal-header bg-primary text-white">
-                     <h5 class="modal-title" id="viewProductModalLabel">
-                         Chi tiết sản phẩm
-                     </h5>
-                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-                 </div>
-                 <div class="modal-body">
-                     <div class="row">
-                         <div class="col-md-4 text-center">
-                             <img id="viewProductImage" src="${productDetails.imageName || 'https://via.placeholder.com/300x300'}" 
-                                 alt="${productDetails.name}" class="img-fluid rounded mb-3" style="max-height: 200px" />
-                             <div class="mb-3 p-2">
-                                 <span class="badge bg-primary" id="viewProductCategory">${productDetails.categoryName}</span>
-                             </div>
-                             <div class="d-flex align-items-center justify-content-center gap-3">
-                                 <h5 class="mb-0" id="viewProductPrice">Giá: ${formatCurrency(productDetails.discountedPrice)}</h5>
-                                 ${productDetails.discountedPrice !== productDetails.price
-        ? `<small class="text-muted text-decoration-line-through badge bg-primary text-white" id="viewProductOriginalPrice">${formatCurrency(productDetails.price)}</small>`
-        : ""
-    }
-                             </div>
-                         </div>
-                         <div class="col-md-8">
-                             <h4 id="viewProductName" class="mb-3">${productDetails.name}</h4>
-                             <div class="row mb-2">
-                                 <div class="col-md-6">
-                                     <p class="mb-1"><strong>ID:</strong> <span id="viewProductId">${productDetails.id}</span></p>
-                                     <p class="mb-1"><strong>Tác giả:</strong> <span id="viewProductAuthor">${productDetails.author}</span></p>
-                                     <p class="mb-1"><strong>Nhà xuất bản:</strong> <span id="viewProductPublisher">${productDetails.publisher}</span></p>
-                                     <p class="mb-1"><strong>Năm xuất bản:</strong> <span id="viewProductYear">${productDetails.yearPublishing}</span></p>
-                                     <p class="mb-1"><strong>Thể loại:</strong> <span id="viewCategory">${productDetails.categoryName}</span></p>
-                                 </div>
-                                 <div class="col-md-6">
-                                     <p class="mb-1"><strong>Số trang:</strong> <span id="viewProductPages">${productDetails.pages || "N/A"}</span></p>
-                                     <p class="mb-1"><strong>Tồn kho:</strong> <span id="viewProductQuantity">${productDetails.quantity}</span></p>
-                                     <p class="mb-1"><strong>Lượt mua:</strong> <span id="viewProductTotalBuy">${productDetails.totalBuy}</span></p>
-                                     <p class="mb-1"><strong>Trạng thái:</strong> <span id="viewProductStatus">${badgeStockMap[productDetails.stockStatus] || "Không xác định"}</span></p>
-                                 </div>
-                             </div>
-                             <hr />
-                             <div class="mb-3">
-                                 <h5>Mô tả sản phẩm</h5>
-                                 <div id="viewProductDescription" class="overflow-auto" style="max-height: 200px">${productDetails.description}</div>
-                             </div>
-                             <div class="row mb-2">
-                                 <div class="col-md-6">
-                                     <p class="mb-1"><strong>Khuyến mãi:</strong> <span id="viewProductDiscount">${productDetails.discount}%</span></p>
-                                     <p class="mb-1"><strong>Cho phép giao dịch:</strong> 
-                                         <span id="viewProductShop">${productDetails.shop === 0 ?
-        `<span class="badge bg-success">Có</span>` :
-        `<span class="badge bg-danger">Không</span>`
-    }
-                                         </span>
-                                     </p>
-                                 </div>
-                                 <div class="col-md-6">
-                                     <p class="mb-1"><strong>Bắt đầu KM:</strong> 
-                                         <span id="viewProductStartsAt">${productDetails.startsAt ? formatDateTime(productDetails.startsAt) : "Không có"}</span>
-                                     </p>
-                                     <p class="mb-1"><strong>Kết thúc KM:</strong> 
-                                         <span id="viewProductEndsAt">${productDetails.endsAt ? formatDateTime(productDetails.endsAt) : "Không có"}</span>
-                                     </p>
-                                 </div>
-                             </div>
-                         </div>
-                     </div>
-                 </div>
-                 <div class="modal-footer">
-                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
-                     <button type="button" class="btn btn-primary" id="editFromViewBtn">
-                         <i class="bi bi-pencil me-1"></i> Chỉnh sửa
-                     </button>
-                 </div>
-             </div>
-         </div>
-     </div>
- `;
     // Tạo một phần tử div và đặt HTML modal vào đó
     const modalElement = document.createElement('div');
     modalElement.innerHTML = modalHTML;
@@ -300,20 +34,326 @@ export const productDetailModal = (productDetails) => {
     document.body.appendChild(modalElement.firstElementChild);
 
     // Khởi tạo và hiển thị modal
-    const modal = new bootstrap.Modal(document.getElementById('viewProductModal'));
+    const modal = new bootstrap.Modal(document.getElementById(modalId));
     modal.show();
-
-    // Xử lý nút edit
-    // document.querySelector('#viewProductModal [data-action="edit"]').addEventListener('click', function () {
-    //     const productId = this.getAttribute('data-product-id');
-    //     modal.hide();
-    //     console.log('Edit product:', productId);
-    //     // Thêm code để chỉnh sửa sản phẩm ở đây nếu cần
-    // });
 
     return modal;
 };
 
-export const editProductModal = (productDetails) => {
 
-}
+/**
+ * Hàm điền dữ liệu danh mục vào select box
+ * @param {string} selectId - ID của select box
+ * @param {number|string} selectedValue - Giá trị được chọn (nếu có)
+ */
+const populateCategories = (selectId, selectedValue = null) => {
+    const categorySelect = document.getElementById(selectId);
+    const categoryFilter = document.getElementById('categoryFilter');
+
+    if (categoryFilter && categorySelect) {
+        Array.from(categoryFilter.options).forEach(option => {
+            if (option.value) {
+                const newOption = document.createElement('option');
+                newOption.value = option.value;
+                newOption.textContent = option.textContent;
+
+                if (selectedValue && option.value == selectedValue) {
+                    newOption.selected = true;
+                }
+
+                categorySelect.appendChild(newOption);
+            }
+        });
+    }
+};
+
+/**
+ * Hàm thiết lập xem trước hình ảnh
+ * @param {string} inputId - ID của input file
+ * @param {string|Element} previewElement - ID hoặc phần tử xem trước
+ */
+const setupImagePreview = (inputId, previewElement) => {
+    const fileInput = document.getElementById(inputId);
+    const preview = typeof previewElement === 'string'
+        ? document.getElementById(previewElement)
+        : previewElement;
+
+    if (fileInput) {
+        fileInput.addEventListener('change', function (e) {
+            if (e.target.files.length > 0) {
+                const file = e.target.files[0];
+                const url = URL.createObjectURL(file);
+
+                if (preview.tagName === 'IMG') {
+                    preview.src = url;
+                    preview.parentElement.style.display = 'block';
+                } else if (preview.querySelector('img')) {
+                    preview.querySelector('img').src = url;
+                    preview.style.display = 'block';
+                }
+            }
+        });
+    }
+};
+
+
+/**
+ * Modal thêm sản phẩm mới
+ * @returns {Modal}
+ */
+export const addProductModal = () => {
+    const modal = createAndShowModal('addProductModal', renderAddModal());
+
+    // Điền dữ liệu danh mục
+    populateCategories('product-category');
+
+    // Thiết lập sự kiện cho nút lưu
+    document.getElementById('saveProductBtn').addEventListener('click', function () {
+        handleAddProduct();
+    });
+
+    // Thiết lập xem trước hình ảnh
+    setupImagePreview('product-imageName', 'imagePreview');
+
+    // Thiết lập Froala Editor
+    setupFroalaEditor('froala-editor');
+
+    // Thiết lập Select2
+    setupSelect2('product-category', '#addProductModal .modal-body');
+
+    return modal;
+};
+
+/**
+ * Modal hiển thị chi tiết sản phẩm
+ * @param {Object} productDetails - Thông tin chi tiết sản phẩm
+ * @returns {Modal}
+ */
+export const productDetailModal = (productDetails) => {
+    const modal = createAndShowModal('viewProductModal', renderDetailProduct(productDetails));
+
+    // Xử lý nút edit
+    document.getElementById('editFromViewBtn').addEventListener('click', function () {
+        const productId = productDetails.id;
+        modal.hide();
+        editProductModal(productDetails);
+    });
+
+    return modal;
+};
+
+/**
+ * Modal chỉnh sửa sản phẩm
+ * @param {Object} productDetails - Thông tin chi tiết sản phẩm
+ * @returns {Modal}
+ */
+export const editProductModal = (productDetails) => {
+    const modal = createAndShowModal('editProductModal', renderEditProduct(productDetails));
+
+    // Điền dữ liệu danh mục
+    populateCategories('editProductCategory', productDetails.categoryId);
+
+    // Đặt giá trị cho các trường ngày tháng
+    if (productDetails.startsAt) {
+        document.getElementById('editProductStartsAt').value = formatDateForInput(productDetails.startsAt);
+    }
+    if (productDetails.endsAt) {
+        document.getElementById('editProductEndsAt').value = formatDateForInput(productDetails.endsAt);
+    }
+
+    // Thiết lập sự kiện cho nút cập nhật
+    document.getElementById('updateProductBtn').addEventListener('click', function () {
+        handleUpdateProduct(productDetails.id);
+    });
+
+    // Thiết lập xem trước hình ảnh
+    setupImagePreview('editProductImage', document.getElementById('editImagePreview').querySelector('img'));
+
+    // Thiết lập Select2
+    setupSelect2('editProductCategory', '#editProductModal .modal-body');
+
+    // Thiết lập Froala Editor
+    const editor = setupFroalaEditor('edit-froala-editor', function () {
+        document.getElementById('editProductDescription').value = this.html.get();
+    });
+
+    // Đặt nội dung cho editor nếu có
+    if (editor && productDetails.description) {
+        editor.html.set(productDetails.description);
+    }
+
+    return modal;
+};
+
+/**
+ * Hàm xử lý việc thêm sản phẩm mới
+ */
+const handleAddProduct = () => {
+    // Lấy form
+    const form = document.getElementById('addProductForm');
+
+    // Kiểm tra tính hợp lệ của form
+    if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+    }
+
+    // Tạo FormData
+    const formData = new FormData(form);
+
+    // Lấy nội dung từ Froala Editor nếu có
+    if (typeof FroalaEditor !== 'undefined') {
+        const editor = FroalaEditor.INSTANCES.find(i => i.el.id === 'froala-editor');
+        if (editor) {
+            formData.append('description', editor.html.get());
+        }
+    }
+
+    // Thực hiện gửi request thêm mới
+    addProduct(formData);
+};
+
+/**
+ * Gửi request API thêm sản phẩm mới
+ * @param {FormData} formData Dữ liệu form
+ */
+const addProduct = async (formData) => {
+    try {
+        showLoadingOverlay();
+
+        // Gửi request
+        const response = await fetch('/admin/productManager/create', {
+            method: 'POST',
+            body: formData
+        });
+
+        // Xử lý kết quả
+        if (response.ok) {
+            const result = await response.json();
+
+            // Ẩn modal
+            const modal = bootstrap.Modal.getInstance(document.getElementById('addProductModal'));
+            modal.hide();
+
+            // Hiển thị thông báo thành công
+            showNotification('Thêm sản phẩm thành công!', 'success');
+
+            // Tải lại danh sách sản phẩm
+            if (typeof loadProducts === 'function') {
+                loadProducts();
+            }
+        } else {
+            const errorData = await response.json();
+            showNotification(`Lỗi: ${errorData.message || 'Không thể thêm sản phẩm!'}`, 'error');
+        }
+    } catch (error) {
+        console.error('Lỗi thêm sản phẩm:', error);
+        showNotification('Đã xảy ra lỗi khi thêm sản phẩm!', 'error');
+    } finally {
+        hideLoadingOverlay();
+    }
+};
+
+/**
+ * Hàm xử lý việc cập nhật sản phẩm
+ * @param {number} productId ID của sản phẩm cần cập nhật
+ */
+const handleUpdateProduct = (productId) => {
+    // Lấy form
+    const form = document.getElementById('editProductForm');
+
+    // Kiểm tra tính hợp lệ của form
+    if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+    }
+
+    // Tạo FormData
+    const formData = new FormData(form);
+
+    // Nếu không chọn file hình ảnh mới, xoá trường image để không gửi lên server
+    const imageInput = document.getElementById('editProductImage');
+    if (imageInput.files.length === 0) {
+        formData.delete('image');
+    }
+
+    // Lấy nội dung từ Froala Editor nếu có
+    if (typeof FroalaEditor !== 'undefined') {
+        const editor = FroalaEditor.INSTANCES.find(i => i.el.id === 'edit-froala-editor');
+        if (editor) {
+            formData.set('description', editor.html.get());
+        }
+    }
+
+    // Thực hiện gửi request cập nhật
+    updateProduct(formData, productId);
+};
+
+/**
+ * Gửi request API cập nhật sản phẩm
+ * @param {FormData} formData Dữ liệu form
+ * @param {number} productId ID sản phẩm
+ */
+const updateProduct = async (formData, productId) => {
+    try {
+        showLoadingOverlay();
+
+        // Gửi request
+        const response = await fetch(`/admin/productManager/update/${productId}`, {
+            method: 'POST',
+            body: formData
+        });
+
+        // Xử lý kết quả
+        if (response.ok) {
+            const result = await response.json();
+
+            // Ẩn modal
+            const modal = bootstrap.Modal.getInstance(document.getElementById('editProductModal'));
+            modal.hide();
+
+            // Hiển thị thông báo thành công
+            showNotification('Cập nhật sản phẩm thành công!', 'success');
+
+            // Tải lại danh sách sản phẩm
+            if (typeof loadProducts === 'function') {
+                loadProducts();
+            }
+        } else {
+            const errorData = await response.json();
+            showNotification(`Lỗi: ${errorData.message || 'Không thể cập nhật sản phẩm!'}`, 'error');
+        }
+    } catch (error) {
+        console.error('Lỗi cập nhật sản phẩm:', error);
+        showNotification('Đã xảy ra lỗi khi cập nhật sản phẩm!', 'error');
+    } finally {
+        hideLoadingOverlay();
+    }
+};
+
+/**
+ * Hiển thị overlay loading
+ */
+const showLoadingOverlay = () => {
+    const loadingOverlay = document.createElement('div');
+    loadingOverlay.className = 'position-fixed top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center';
+    loadingOverlay.id = 'modalLoadingOverlay';
+    loadingOverlay.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
+    loadingOverlay.style.zIndex = '9999';
+    loadingOverlay.innerHTML = `
+        <div class="spinner-border text-light" role="status">
+            <span class="visually-hidden">Đang xử lý...</span>
+        </div>
+    `;
+    document.body.appendChild(loadingOverlay);
+};
+
+/**
+ * Ẩn overlay loading
+ */
+const hideLoadingOverlay = () => {
+    const loadingOverlay = document.getElementById('modalLoadingOverlay');
+    if (loadingOverlay) {
+        document.body.removeChild(loadingOverlay);
+    }
+};
