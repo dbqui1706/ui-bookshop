@@ -7,7 +7,7 @@ export const API_URLS = {
     STATISTIC: "http://localhost:8080/admin2/api/product/statistic",
     PRODUCTS: "http://localhost:8080/admin2/api/product/table",
     CATEGORIES: "http://localhost:8080/admin2/api/product/category",
-    CREATE_PRODUCT: "http://localhost:8080/admin2/api/product/create",
+    CREATE_PRODUCT: "http://localhost:8080/admin2/api/product/add",
     UPDATE_PRODUCT: "http://localhost:8080/admin2/api/product/update",
     DELETE_PRODUCT: "http://localhost:8080/admin2/api/product/delete",
 };
@@ -102,7 +102,6 @@ export const getProducts = async (filter) => {
  */
 export const addProduct = async (formData) => {
     try {
-        console.log('formData', formData);
         const response = await fetch(API_URLS.CREATE_PRODUCT, {
             method: 'POST',
             body: formData,

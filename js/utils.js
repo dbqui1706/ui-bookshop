@@ -183,3 +183,20 @@ export const hideLoadingOverlay = () => {
         document.body.removeChild(loadingOverlay);
     }
 };
+
+/**
+ * Hàm hiển thị  SweetAlert theo status
+ * @param {boolean} status - Trạng thái thành công
+ * @param {string} message - Nội dung thông báo
+ */
+export const showAlert = (status, message) => {
+    if (typeof Swal !== 'undefined') {
+        Swal.fire({
+            icon: status ? 'success' : 'error',
+            title: status ? 'Thành công' : 'Lỗi',
+            text: message
+        });
+    } else {
+        alert(message);
+    }
+};

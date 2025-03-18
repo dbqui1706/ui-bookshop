@@ -104,8 +104,7 @@ export const renderEditProduct = (productDetails) => {
                                 <label for="editProductDescription" class="form-label">Mô tả sách</label>
                                 <div id="edit-editor-container">
                                     <div id="edit-froala-editor"></div>
-                                    <textarea class="form-control" id="editProductDescription" name="description"
-                                        rows="5" style="display: none">${productDetails.description || ''}</textarea>
+                                    <input type="hidden" id="editProductDescription" name="description" />
                                 </div>
                             </div>
                             <div class="mb-3">

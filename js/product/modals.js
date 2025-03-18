@@ -15,7 +15,8 @@ import {
     formatDateForInput,
     setupSelect2,
     showLoadingOverlay,
-    hideLoadingOverlay
+    hideLoadingOverlay,
+    showAlert
 } from '../utils.js';
 
 
@@ -112,19 +113,19 @@ export const addProductModal = () => {
     // Điền dữ liệu danh mục
     populateCategories('product-category');
 
+     // Thiết lập xem trước hình ảnh
+     setupImagePreview('product-imageName', 'imagePreview');
+
+     // Thiết lập Froala Editor
+     setupFroalaEditor('froala-editor');
+ 
+     // Thiết lập Select2
+     setupSelect2('product-category', '#addProductModal .modal-body');
+
     // Thiết lập sự kiện cho nút lưu
-    document.getElementById('saveProductBtn').addEventListener('click', function () {
+    document.getElementById('saveProductBtn').addEventListener('click', function (e) {
         handleAddProduct(modal);
     });
-
-    // Thiết lập xem trước hình ảnh
-    setupImagePreview('product-imageName', 'imagePreview');
-
-    // Thiết lập Froala Editor
-    setupFroalaEditor('froala-editor');
-
-    // Thiết lập Select2
-    setupSelect2('product-category', '#addProductModal .modal-body');
 
     return modal;
 };
@@ -213,56 +214,73 @@ export const deleteProductModal = (productDetails) => {
 const handleAddProduct = async (modal) => {
     // Lấy form
     const form = document.getElementById('addProductForm');
-
-    // Kiểm tra form
-    console.log('Form exists:', !!form);
-    console.log(form);
-
-    // Debug: Kiểm tra tất cả các trường input
-    const inputs = form.querySelectorAll('input, select, textarea');
-    inputs.forEach(input => {
-        console.log(`Input ${input.id || input.name}: value='${input.value}', name='${input.name || 'NO_NAME'}'`);
-    });
-    // Kiểm tra tính hợp lệ của form
+    
+    // Kiểm tra validation
     if (!form.checkValidity()) {
-        form.reportValidity();
+        // Hiển thị các thông báo lỗi validation
+        form.classList.add('was-validated');
         return;
     }
-
-    // Tạo FormData
-    const formData = new FormData(form);
-    console.log(formData);
-
-    // Lấy nội dung từ Froala Editor nếu có
-    if (typeof FroalaEditor !== 'undefined') {
-        const editor = FroalaEditor.INSTANCES.find(i => i.el.id === 'froala-editor');
-        if (editor) {
-            formData.append('description', editor.html.get());
-        }
-    }
-
-    // Hiển thị loading
-    showLoadingOverlay();
-
+    
     try {
-        // Gọi API thêm sản phẩm
-        const result = await addProduct(formData);
+        // Hiển thị overlay loading
+        showLoadingOverlay();
+        
+        // Lấy nội dung từ Froala Editor và cập nhật vào hidden input
+        const editorContent = FroalaEditor.INSTANCES[0].html.get();
+        document.getElementById('product-description').value = editorContent;
+        
+        // Tạo FormData từ form
+        const formData = new FormData(form);
 
+        // Gọi API để thêm sản phẩm
+        const result = await addProduct(formData);
+        
         if (result.success) {
-            // Ẩn modal
-            modal.hide();
-            
             // Hiển thị thông báo thành công
-            showNotification(result.message, 'success');
+            const successMessage = document.getElementById('successMessage');
+            successMessage.textContent = result.message;
+            successMessage.style.display = 'block';
             
-            // Tải lại danh sách sản phẩm
-            loadProducts();
+            // Ẩn thông báo lỗi nếu có
+            document.getElementById('errorMessage').style.display = 'none';
+            
+            showAlert('success', 'Thêm sản phẩm thành công!');
+
+            // Reset form sau 1 giây
+            setTimeout(() => {
+                form.reset();
+                form.classList.remove('was-validated');
+                document.getElementById('imagePreview').style.display = 'none';
+                FroalaEditor.INSTANCES[0].html.set('');
+                successMessage.style.display = 'none';
+                
+                // Tải lại danh sách sản phẩm
+                loadProducts();
+                
+                // Đóng modal
+                modal.hide();
+            }, 1);
+
+
         } else {
             // Hiển thị thông báo lỗi
-            showNotification(result.message, 'error');
+            const errorMessage = document.getElementById('errorMessage');
+            errorMessage.textContent = result.message;
+            errorMessage.style.display = 'block';
+            
+            // Ẩn thông báo thành công nếu có
+            document.getElementById('successMessage').style.display = 'none';
         }
+    } catch (error) {
+        console.error('Lỗi xử lý form:', error);
+        
+        // Hiển thị thông báo lỗi
+        const errorMessage = document.getElementById('errorMessage');
+        errorMessage.textContent = 'Đã xảy ra lỗi khi xử lý form!';
+        errorMessage.style.display = 'block';
     } finally {
-        // Ẩn loading dù thành công hay thất bại
+        // Ẩn overlay loading
         hideLoadingOverlay();
     }
 };

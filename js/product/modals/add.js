@@ -12,9 +12,7 @@ export const renderAddModal = () => {
                                 aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <form id="addProductForm" method="POST"
-                              action="/admin/productManager/create"
-                              enctype="multipart/form-data">
+                        <form id="addProductForm" enctype="multipart/form-data">
                             <!-- Thông báo thành công/lỗi -->
                             <div id="successMessage" class="alert alert-success mb-3" role="alert"
                                  style="display: none"></div>
@@ -29,7 +27,7 @@ export const renderAddModal = () => {
                                 </div>
                                 <div class="col-md-6">
                                     <label for="product-category" class="form-label">Thể loại <span class="text-danger">*</span></label>
-                                    <select class="form-select" id="product-category" name="category" required>
+                                    <select class="form-select" id="product-category" name="categoryId" required>
                                         <option value="" selected disabled>
                                             Chọn một thể loại...
                                         </option>
@@ -125,6 +123,7 @@ export const renderAddModal = () => {
                                 <div id="editor-container">
                                     <div id="froala-editor"></div>
                                 </div>
+                                <input type="hidden" id="product-description" name="description" value="">
                                 <div class="invalid-feedback"></div>
                             </div>
                             <div class="mb-3">
@@ -161,7 +160,7 @@ export const renderAddModal = () => {
                         <button type="button" class="btn btn-warning" id="resetFormBtn">
                             <i class="bi bi-arrow-counterclockwise me-1"></i> Mặc định
                         </button>
-                        <button type="button" class="btn btn-primary" id="saveProductBtn">
+                        <button type="submit" class="btn btn-primary" id="saveProductBtn">
                             <i class="bi bi-save me-1"></i> Thêm sản phẩm
                         </button>
                     </div>
