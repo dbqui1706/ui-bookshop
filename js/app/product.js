@@ -6,7 +6,7 @@ import {
     stockFilterMap,
     sortOptionMap,
 } from '../constants/product.js';
-import { initializeSelect2 } from '../utils/index.js';
+import { initializeLoadingOverlay, initializeSelect2 } from '../utils/index.js';
 import {
     filterInitialize,
     loadProducts,
@@ -17,33 +17,9 @@ import {
 } from '../container/product.js';
 
 document.addEventListener("DOMContentLoaded", async function () {
-    // Lấy tham chiếu đến các phần tử DOM
-    const totalProducts = document.getElementById("totalProducts");
-    const available = document.getElementById("available");
-    const almostOutOfStock = document.getElementById("almostOutOfStock");
-    const outOfStock = document.getElementById("outOfStock");
 
     // Tạo loading overlay nếu chưa có
-    if (!document.getElementById('loadingOverlay')) {
-        const loadingHTML = `
-        <div id="loadingOverlay" class="position-absolute top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center" 
-             style="z-index: 1000; background-color: rgba(255, 255, 255, 0.8); display: none;">
-            <div class="d-flex flex-column align-items-center">
-                <div class="spinner-border text-primary mb-2" role="status">
-                    <span class="visually-hidden">Loading...</span>
-                </div>
-                <div>Đang tải dữ liệu...</div>
-            </div>
-        </div>`;
-
-        const tableContainer = document.querySelector('.table-responsive');
-        if (tableContainer) {
-            tableContainer.style.position = 'relative';
-            const loadingElement = document.createElement('div');
-            loadingElement.innerHTML = loadingHTML;
-            tableContainer.appendChild(loadingElement.firstElementChild);
-        }
-    }
+    initializeLoadingOverlay('.table-responsive');
 
     // Lấy và hiển thị danh mục
     const categories = await getCategory();
@@ -58,15 +34,6 @@ document.addEventListener("DOMContentLoaded", async function () {
             });
         }
     }
-
-    // Lấy và hiển thị thống kê
-    // const stats = await getStatistic();
-    // if (stats && totalProducts) {
-    //     totalProducts.textContent = stats.total;
-    //     available.textContent = stats.available;
-    //     almostOutOfStock.textContent = stats.almostOutOfStock;
-    //     outOfStock.textContent = stats.outOfStock;
-    // }
 
     loadSatistic();
 

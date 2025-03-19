@@ -206,3 +206,44 @@ export const showAlert = (status, message) => {
         alert(message);
     }
 };
+
+/**
+ * Hàm khởi tạo các tooltip
+ * @param {string} selector - Selector của các tooltip
+ */
+export const initializeTooltip = (selector) => {
+    if (typeof bootstrap !== 'undefined' && typeof bootstrap.Tooltip !== 'undefined') {
+        var tooltipTriggerList = [].slice.call(
+            document.querySelectorAll(selector)
+        );
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl);
+        });
+    }
+}
+
+/**
+ * Hàm tạo Loading Overlay
+ */
+export const initializeLoadingOverlay = (tableSelector) => {
+    if (!document.getElementById('loadingOverlay')) {
+        const loadingHTML = `
+        <div id="loadingOverlay" class="position-absolute top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center" 
+             style="z-index: 1000; background-color: rgba(255, 255, 255, 0.8); display: none;">
+            <div class="d-flex flex-column align-items-center">
+                <div class="spinner-border text-primary mb-2" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                <div>Đang tải dữ liệu...</div>
+            </div>
+        </div>`;
+
+        const tableContainer = document.querySelector(tableSelector);
+        if (tableContainer) {
+            tableContainer.style.position = 'relative';
+            const loadingElement = document.createElement('div');
+            loadingElement.innerHTML = loadingHTML;
+            tableContainer.appendChild(loadingElement.firstElementChild);
+        }
+    }
+}
