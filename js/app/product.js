@@ -1,12 +1,12 @@
 // =======================================================================
 // main.js - File chính kết nối tất cả module cho trang quản lý sản phẩm
 // =======================================================================
-import { getCategory } from './api.js';
+import { getCategory } from '../service/product.js'
 import {
     stockFilterMap,
     sortOptionMap,
-} from './constants.js';
-import { initializeSelect2 } from '../utils.js';
+} from '../constants/product.js';
+import { initializeSelect2 } from '../utils/index.js';
 import {
     filterInitialize,
     loadProducts,
@@ -14,7 +14,7 @@ import {
     setValueForFilter,
     setDefaultItemsPerPage,
     loadSatistic
-} from './product.js';
+} from '../container/product.js';
 
 document.addEventListener("DOMContentLoaded", async function () {
     // Lấy tham chiếu đến các phần tử DOM
@@ -58,7 +58,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             });
         }
     }
-``
+
     // Lấy và hiển thị thống kê
     // const stats = await getStatistic();
     // if (stats && totalProducts) {

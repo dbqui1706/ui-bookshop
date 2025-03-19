@@ -2,14 +2,14 @@
 // products.js - Module quản lý sản phẩm
 // ==========================================================
 
-import { exportExcelProduct, getProducts, getStatistic } from './api.js';
-import { showLoading, hideLoading, formatCurrency, showAlert } from '../utils.js';
+import { exportExcelProduct, getProducts, getStatistic } from '../service/product.js';
+import { showLoading, hideLoading, formatCurrency, showAlert } from '../utils/index.js';
 import {
     productDetailModal,
     addProductModal,
     editProductModal,
     deleteProductModal
-} from './modals.js';
+} from '../components/product-modal/modal.js';
 
 // Filter state
 export const filterInitialize = {
@@ -180,18 +180,6 @@ export const addButtonEventListeners = () => {
 export const exportFileExcel = async () => {
     console.log('Export file Excel');
     const result = await exportExcelProduct();
-    // const filename = `${new Date().toISOString().slice(0, 10)}-products.xlsx`;
-    // if (result.success) {
-    //     const url = window.URL.createObjectURL(new Blob([result.data]));
-    //     const link = document.createElement('a');
-    //     link.href = url;
-    //     link.setAttribute('download', filename);
-    //     document.body.appendChild(link);
-    //     link.click();
-    //     document.body.removeChild(link);
-
-    //     showAlert('Xuất file Excel thành công!', 'success');
-    // }
 };
 
 export const viewProduct = (productId) => {

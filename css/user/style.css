@@ -1,0 +1,110 @@
+/* CSS tùy chỉnh cho trang Quản lý người dùng */
+
+/* Hiệu ứng khi hover lên hàng trong bảng */
+.table-hover tbody tr:hover {
+    background-color: rgba(13, 110, 253, 0.05);
+}
+
+/* Canh giữa nội dung trong các ô bảng */
+.table td {
+    vertical-align: middle;
+}
+
+/* CSS cho badge vai trò */
+.badge.bg-danger {
+    background-color: #dc3545 !important;
+}
+
+.badge.bg-primary {
+    background-color: #0d6efd !important;
+}
+
+.badge.bg-secondary {
+    background-color: #6c757d !important;
+}
+
+/* CSS cho badge trạng thái */
+.badge.bg-success {
+    background-color: #198754 !important;
+}
+
+.badge.bg-warning {
+    background-color: #ffc107 !important;
+}
+
+.badge.bg-danger {
+    background-color: #dc3545 !important;
+}
+
+/* Tùy chỉnh card trong trang */
+.card {
+    border: none;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    transition: box-shadow 0.3s ease;
+}
+
+.card:hover {
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
+
+/* CSS cho stat-icon */
+.stat-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50px;
+    height: 50px;
+    border-radius: 0.5rem;
+}
+
+/* Tùy chỉnh modal */
+.modal-header {
+    border-bottom: none;
+}
+
+.modal-footer {
+    border-top: none;
+}
+
+/* Tùy chỉnh cho sidebar */
+#sidebar .submenu {
+    padding-left: 2.5rem;
+}
+
+/* CSS cho ảnh đại diện người dùng */
+#viewUserAvatar {
+    border: 3px solid #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* CSS cho form */
+.form-floating > .form-control {
+    padding-top: 1.625rem;
+    padding-bottom: 0.625rem;
+}
+
+.form-floating > label {
+    padding-top: 0.625rem;
+}
+
+/* Responsive cho nút thao tác trên mobile */
+@media (max-width: 767px) {
+    .table .btn-group {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .table .btn-group .btn {
+        border-radius: 0.25rem !important;
+        width: 100%;
+    }
+
+    .modal-dialog {
+        margin: 0.5rem;
+    }
+}
+
+.modal-lg {
+    max-width: 1000px;
+}

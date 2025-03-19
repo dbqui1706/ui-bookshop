@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quản Trị Hệ Thống</title>
+
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" />
+
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.bootstrap5.min.css">
+
+    <!-- Thêm Select2 CSS và JS -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/product/product.css" />
+</head>
+
+<body>
+    <div class="wrapper">
+        <!-- Sidebar -->
+        <nav id="sidebar">
+            <div class="sidebar-header">
+                <h5 class="mb-0 d-flex align-items-center">
+                    <i class="bi bi-boxes me-2 text-primary"></i>
+                    <span>Hệ Thống Quản Lý</span>
+                </h5>
+            </div>
+
+            <ul class="components">
+                <li>
+                    <a href="#" class="">
+                        <i class="bi bi-speedometer2"></i>
+                        <span>Trang Chủ</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#productSubmenu" data-bs-toggle="collapse" aria-expanded="false"
+                        class="dropdown-toggle active">
+                        <i class="bi bi-box-seam"></i>
+                        <span>Sản Phẩm</span>
+                    </a>
+                    <ul class="collapse submenu submenu" id="productSubmenu">
+                        <li>
+                            <a href="#" class="active">
+                                Danh Sách Sản Phẩm
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="">
+                                Danh Mục Sản Phẩm
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#orderSubmenu" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+                        <i class="bi bi-cart3"></i>
+                        <span>Đơn Hàng</span>
+                        <span class="badge bg-danger rounded-pill">5</span>
+                    </a>
+                    <ul class="collapse submenu" id="orderSubmenu">
+                        <li>
+                            <a href="#">Tất Cả Đơn Hàng</a>
+                        </li>
+                        <li>
+                            <a href="#">Đơn Hàng Mới</a>
+                        </li>
+                        <li>
+                            <a href="#">Đơn Đang Xử Lý</a>
+                        </li>
+                        <li>
+                            <a href="#">Đơn Đã Hoàn Thành</a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#customerSubmenu" data-bs-toggle="collapse" aria-expanded="false" class="">
+                        <i class="bi bi-people"></i>
+                        <span>Khách Hàng</span>
+                    </a>
+                    <ul class="collapse submenu" id="customerSubmenu">
+                        <li>
+                            <a href="#" class="">
+                                Danh Sách Khách Hàng
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="">
+                                Phản Hồi Khách Hàng
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <div class="sidebar-heading">Báo Cáo</div>
+                <li>
+                    <a href="#">
+                        <i class="bi bi-graph-up"></i>
+                        <span>Báo Cáo Doanh Thu</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <i class="bi bi-bar-chart"></i>
+                        <span>Thống Kê Bán Hàng</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <i class="bi bi-pie-chart"></i>
+                        <span>Phân Tích Xu Hướng</span>
+                    </a>
+                </li>
+
+                <div class="sidebar-heading">Hệ Thống</div>
+                <li>
+                    <a href="#">
+                        <i class="bi bi-gear"></i>
+                        <span>Thiết Lập Hệ Thống</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <i class="bi bi-person-badge"></i>
+                        <span>Quản Lý Người Dùng</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <i class="bi bi-shield-lock"></i>
+                        <span>Phân Quyền</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+        <!-- Page Content -->
+        <div id="content">
+            <!-- Navbar -->
+            <nav class="navbar navbar-expand-lg mb-4">
+                <div class="container-fluid">
+                    <button type="button" id="sidebarCollapse" class="btn btn-primary">
+                        <i class="bi bi-list"></i>
+                    </button>
+                    <button class="btn btn-dark d-inline-block d-lg-none ms-auto" type="button"
+                        data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+                        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                        <i class="bi bi-three-dots"></i>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="nav navbar-nav ms-auto">
+                            <li class="nav-item">
+                                <a class="nav-link" href="#" title="Thông báo">
+                                    <i class="bi bi-bell position-relative">
+                                        <span
+                                            class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle">
+                                            <span class="visually-hidden">Thông báo mới</span>
+                                        </span>
+                                    </i>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#" title="Tin nhắn">
+                                    <i class="bi bi-envelope"></i>
+                                </a>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle d-flex align-items-center" href="#"
+                                    id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <img src="https://via.placeholder.com/30" class="rounded-circle me-2" alt="Admin" />
+                                    <span>Admin</span>
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                    <li>
+                                        <a class="dropdown-item" href="#"><i class="bi bi-person me-2"></i>Hồ sơ</a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" href="#"><i class="bi bi-gear me-2"></i>Cài đặt</a>
+                                    </li>
+                                    <li>
+                                        <hr class="dropdown-divider" />
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" href="#"><i class="bi bi-box-arrow-right me-2"></i>Đăng
+                                            xuất</a>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+
+            <!-- Dashboard Header -->
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="bg-primary text-white rounded p-3">
+                        <div class="row align-items-center">
+                            <div class="col-md-6">
+                                <h2>Quản lý thể loại</h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Control Panel -->
+            <div class="row mb-4">
+                <div class="col-md-12">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-body p-3">
+                            <div class="row g-2 align-items-center">
+                                <div class="col-lg-4 col-md-6">
+                                    <div class="form-floating">
+                                        <input type="text" class="form-control" id="searchCategory"
+                                            placeholder="Tìm kiếm thể loại" />
+                                        <label for="searchCategory">Tìm kiếm thể loại</label>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3 col-md-6">
+                                    <div class="form-floating">
+                                        <select class="form-select" id="statusFilter">
+                                            <option value="" selected>Tất cả</option>
+                                            <option value="active">Đang hoạt động</option>
+                                            <option value="inactive">Đã tạm khóa</option>
+                                        </select>
+                                        <label for="statusFilter">Trạng thái</label>
+                                    </div>
+                                </div>
+                                <div class="col-lg-5 col-md-12 text-end">
+                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                        data-bs-target="#addCategoryModal">
+                                        <i class="bi bi-plus-lg"></i> Thêm thể loại mới
+                                    </button>
+                                    <button class="btn btn-success ms-2" data-bs-toggle="tooltip"
+                                        data-bs-placement="top" title="Xuất file Excel danh sách thể loại">
+                                        <i class="bi bi-file-earmark-arrow-up"></i> Export Excel
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stats Row -->
+            <div class="row mb-4">
+                <div class="col-md-4">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <div class="flex-shrink-0">
+                                    <div class="stat-icon bg-primary bg-opacity-10 p-3 rounded text-primary">
+                                        <i class="bi bi-tags fs-3"></i>
+                                    </div>
+                                </div>
+                                <div class="flex-grow-1 ms-3">
+                                    <h6 class="mb-1">Tổng thể loại</h6>
+                                    <h3 class="mb-0">24</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <div class="flex-shrink-0">
+                                    <div class="stat-icon bg-success bg-opacity-10 p-3 rounded text-success">
+                                        <i class="bi bi-check-circle fs-3"></i>
+                                    </div>
+                                </div>
+                                <div class="flex-grow-1 ms-3">
+                                    <h6 class="mb-1">Thể loại hoạt động</h6>
+                                    <h3 class="mb-0">22</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <div class="flex-shrink-0">
+                                    <div class="stat-icon bg-danger bg-opacity-10 p-3 rounded text-danger">
+                                        <i class="bi bi-x-circle fs-3"></i>
+                                    </div>
+                                </div>
+                                <div class="flex-grow-1 ms-3">
+                                    <h6 class="mb-1">Thể loại tạm khóa</h6>
+                                    <h3 class="mb-0">2</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Category Table View -->
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-body p-0">
+                            <div class="table-responsive">
+                                <table class="table table-hover mb-0">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th width="60">ID</th>
+                                            <th>Tên thể loại</th>
+                                            <th>Số sách</th>
+                                            <th>Ngày tạo</th>
+                                            <th>Cập nhật cuối</th>
+                                            <th>Trạng thái</th>
+                                            <th width="150">Thao tác</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <!-- Category Row 1 -->
+                                        <tr>
+                                            <td>#TL001</td>
+                                            <td>Văn học</td>
+                                            <td>142</td>
+                                            <td>20/02/2025</td>
+                                            <td>12/03/2025</td>
+                                            <td><span class="badge bg-success">Hoạt động</span></td>
+                                            <td>
+                                                <div class="btn-group btn-group-sm">
+                                                    <button class="btn btn-outline-primary" data-bs-toggle="tooltip"
+                                                        data-bs-placement="top" title="Chỉnh sửa">
+                                                        <i class="bi bi-pencil"></i>
+                                                    </button>
+                                                    <button class="btn btn-outline-danger" data-bs-toggle="tooltip"
+                                                        data-bs-placement="top" title="Tạm khóa">
+                                                        <i class="bi bi-lock"></i>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+
+                                        <!-- Category Row 2 -->
+                                        <tr>
+                                            <td>#TL002</td>
+                                            <td>Kinh tế</td>
+                                            <td>95</td>
+                                            <td>20/02/2025</td>
+                                            <td>10/03/2025</td>
+                                            <td><span class="badge bg-success">Hoạt động</span></td>
+                                            <td>
+                                                <div class="btn-group btn-group-sm">
+                                                    <button class="btn btn-outline-primary" data-bs-toggle="tooltip"
+                                                        data-bs-placement="top" title="Chỉnh sửa">
+                                                        <i class="bi bi-pencil"></i>
+                                                    </button>
+                                                    <button class="btn btn-outline-danger" data-bs-toggle="tooltip"
+                                                        data-bs-placement="top" title="Tạm khóa">
+                                                        <i class="bi bi-lock"></i>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+
+                                        <!-- Category Row 3 -->
+                                        <tr>
+                                            <td>#TL003</td>
+                                            <td>Tâm lý - Kỹ năng sống</td>
+                                            <td>78</td>
+                                            <td>21/02/2025</td>
+                                            <td>05/03/2025</td>
+                                            <td><span class="badge bg-success">Hoạt động</span></td>
+                                            <td>
+                                                <div class="btn-group btn-group-sm">
+                                                    <button class="btn btn-outline-primary" data-bs-toggle="tooltip"
+                                                        data-bs-placement="top" title="Chỉnh sửa">
+                                                        <i class="bi bi-pencil"></i>
+                                                    </button>
+                                                    <button class="btn btn-outline-danger" data-bs-toggle="tooltip"
+                                                        data-bs-placement="top" title="Tạm khóa">
+                                                        <i class="bi bi-lock"></i>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+
+                                        <!-- Category Row 4 -->
+                                        <tr>
+                                            <td>#TL004</td>
+                                            <td>Thiếu nhi</td>
+                                            <td>112</td>
+                                            <td>21/02/2025</td>
+                                            <td>08/03/2025</td>
+                                            <td><span class="badge bg-success">Hoạt động</span></td>
+                                            <td>
+                                                <div class="btn-group btn-group-sm">
+                                                    <button class="btn btn-outline-primary" data-bs-toggle="tooltip"
+                                                        data-bs-placement="top" title="Chỉnh sửa">
+                                                        <i class="bi bi-pencil"></i>
+                                                    </button>
+                                                    <button class="btn btn-outline-danger" data-bs-toggle="tooltip"
+                                                        data-bs-placement="top" title="Tạm khóa">
+                                                        <i class="bi bi-lock"></i>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+
+                                        <!-- Category Row 5 -->
+                                        <tr>
+                                            <td>#TL005</td>
+                                            <td>Tiểu sử - Hồi ký</td>
+                                            <td>45</td>
+                                            <td>22/02/2025</td>
+                                            <td>01/03/2025</td>
+                                            <td><span class="badge bg-success">Hoạt động</span></td>
+                                            <td>
+                                                <div class="btn-group btn-group-sm">
+                                                    <button class="btn btn-outline-primary" data-bs-toggle="tooltip"
+                                                        data-bs-placement="top" title="Chỉnh sửa">
+                                                        <i class="bi bi-pencil"></i>
+                                                    </button>
+                                                    <button class="btn btn-outline-danger" data-bs-toggle="tooltip"
+                                                        data-bs-placement="top" title="Tạm khóa">
+                                                        <i class="bi bi-lock"></i>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+
+                                        <!-- Category Row 6 (Inactive) -->
+                                        <tr class="table-danger bg-opacity-25">
+                                            <td>#TL006</td>
+                                            <td>Comics - Manga (18+)</td>
+                                            <td>37</td>
+                                            <td>22/02/2025</td>
+                                            <td>11/03/2025</td>
+                                            <td><span class="badge bg-danger">Tạm khóa</span></td>
+                                            <td>
+                                                <div class="btn-group btn-group-sm">
+                                                    <button class="btn btn-outline-primary" data-bs-toggle="tooltip"
+                                                        data-bs-placement="top" title="Chỉnh sửa">
+                                                        <i class="bi bi-pencil"></i>
+                                                    </button>
+                                                    <button class="btn btn-outline-success" data-bs-toggle="tooltip"
+                                                        data-bs-placement="top" title="Mở khóa">
+                                                        <i class="bi bi-unlock"></i>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+
+                                        <!-- Category Row 7 (Inactive) -->
+                                        <tr class="table-danger bg-opacity-25">
+                                            <td>#TL007</td>
+                                            <td>Văn học người lớn</td>
+                                            <td>21</td>
+                                            <td>23/02/2025</td>
+                                            <td>09/03/2025</td>
+                                            <td><span class="badge bg-danger">Tạm khóa</span></td>
+                                            <td>
+                                                <div class="btn-group btn-group-sm">
+                                                    <button class="btn btn-outline-primary" data-bs-toggle="tooltip"
+                                                        data-bs-placement="top" title="Chỉnh sửa">
+                                                        <i class="bi bi-pencil"></i>
+                                                    </button>
+                                                    <button class="btn btn-outline-success" data-bs-toggle="tooltip"
+                                                        data-bs-placement="top" title="Mở khóa">
+                                                        <i class="bi bi-unlock"></i>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pagination -->
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <div class="d-flex align-items-center">
+                        <span class="me-2">Hiển thị</span>
+                        <select class="form-select-sm w-auto">
+                            <option value="10">10</option>
+                            <option value="25" selected>25</option>
+                            <option value="50">50</option>
+                            <option value="100">100</option>
+                        </select>
+                        <span class="ms-2">thể loại trên mỗi trang</span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <nav aria-label="Page navigation">
+                        <ul class="pagination justify-content-end">
+                            <li class="page-item disabled">
+                                <a class="page-link" href="#" aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                </a>
+                            </li>
+                            <li class="page-item active">
+                                <a class="page-link" href="#">1</a>
+                            </li>
+                            <li class="page-item"><a class="page-link" href="#">2</a></li>
+                            <li class="page-item">
+                                <a class="page-link" href="#" aria-label="Next">
+                                    <span aria-hidden="true">&raquo;</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+
+            <!-- Modal Thêm Sản Phẩm -->
+            <div class="modal fade" id="addCategoryModal" tabindex="-1" aria-labelledby="addCategoryModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header bg-primary text-white">
+                            <h5 class="modal-title" id="addCategoryModalLabel">
+                                Thêm thể loại mới
+                            </h5>
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="addCategoryForm">
+                                <div class="mb-3">
+                                    <label for="categoryName" class="form-label">Tên thể loại <span
+                                            class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="categoryName" required />
+                                    <div class="form-text">
+                                        Tên thể loại sẽ hiển thị cho người dùng.
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="categorySlug" class="form-label">Slug <span
+                                            class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="categorySlug" required />
+                                    <div class="form-text">
+                                        Slug sẽ được sử dụng trong URL (ví dụ: van-hoc,
+                                        tam-ly-song).
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="categoryDescription" class="form-label">Mô tả</label>
+                                    <textarea class="form-control" id="categoryDescription" rows="3"></textarea>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label d-block">Trạng thái</label>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="categoryStatus"
+                                            id="categoryStatusActive" value="active" checked />
+                                        <label class="form-check-label" for="categoryStatusActive">Hoạt động</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="categoryStatus"
+                                            id="categoryStatusInactive" value="inactive" />
+                                        <label class="form-check-label" for="categoryStatusInactive">Tạm khóa</label>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="categoryParent" class="form-label">Thể loại cha</label>
+                                    <select class="form-select" id="categoryParent">
+                                        <option value="0" selected>Không có</option>
+                                        <option value="1">Văn học</option>
+                                        <option value="2">Kinh tế</option>
+                                        <option value="3">Tâm lý - Kỹ năng sống</option>
+                                        <option value="4">Thiếu nhi</option>
+                                        <option value="5">Tiểu sử - Hồi ký</option>
+                                    </select>
+                                    <div class="form-text">
+                                        Chọn thể loại cha nếu đây là thể loại con.
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="categoryOrder" class="form-label">Thứ tự hiển thị</label>
+                                    <input type="number" class="form-control" id="categoryOrder" min="0" value="0" />
+                                    <div class="form-text">
+                                        Thể loại có thứ tự cao hơn sẽ hiển thị trước.
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                Hủy
+                            </button>
+                            <button type="button" class="btn btn-primary" id="saveCategoryBtn">
+                                <i class="bi bi-save me-1"></i> Lưu thể loại
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal Chỉnh Sửa Thể Loại -->
+            <div class="modal fade" id="editCategoryModal" tabindex="-1" aria-labelledby="editCategoryModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header bg-primary text-white">
+                            <h5 class="modal-title" id="editCategoryModalLabel">
+                                Chỉnh sửa thể loại
+                            </h5>
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="editCategoryForm">
+                                <input type="hidden" id="editCategoryId" value="" />
+                                <div class="mb-3">
+                                    <label for="editCategoryName" class="form-label">Tên thể loại <span
+                                            class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="editCategoryName" required />
+                                    <div class="form-text">
+                                        Tên thể loại sẽ hiển thị cho người dùng.
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="editCategorySlug" class="form-label">Slug <span
+                                            class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="editCategorySlug" required />
+                                    <div class="form-text">
+                                        Slug sẽ được sử dụng trong URL (ví dụ: van-hoc,
+                                        tam-ly-song).
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="editCategoryDescription" class="form-label">Mô tả</label>
+                                    <textarea class="form-control" id="editCategoryDescription" rows="3"></textarea>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label d-block">Trạng thái</label>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="editCategoryStatus"
+                                            id="editCategoryStatusActive" value="active" />
+                                        <label class="form-check-label" for="editCategoryStatusActive">Hoạt động</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="editCategoryStatus"
+                                            id="editCategoryStatusInactive" value="inactive" />
+                                        <label class="form-check-label" for="editCategoryStatusInactive">Tạm
+                                            khóa</label>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="editCategoryParent" class="form-label">Thể loại cha</label>
+                                    <select class="form-select" id="editCategoryParent">
+                                        <option value="0" selected>Không có</option>
+                                        <option value="1">Văn học</option>
+                                        <option value="2">Kinh tế</option>
+                                        <option value="3">Tâm lý - Kỹ năng sống</option>
+                                        <option value="4">Thiếu nhi</option>
+                                        <option value="5">Tiểu sử - Hồi ký</option>
+                                    </select>
+                                    <div class="form-text">
+                                        Chọn thể loại cha nếu đây là thể loại con.
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="editCategoryOrder" class="form-label">Thứ tự hiển thị</label>
+                                    <input type="number" class="form-control" id="editCategoryOrder" min="0" />
+                                    <div class="form-text">
+                                        Thể loại có thứ tự cao hơn sẽ hiển thị trước.
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                Hủy
+                            </button>
+                            <button type="button" class="btn btn-primary" id="updateCategoryBtn">
+                                <i class="bi bi-save me-1"></i> Cập nhật
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal Chỉnh Sửa Sản Phẩm -->
+
+            <!-- Modal Xác Nhận Xóa Sản Phẩm -->
+
+            <!-- Footer -->
+            <footer class="bg-white text-center py-3 mt-2 rounded">
+                <p class="mb-0 text-muted">
+                    © 2025 Hệ Thống Quản Lý. Thiết kế bởi
+                    <a href="#" class="text-decoration-none">BookShopTeam</a>
+                </p>
+            </footer>
+        </div>
+    </div>
+    <!-- Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Froala JS -->
+    <link href="https://cdn.jsdelivr.net/npm/froala-editor@latest/css/froala_editor.pkgd.min.css" rel="stylesheet"
+        type="text/css" />
+    <script type="text/javascript"
+        src="https://cdn.jsdelivr.net/npm/froala-editor@latest/js/froala_editor.pkgd.min.js"></script>
+
+    <!-- Alert Sweet -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <!-- Custom JS -->
+    <script src="js/category/category.js" type="module"></script>
+    <script src="js/home.js"></script>
+
+    <!-- Select2 JS CSS -->
+    <style>
+        /* Ẩn container của Select2 để không thay đổi giao diện */
+        .select2-container--default .select2-selection--single {
+            height: 100%;
+            border: 1px solid #ced4da;
+            /* Giữ border giống Bootstrap */
+            border-radius: 0.375rem;
+            /* Border radius giống Bootstrap */
+            padding: 0.1rem 0.75rem;
+        }
+
+        /* Giữ nguyên vị trí và kích thước của mũi tên dropdown */
+        .select2-container--default .select2-selection--single .select2-selection__arrow {
+            height: 100%;
+            right: 10px;
+        }
+
+        /* Đảm bảo văn bản được hiển thị đúng vị trí */
+        .select2-container--default .select2-selection--single .select2-selection__rendered {
+            line-height: 1.5;
+            padding-left: 0;
+            color: #212529;
+            /* Màu chữ giống Bootstrap */
+        }
+
+        /* Đảm bảo form-floating hoạt động đúng */
+        .form-floating .select2-container {
+            height: 100%;
+        }
+
+        .form-floating .select2-container--default .select2-selection--single {
+            padding-top: 1.62rem;
+            padding-bottom: 0.62rem;
+        }
+    </style>
+</body>
+
+</html>

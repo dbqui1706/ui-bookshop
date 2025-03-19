@@ -2,13 +2,13 @@
 // modals.js - Module quản lý các modal
 // ==========================================================
 
-import { renderDetailProduct } from './modals/detail.js';
-import { renderEditProduct } from './modals/edit.js';
-import { renderAddModal } from './modals/add.js';
-import { renderDeleteProduct } from './modals/delete.js';
+import { renderDetailProduct } from './detail.js'
+import { renderEditProduct } from './edit.js';
+import { renderAddModal } from './add.js';
+import { renderDeleteProduct } from './delete.js';
 
-import { addProduct, updateProduct, deleteProduct } from './api.js';
-import { loadProducts, loadSatistic } from './product.js';
+import { addProduct, updateProduct, deleteProduct } from '../../service/product.js';
+import { loadProducts, loadSatistic } from '../../container/product.js';
 import {
     showNotification,
     setupFroalaEditor,
@@ -17,8 +17,7 @@ import {
     showLoadingOverlay,
     hideLoadingOverlay,
     showAlert
-} from '../utils.js';
-
+} from '../../utils/index.js';
 
 /**
  * Hàm tiện ích để tạo và hiển thị modal
