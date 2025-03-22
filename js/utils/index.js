@@ -11,10 +11,10 @@ export const formatCurrency = (price) => {
     }).format(price);
 };
 
-export const formatDateTime = (date) => {
+export const formatDateTime = (date, options = {}) => {
     return new Intl.DateTimeFormat('vi-VN', {
-        dateStyle: 'full',
-        timeStyle: 'long'
+        dateStyle: options.dateStyle || 'full',
+        timeStyle: options.timeStyle || 'long'
     }).format(new Date(date));
 };
 

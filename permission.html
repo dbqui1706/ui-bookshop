@@ -208,7 +208,7 @@
                     <div class="bg-primary text-white rounded p-3">
                         <div class="row align-items-center">
                             <div class="col-md-6">
-                                <h2>Quản lý thông tin người dùng</h2>
+                                <h2>Phân Quyền</h2>
                             </div>
                         </div>
                     </div>
@@ -217,61 +217,22 @@
 
             <!-- Control Panel -->
             <div class="row mb-4">
-                <div class="col-md-12">
+                <div class="col-12">
                     <div class="card border-0 shadow-sm">
-                        <div class="card-body p-3">
-                            <div class="row g-2 align-items-center">
-                                <div class="col-lg-3 col-md-6">
-                                    <div class="form-floating">
-                                        <input type="text" class="form-control" id="searchUser"
-                                            placeholder="Tìm kiếm người dùng" />
-                                        <label for="searchUser">Tìm kiếm người dùng</label>
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col-md-8 mb-3 mb-md-0">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" placeholder="Tìm kiếm vai trò..."
+                                            id="searchRole">
+                                        <button class="btn btn-primary" type="button">
+                                            <i class="bi bi-search"></i>
+                                        </button>
                                     </div>
                                 </div>
-                                <div class="col-lg-2 col-md-6">
-                                    <div class="form-floating">
-                                        <select class="form-select" id="roleFilter">
-                                            <option value="" selected>Tất cả</option>
-                                            <option value="ADMIN">Quản trị viên</option>
-                                            <option value="EMPLOYEE">Nhân viên</option>
-                                            <option value="CUSTOMER">Khách hàng</option>
-                                        </select>
-                                        <label for="roleFilter">Vai trò</label>
-                                    </div>
-                                </div>
-                                <div class="col-lg-2 col-md-6">
-                                    <div class="form-floating">
-                                        <select class="form-select" id="statusFilter">
-                                            <option value="" selected>Tất cả</option>
-                                            <option value="active">Đang hoạt động</option>
-                                            <option value="inactive">Không hoạt động</option>
-                                            <option value="locked">Bị khóa</option>
-                                        </select>
-                                        <label for="statusFilter">Trạng thái</label>
-                                    </div>
-                                </div>
-                                <div class="col-lg-2 col-md-6">
-                                    <div class="form-floating">
-                                        <select class="form-select" id="sortOption">
-                                            <option value="" selected>Tất cả</option>
-                                            <option value="name-asc">Tên A-Z</option>
-                                            <option value="name-desc">Tên Z-A</option>
-                                            <option value="date-asc">Ngày tạo (cũ nhất)</option>
-                                            <option value="date-desc">Ngày tạo (mới nhất)</option>
-                                            <option value="login-desc">Đăng nhập gần đây</option>
-                                            <option value="role-asc">Vai trò (A-Z)</option>
-                                        </select>
-                                        <label for="sortOption">Sắp xếp theo</label>
-                                    </div>
-                                </div>
-                                <div class="col-lg-3 col-md-12 text-end">
-                                    <button class="btn btn-success ms-2" data-bs-toggle="tooltip" id="exportExcelBtn"
-                                        data-bs-placement="top" title="Xuất danh sách người dùng">
-                                        <i class="bi bi-file-earmark-arrow-up"></i> Export Excel
-                                    </button>
-                                    <button id="addUserBtn" class="btn btn-primary ms-2" data-bs-toggle="modal"
-                                        data-bs-target="#addUserModal">
-                                        <i class="bi bi-plus-lg"></i> Thêm người dùng
+                                <div class="col-md-4 text-md-end">
+                                    <button class="btn btn-primary" id="addRoleBtn">
+                                        <i class="bi bi-plus-lg"></i> Thêm vai trò mới
                                     </button>
                                 </div>
                             </div>
@@ -352,27 +313,38 @@
                 </div>
             </div>
 
-            <!-- User Table -->
+            <!-- Table -->
             <div class="row mb-4">
                 <div class="col-12">
                     <div class="card border-0 shadow-sm">
-                        <div class="card-body p-0">
+                        <div class="card-body">
                             <div class="table-responsive">
-                                <table class="table table-hover mb-0">
+                                <table class="table table-hover align-middle" id="rolesTable">
                                     <thead class="table-light">
                                         <tr>
-                                            <th width="50">ID</th>
-                                            <th width="60">Ảnh</th>
-                                            <th>Người dùng</th>
-                                            <th>Vai trò</th>
-                                            <th>Số điện thoại</th>
-                                            <th>Đăng nhập gần đây</th>
-                                            <th>Trạng thái</th>
-                                            <th width="150">Thao tác</th>
+                                            <th scope="col" width="50">#</th>
+                                            <th scope="col">Tên vai trò</th>
+                                            <th scope="col">Mô tả</th>
+                                            <th scope="col">Số người dùng</th>
+                                            <th scope="col">Trạng thái</th>
+                                            <th scope="col">Ngày tạo</th>
+                                            <th scope="col" class="text-end">Thao tác</th>
                                         </tr>
                                     </thead>
-                                    <tbody id="userTableBody"></tbody>
+                                    <tbody id="rolesTableBody">
+                                        <!-- Dữ liệu sẽ được thêm bằng JavaScript -->
+                                    </tbody>
                                 </table>
+                                <div id="noRolesMessage" class="text-center py-4 d-none">
+                                    <i class="bi bi-exclamation-circle fs-1 text-muted"></i>
+                                    <p class="mt-2">Không tìm thấy vai trò nào.</p>
+                                </div>
+                                <div id="loadingRoles" class="text-center py-4">
+                                    <div class="spinner-border text-primary" role="status">
+                                        <span class="visually-hidden">Đang tải...</span>
+                                    </div>
+                                    <p class="mt-2">Đang tải dữ liệu...</p>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -384,7 +356,7 @@
                 <div class="col-md-6 mb-3">
                     <div class="d-flex align-items-center">
                         <span class="me-2">Hiển thị</span>
-                        <select class="form-select-sm w-auto" id="itemsPerPage"> 
+                        <select class="form-select-sm w-auto" id="itemsPerPage">
                             <option value="5" selected>5</option>
                             <option value="10">10</option>
                             <option value="50">50</option>
@@ -400,54 +372,175 @@
                 </div>
             </div>
 
-            <!-- Modal Thêm người dùng -->
-
-            <!-- Modal Xem chi tiết -->
-
-            <!-- Modal Chỉnh Sửa -->
-           
-            <!-- Modal Xác Nhận Xóa Người Dùng -->
-            <div class="modal fade" id="deleteUserModal" tabindex="-1" aria-labelledby="deleteUserModalLabel"
+            <!-- Modal Thêm vai trò mới -->
+            <div class="modal fade" id="addRoleModal" tabindex="-1" aria-labelledby="addRoleModalLabel"
                 aria-hidden="true">
-                <div class="modal-dialog">
+                <div class="modal-dialog modal-lg">
                     <div class="modal-content">
-                        <div class="modal-header bg-danger text-white">
-                            <h5 class="modal-title" id="deleteUserModalLabel">
-                                Xác nhận xóa người dùng
-                            </h5>
-                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
-                                aria-label="Close"></button>
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="addRoleModalLabel">Thêm vai trò mới</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            <p>
-                                Bạn có chắc chắn muốn xóa người dùng
-                                <strong id="deleteUserName"></strong>?
-                            </p>
-                            <p class="text-danger">
-                                Lưu ý: Hành động này không thể hoàn tác. Tất cả dữ liệu liên
-                                quan đến người dùng này sẽ bị xóa vĩnh viễn.
-                            </p>
+                            <form id="addRoleForm">
+                                <div class="mb-3">
+                                    <label for="roleName" class="form-label">Tên vai trò <span
+                                            class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="roleName" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="roleDescription" class="form-label">Mô tả</label>
+                                    <textarea class="form-control" id="roleDescription" rows="2"></textarea>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Trạng thái</label>
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" id="roleStatus" checked>
+                                        <label class="form-check-label" for="roleStatus">Kích hoạt</label>
+                                    </div>
+                                </div>
 
-                            <div class="form-check mb-3">
-                                <input class="form-check-input" type="checkbox" id="confirmUserDeletion" required />
-                                <label class="form-check-label" for="confirmUserDeletion">
-                                    Tôi hiểu rằng hành động này không thể hoàn tác
-                                </label>
-                            </div>
+                                <hr>
+                                <h5 class="mb-3">Phân quyền</h5>
+
+                                <div class="permission-groups">
+                                    <!-- Các nhóm quyền sẽ được thêm bằng JavaScript -->
+                                </div>
+                            </form>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                                Hủy
-                            </button>
-                            <button type="button" class="btn btn-danger" id="confirmDeleteUserBtn" disabled>
-                                <i class="bi bi-trash me-1"></i> Xóa
-                            </button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                            <button type="button" class="btn btn-primary" id="saveRoleBtn">Lưu vai trò</button>
                         </div>
                     </div>
                 </div>
             </div>
 
-          
+            <!-- Modal Chỉnh sửa vai trò -->
+            <div class="modal fade" id="editRoleModal" tabindex="-1" aria-labelledby="editRoleModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="editRoleModalLabel">Chỉnh sửa vai trò</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="editRoleForm">
+                                <input type="hidden" id="editRoleId">
+                                <div class="mb-3">
+                                    <label for="editRoleName" class="form-label">Tên vai trò <span
+                                            class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="editRoleName" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="editRoleDescription" class="form-label">Mô tả</label>
+                                    <textarea class="form-control" id="editRoleDescription" rows="2"></textarea>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Trạng thái</label>
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" id="editRoleStatus">
+                                        <label class="form-check-label" for="editRoleStatus">Kích hoạt</label>
+                                    </div>
+                                </div>
+
+                                <hr>
+                                <h5 class="mb-3">Phân quyền</h5>
+
+                                <div class="edit-permission-groups">
+                                    <!-- Các nhóm quyền sẽ được thêm bằng JavaScript -->
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                            <button type="button" class="btn btn-primary" id="updateRoleBtn">Cập nhật</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal Xem chi tiết vai trò -->
+            <div class="modal fade" id="viewRoleModal" tabindex="-1" aria-labelledby="viewRoleModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="viewRoleModalLabel">Chi tiết vai trò</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row mb-4">
+                                <div class="col-md-6">
+                                    <h6 class="text-muted mb-1">Tên vai trò</h6>
+                                    <p class="fs-5 fw-semibold" id="viewRoleName">-</p>
+                                </div>
+                                <div class="col-md-6">
+                                    <h6 class="text-muted mb-1">Trạng thái</h6>
+                                    <p id="viewRoleStatus">-</p>
+                                </div>
+                            </div>
+
+                            <div class="row mb-4">
+                                <div class="col-md-6">
+                                    <h6 class="text-muted mb-1">Ngày tạo</h6>
+                                    <p id="viewRoleCreatedAt">-</p>
+                                </div>
+                                <div class="col-md-6">
+                                    <h6 class="text-muted mb-1">Cập nhật lần cuối</h6>
+                                    <p id="viewRoleUpdatedAt">-</p>
+                                </div>
+                            </div>
+
+                            <div class="row mb-4">
+                                <div class="col-12">
+                                    <h6 class="text-muted mb-1">Mô tả</h6>
+                                    <p id="viewRoleDescription">-</p>
+                                </div>
+                            </div>
+
+                            <hr>
+                            <h5 class="mb-3">Danh sách quyền</h5>
+
+                            <div class="view-permission-groups">
+                                <!-- Các nhóm quyền sẽ được thêm bằng JavaScript -->
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal Xác nhận xóa -->
+            <div class="modal fade" id="deleteRoleModal" tabindex="-1" aria-labelledby="deleteRoleModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="deleteRoleModalLabel">Xác nhận xóa</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <input type="hidden" id="deleteRoleId">
+                            <p>Bạn có chắc chắn muốn xóa vai trò "<span id="deleteRoleName"></span>"?</p>
+                            <div class="alert alert-warning" id="roleDeleteWarning">
+                                <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                                Vai trò này đang được sử dụng bởi <strong id="deleteRoleUserCount">0</strong> người
+                                dùng.
+                                Nếu xóa, các người dùng này sẽ mất quyền truy cập.
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                            <button type="button" class="btn btn-danger" id="confirmDeleteRole">Xóa</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- Footer -->
             <footer class="bg-white text-center py-3 mt-2 rounded">
                 <p class="mb-0 text-muted">
@@ -470,7 +563,7 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <!-- Custom JS -->
-    <script src="js/app/user.js" type="module"></script>
+    <script src="js/app/permission.js" type="module"></script>
     <script src="js/app/index.js"></script>
 
     <!-- Select2 JS CSS -->

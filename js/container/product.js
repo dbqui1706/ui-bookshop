@@ -208,7 +208,7 @@ export const deleteProduct = (productId) => {
 
 export const loadProducts = async () => {
     try {
-        showLoading();
+        // showLoading();
         const data = await getProducts(filterInitialize);
         filterInitialize.data = data.products;
         renderProductTable(data.products);
@@ -222,7 +222,7 @@ export const loadProducts = async () => {
     } catch (error) {
         console.error('Error loading products:', error);
     } finally {
-        hideLoading();
+        // hideLoading();
     }
 };
 

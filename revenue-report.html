@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Báo Cáo Doanh Thu - Quản Trị Hệ Thống</title>
+
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" />
+
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.bootstrap5.min.css">
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Thêm Select2 CSS và JS -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/style.css" />
+</head>
+
+<body>
+    <div class="wrapper">
+        <!-- Sidebar -->
+        <nav id="sidebar">
+            <div class="sidebar-header">
+                <h5 class="mb-0 d-flex align-items-center">
+                    <i class="bi bi-boxes me-2 text-primary"></i>
+                    <span>Hệ Thống Quản Lý</span>
+                </h5>
+            </div>
+
+            <ul class="components">
+                <li>
+                    <a href="#" class="">
+                        <i class="bi bi-speedometer2"></i>
+                        <span>Trang Chủ</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#productSubmenu" data-bs-toggle="collapse" aria-expanded="false"
+                        class="dropdown-toggle">
+                        <i class="bi bi-box-seam"></i>
+                        <span>Sản Phẩm</span>
+                    </a>
+                    <ul class="collapse submenu" id="productSubmenu">
+                        <li>
+                            <a href="#" class="">
+                                Danh Sách Sản Phẩm
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="">
+                                Danh Mục Sản Phẩm
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#orderSubmenu" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+                        <i class="bi bi-cart3"></i>
+                        <span>Đơn Hàng</span>
+                        <span class="badge bg-danger rounded-pill">5</span>
+                    </a>
+                    <ul class="collapse submenu" id="orderSubmenu">
+                        <li>
+                            <a href="#">Tất Cả Đơn Hàng</a>
+                        </li>
+                        <li>
+                            <a href="#">Đơn Hàng Mới</a>
+                        </li>
+                        <li>
+                            <a href="#">Đơn Đang Xử Lý</a>
+                        </li>
+                        <li>
+                            <a href="#">Đơn Đã Hoàn Thành</a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#customerSubmenu" data-bs-toggle="collapse" aria-expanded="false" class="">
+                        <i class="bi bi-people"></i>
+                        <span>Khách Hàng</span>
+                    </a>
+                    <ul class="collapse submenu" id="customerSubmenu">
+                        <li>
+                            <a href="#" class="">
+                                Danh Sách Khách Hàng
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="">
+                                Phản Hồi Khách Hàng
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <div class="sidebar-heading">Báo Cáo</div>
+                <li>
+                    <a href="#" class="active">
+                        <i class="bi bi-graph-up"></i>
+                        <span>Báo Cáo Doanh Thu</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <i class="bi bi-bar-chart"></i>
+                        <span>Thống Kê Bán Hàng</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <i class="bi bi-pie-chart"></i>
+                        <span>Phân Tích Xu Hướng</span>
+                    </a>
+                </li>
+
+                <div class="sidebar-heading">Hệ Thống</div>
+                <li>
+                    <a href="#">
+                        <i class="bi bi-gear"></i>
+                        <span>Thiết Lập Hệ Thống</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <i class="bi bi-person-badge"></i>
+                        <span>Quản Lý Người Dùng</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <i class="bi bi-shield-lock"></i>
+                        <span>Phân Quyền</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+        <!-- Page Content -->
+        <div id="content">
+            <!-- Navbar -->
+            <nav class="navbar navbar-expand-lg mb-4">
+                <div class="container-fluid">
+                    <button type="button" id="sidebarCollapse" class="btn btn-primary">
+                        <i class="bi bi-list"></i>
+                    </button>
+                    <button class="btn btn-dark d-inline-block d-lg-none ms-auto" type="button"
+                        data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+                        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                        <i class="bi bi-three-dots"></i>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="nav navbar-nav ms-auto">
+                            <li class="nav-item">
+                                <a class="nav-link" href="#" title="Thông báo">
+                                    <i class="bi bi-bell position-relative">
+                                        <span
+                                            class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle">
+                                            <span class="visually-hidden">Thông báo mới</span>
+                                        </span>
+                                    </i>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#" title="Tin nhắn">
+                                    <i class="bi bi-envelope"></i>
+                                </a>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle d-flex align-items-center" href="#"
+                                    id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <img src="https://via.placeholder.com/30" class="rounded-circle me-2" alt="Admin" />
+                                    <span>Admin</span>
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                    <li>
+                                        <a class="dropdown-item" href="#"><i class="bi bi-person me-2"></i>Hồ sơ</a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" href="#"><i class="bi bi-gear me-2"></i>Cài đặt</a>
+                                    </li>
+                                    <li>
+                                        <hr class="dropdown-divider" />
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" href="#"><i class="bi bi-box-arrow-right me-2"></i>Đăng
+                                            xuất</a>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+
+            <!-- Dashboard Header -->
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="bg-primary text-white rounded p-3">
+                        <div class="row align-items-center">
+                            <div class="col-md-6">
+                                <h2>Báo Cáo Doanh Thu</h2>
+                            </div>
+                            <div class="col-md-6 text-md-end">
+                                <button class="btn btn-light me-2">
+                                    <i class="bi bi-file-earmark-pdf"></i> Xuất PDF
+                                </button>
+                                <button class="btn btn-light">
+                                    <i class="bi bi-file-earmark-excel"></i> Xuất Excel
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filter Section -->
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-body">
+                            <form class="row g-3">
+                                <div class="col-md-4">
+                                    <label class="form-label">Khoảng thời gian</label>
+                                    <select class="form-select" id="reportTimeRange">
+                                        <option value="today">Hôm nay</option>
+                                        <option value="yesterday">Hôm qua</option>
+                                        <option value="thisWeek">Tuần này</option>
+                                        <option value="lastWeek">Tuần trước</option>
+                                        <option value="thisMonth" selected>Tháng này</option>
+                                        <option value="lastMonth">Tháng trước</option>
+                                        <option value="thisQuarter">Quý này</option>
+                                        <option value="lastQuarter">Quý trước</option>
+                                        <option value="thisYear">Năm nay</option>
+                                        <option value="lastYear">Năm trước</option>
+                                        <option value="custom">Tùy chỉnh...</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label">Từ ngày</label>
+                                    <input type="date" class="form-control" id="startDate" disabled>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label">Đến ngày</label>
+                                    <input type="date" class="form-control" id="endDate" disabled>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label">Danh mục sản phẩm</label>
+                                    <select class="form-select" id="productCategory">
+                                        <option value="all" selected>Tất cả danh mục</option>
+                                        <option value="books">Sách</option>
+                                        <option value="electronics">Điện tử</option>
+                                        <option value="clothing">Quần áo</option>
+                                        <option value="home">Đồ gia dụng</option>
+                                        <option value="toys">Đồ chơi</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label">Kênh bán hàng</label>
+                                    <select class="form-select" id="salesChannel">
+                                        <option value="all" selected>Tất cả kênh</option>
+                                        <option value="website">Website</option>
+                                        <option value="app">Ứng dụng di động</option>
+                                        <option value="pos">Cửa hàng (POS)</option>
+                                        <option value="marketplace">Sàn TMĐT</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label">Nhóm theo</label>
+                                    <select class="form-select" id="groupBy">
+                                        <option value="day" selected>Theo ngày</option>
+                                        <option value="week">Theo tuần</option>
+                                        <option value="month">Theo tháng</option>
+                                        <option value="quarter">Theo quý</option>
+                                        <option value="year">Theo năm</option>
+                                    </select>
+                                </div>
+                                <div class="col-12 text-end">
+                                    <button type="button" class="btn btn-secondary me-2">Đặt lại</button>
+                                    <button type="button" class="btn btn-primary">Áp dụng</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Summary Stats -->
+            <div class="row mb-4">
+                <div class="col-md-3">
+                    <div class="card border-0 shadow-sm h-100">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <div class="flex-shrink-0">
+                                    <div class="stat-icon bg-primary bg-opacity-10 p-3 rounded text-primary">
+                                        <i class="bi bi-currency-dollar fs-3"></i>
+                                    </div>
+                                </div>
+                                <div class="flex-grow-1 ms-3">
+                                    <h6 class="mb-1">Tổng doanh thu</h6>
+                                    <h3 class="mb-0">1,235,600,000đ</h3>
+                                    <span class="text-success"><i class="bi bi-arrow-up"></i> 12.5%</span>
+                                    <small class="text-muted">so với kỳ trước</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card border-0 shadow-sm h-100">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <div class="flex-shrink-0">
+                                    <div class="stat-icon bg-success bg-opacity-10 p-3 rounded text-success">
+                                        <i class="bi bi-receipt fs-3"></i>
+                                    </div>
+                                </div>
+                                <div class="flex-grow-1 ms-3">
+                                    <h6 class="mb-1">Tổng đơn hàng</h6>
+                                    <h3 class="mb-0">8,427</h3>
+                                    <span class="text-success"><i class="bi bi-arrow-up"></i> 9.2%</span>
+                                    <small class="text-muted">so với kỳ trước</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card border-0 shadow-sm h-100">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <div class="flex-shrink-0">
+                                    <div class="stat-icon bg-info bg-opacity-10 p-3 rounded text-info">
+                                        <i class="bi bi-cart-check fs-3"></i>
+                                    </div>
+                                </div>
+                                <div class="flex-grow-1 ms-3">
+                                    <h6 class="mb-1">Giá trị trung bình</h6>
+                                    <h3 class="mb-0">146,620đ</h3>
+                                    <span class="text-danger"><i class="bi bi-arrow-down"></i> 2.3%</span>
+                                    <small class="text-muted">so với kỳ trước</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card border-0 shadow-sm h-100">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <div class="flex-shrink-0">
+                                    <div class="stat-icon bg-warning bg-opacity-10 p-3 rounded text-warning">
+                                        <i class="bi bi-cash-stack fs-3"></i>
+                                    </div>
+                                </div>
+                                <div class="flex-grow-1 ms-3">
+                                    <h6 class="mb-1">Lợi nhuận</h6>
+                                    <h3 class="mb-0">432,460,000đ</h3>
+                                    <span class="text-success"><i class="bi bi-arrow-up"></i> 15.8%</span>
+                                    <small class="text-muted">so với kỳ trước</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Revenue Chart -->
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0">Biểu đồ doanh thu</h5>
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-sm btn-outline-secondary active">Ngày</button>
+                                <button type="button" class="btn btn-sm btn-outline-secondary">Tuần</button>
+                                <button type="button" class="btn btn-sm btn-outline-secondary">Tháng</button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <canvas id="revenueChart" height="300"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Revenue by Category and Channel -->
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <div class="card border-0 shadow-sm h-100">
+                        <div class="card-header bg-white">
+                            <h5 class="mb-0">Doanh thu theo danh mục</h5>
+                        </div>
+                        <div class="card-body">
+                            <canvas id="categoryChart" height="300"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card border-0 shadow-sm h-100">
+                        <div class="card-header bg-white">
+                            <h5 class="mb-0">Doanh thu theo kênh bán hàng</h5>
+                        </div>
+                        <div class="card-body">
+                            <canvas id="channelChart" height="300"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Revenue Growth -->
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-header bg-white">
+                            <h5 class="mb-0">Tăng trưởng doanh thu</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Thời gian</th>
+                                            <th class="text-end">Doanh thu</th>
+                                            <th class="text-end">So với kỳ trước</th>
+                                            <th class="text-end">Đơn hàng</th>
+                                            <th class="text-end">So với kỳ trước</th>
+                                            <th class="text-center">Biểu đồ</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Tháng 01/2023</td>
+                                            <td class="text-end">75,450,000đ</td>
+                                            <td class="text-end text-success">+8.5%</td>
+                                            <td class="text-end">648</td>
+                                            <td class="text-end text-success">+5.2%</td>
+                                            <td class="text-center">
+                                                <div style="height: 30px;">
+                                                    <canvas class="sparkline"></canvas>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Tháng 02/2023</td>
+                                            <td class="text-end">92,120,000đ</td>
+                                            <td class="text-end text-success">+22.1%</td>
+                                            <td class="text-end">721</td>
+                                            <td class="text-end text-success">+11.3%</td>
+                                            <td class="text-center">
+                                                <div style="height: 30px;">
+                                                    <canvas class="sparkline"></canvas>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Tháng 03/2023</td>
+                                            <td class="text-end">107,650,000đ</td>
+                                            <td class="text-end text-success">+16.9%</td>
+                                            <td class="text-end">845</td>
+                                            <td class="text-end text-success">+17.2%</td>
+                                            <td class="text-center">
+                                                <div style="height: 30px;">
+                                                    <canvas class="sparkline"></canvas>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Tháng 04/2023</td>
+                                            <td class="text-end">98,320,000đ</td>
+                                            <td class="text-end text-danger">-8.7%</td>
+                                            <td class="text-end">780</td>
+                                            <td class="text-end text-danger">-7.7%</td>
+                                            <td class="text-center">
+                                                <div style="height: 30px;">
+                                                    <canvas class="sparkline"></canvas>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Tháng 05/2023</td>
+                                            <td class="text-end">115,780,000đ</td>
+                                            <td class="text-end text-success">+17.8%</td>
+                                            <td class="text-end">912</td>
+                                            <td class="text-end text-success">+16.9%</td>
+                                            <td class="text-center">
+                                                <div style="height: 30px;">
+                                                    <canvas class="sparkline"></canvas>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Top Products -->
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-header bg-white">
+                            <h5 class="mb-0">Sản phẩm bán chạy</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th width="60">STT</th>
+                                            <th>Sản phẩm</th>
+                                            <th class="text-end">Đã bán</th>
+                                            <th class="text-end">Doanh thu</th>
+                                            <th class="text-end">Lợi nhuận</th>
+                                            <th class="text-end">Tỷ suất lợi nhuận</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>1</td>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <img src="https://via.placeholder.com/48" class="rounded me-3" alt="">
+                                                    <div>
+                                                        <div class="fw-semibold">iPhone 14 Pro Max 256GB</div>
+                                                        <div class="small text-muted">SKU: IP14PM-256-BLK</div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="text-end">245</td>
+                                            <td class="text-end">735,000,000đ</td>
+                                            <td class="text-end">147,000,000đ</td>
+                                            <td class="text-end">20.0%</td>
+                                        </tr>
+                                        <tr>
+                                            <td>2</td>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <img src="https://via.placeholder.com/48" class="rounded me-3" alt="">
+                                                    <div>
+                                                        <div class="fw-semibold">MacBook Air M2 13"</div>
+                                                        <div class="small text-muted">SKU: MBA-M2-8GB-256-SLV</div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="text-end">178</td>
+                                            <td class="text-end">534,000,000đ</td>
+                                            <td class="text-end">106,800,000đ</td>
+                                            <td class="text-end">20.0%</td>
+                                        </tr>
+                                        <tr>
+                                            <td>3</td>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <img src="https://via.placeholder.com/48" class="rounded me-3" alt="">
+                                                    <div>
+                                                        <div class="fw-semibold">Samsung Galaxy S23 Ultra 256GB</div>
+                                                        <div class="small text-muted">SKU: SS-S23U-256-BLK</div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="text-end">156</td>
+                                            <td class="text-end">468,000,000đ</td>
+                                            <td class="text-end">93,600,000đ</td>
+                                            <td class="text-end">20.0%</td>
+                                        </tr>
+                                        <tr>
+                                            <td>4</td>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <img src="https://via.placeholder.com/48" class="rounded me-3" alt="">
+                                                    <div>
+                                                        <div class="fw-semibold">iPad Pro 11" 256GB</div>
+                                                        <div class="small text-muted">SKU: IPP-11-256-SLV</div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="text-end">110</td>
+                                            <td class="text-end">275,000,000đ</td>
+                                            <td class="text-end">55,000,000đ</td>
+                                            <td class="text-end">20.0%</td>
+                                        </tr>
+                                        <tr>
+                                            <td>5</td>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <img src="https://via.placeholder.com/48" class="rounded me-3" alt="">
+                                                    <div>
+                                                        <div class="fw-semibold">Apple Watch Series 8 GPS + Cellular</div>
+                                                        <div class="small text-muted">SKU: AWS8-GPS-CEL-BLK</div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="text-end">95</td>
+                                            <td class="text-end">190,000,000đ</td>
+                                            <td class="text-end">57,000,000đ</td>
+                                            <td class="text-end">30.0%</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <footer class="bg-white text-center py-3 mt-2 rounded">
+                <p class="mb-0 text-muted">
+                    © 2025 Hệ Thống Quản Lý. Thiết kế bởi
+                    <a href="#" class="text-decoration-none">BookShopTeam</a>
+                </p>
+            </footer>
+        </div>
+    </div>
+
+    <!-- Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Alert Sweet -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <!-- Custom JS -->
+    <script src="js/app/index.js"></script>
+</body>
+
+</html>

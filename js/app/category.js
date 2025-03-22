@@ -1,5 +1,20 @@
-import { getCategory } from "../service/category.js";
-import { initializeTooltip } from "../utils/index.js";
+import {
+    getCategories
+} from "../service/category.js";
+
+import {
+    loadCategories,
+    loadStatistics,
+    setupFilterEvents,
+    setDefaultItemsPerPage
+} from "../container/category.js";
+
+
+import {
+    initializeTooltip,
+    initializeLoadingOverlay,
+    initializeSelect2
+} from "../utils/index.js";
 
 
 document.addEventListener("DOMContentLoaded", async function () {
@@ -15,7 +30,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     initializeSelect2();
 
     // Khởi tạo dữ liệu cho Stats Row
-    loadSatistic();
+    loadStatistics();
 
     // Thiết lập sự kiện cho các filter
     setupFilterEvents();
@@ -23,6 +38,6 @@ document.addEventListener("DOMContentLoaded", async function () {
     // Thiết lập giá trị mặc định cho items per page
     setDefaultItemsPerPage();
 
-    // load Categories
+    // Load Categories
     loadCategories();
 });
