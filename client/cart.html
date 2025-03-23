@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giỏ hàng - BookStore</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/cart.css">
+</head>
+
+<body>
+    <!-- Header -->
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-light bg-white py-1">
+            <div class="container">
+                <a class="navbar-brand" href="#">
+                    <img src="/asset/logo.jpg" alt="BookStore Logo" class="navbar-logo">
+                </a>
+                <div class="search-bar mx-auto">
+                    <div class="input-group">
+                        <input type="text" class="form-control search-input"
+                            placeholder="Tìm kiếm sách, tác giả, thể loại...">
+                        <button class="btn search-button" type="button" id="searchBtn"><i
+                                class="fas fa-search me-1"></i> Tìm kiếm</button>
+                    </div>
+                </div>
+                <div class="user-menu">
+                    <a href="#" title="Trang chủ">
+                        <i class="fas fa-home"></i>
+                        <span>Trang chủ</span>
+                    </a>
+                    <a href="#" title="Tài khoản">
+                        <i class="fas fa-user-circle"></i>
+                        <span>Tài khoản</span>
+                    </a>
+                    <a href="#" class="cart-icon" title="Giỏ hàng">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span class="cart-count">2</span>
+                        <span>Giỏ hàng</span>
+                    </a>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Commitment Bar đã điều chỉnh -->
+        <div class="commitment-bar">
+            <div class="container">
+                <div class="row justify-content-center align-items-center">
+                    <div class="col-md-2 col-6 text-center">
+                        <div class="commitment-item">
+                            <i class="fas fa-shield-alt"></i>
+                            <span>100% hàng thật</span>
+                        </div>
+                    </div>
+                    <div class="col-md-2 col-6 text-center">
+                        <div class="commitment-item">
+                            <i class="fas fa-truck"></i>
+                            <span>Freeship mọi đơn</span>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-6 text-center">
+                        <div class="commitment-item">
+                            <i class="fas fa-undo"></i>
+                            <span>Hoàn 200% nếu hàng giả</span>
+                        </div>
+                    </div>
+                    <div class="col-md-2 col-6 text-center">
+                        <div class="commitment-item">
+                            <i class="fas fa-calendar-alt"></i>
+                            <span>30 ngày đổi trả</span>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-6 text-center">
+                        <div class="commitment-item">
+                            <i class="fas fa-bolt"></i>
+                            <span>Giao nhanh 2h</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mt-4">
+        <div class="row">
+            <!-- Left Column - Cart Items -->
+            <div class="col-lg-8">
+                <div class="cart-container">
+                    <div class="cart-header">
+                        <h2>GIỎ HÀNG</h2>
+                    </div>
+
+                    <div class="cart-main">
+                        <!-- Cart header -->
+                        <div class="cart-grid-header">
+                            <div class="select-all">
+                                <input type="checkbox" id="select-all-checkbox" checked>
+                                <label for="select-all-checkbox">Tất cả (1 sản phẩm)</label>
+                            </div>
+                            <div class="grid-head-price">Đơn giá</div>
+                            <div class="grid-head-quantity">Số lượng</div>
+                            <div class="grid-head-total">Thành tiền</div>
+                            <div class="grid-head-actions">
+                                <i class="fas fa-trash-alt"></i>
+                            </div>
+                        </div>
+
+                        <!-- Seller group -->
+                        <div class="seller-group">
+                            <!-- Cart item 1 -->
+                            <div class="cart-item">
+                                <div class="item-checkbox">
+                                    <input type="checkbox" checked>
+                                </div>
+                                <div class="item-content">
+                                    <div class="item-image">
+                                        <img src="/asset/images/image.png" alt="Combo sách">
+                                    </div>
+                                    <div class="item-details">
+                                        <div class="item-title">
+                                            COMBO 4 - (TRÍ TUỆ CỦA NGƯỜI XƯA - ĐẠO LÝ NGƯỜI XƯA - HIỂU NGƯỜI để DÙNG NGƯỜI -
+                                            CỔ HỌC TINH HOA)
+                                        </div>
+                                        <div class="item-delivery">
+                                            <i class="fas fa-truck-fast"></i> Giao thứ 4, 02/04
+                                        </div>
+                                        <div class="no-bookcare">
+                                            Sách không hỗ trợ Bookcare
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="item-price">
+                                    <div class="price-current">274.000<sup>đ</sup></div>
+                                    <div class="price-original">582.000<sup>đ</sup></div>
+                                </div>
+                                <div class="item-quantity">
+                                    <div class="quantity-controls">
+                                        <button class="quantity-btn">−</button>
+                                        <input type="text" class="quantity-input" value="1">
+                                        <button class="quantity-btn">+</button>
+                                    </div>
+                                </div>
+                                <div class="item-total">
+                                    274.000<sup>đ</sup>
+                                </div>
+                                <div class="item-actions">
+                                    <i class="fas fa-trash-alt"></i>
+                                </div>
+                            </div>
+
+                            <!-- Free Gift -->
+                            <div class="free-gift-item">
+                                <div class="gift-content">
+                                    <div class="gift-label">Quà tặng</div>
+                                    <div class="gift-image">
+                                        <img src="/asset/images/gift.png" alt="Gift">
+                                    </div>
+                                    <div class="gift-details">
+                                        <div class="gift-title">
+                                            DƯỠNG TÂM GIÀU CÓ DƯỠNG THẦN NGHÈO KHỔ - NGUYỄN ANH DŨNG
+                                        </div>
+                                        <div class="gift-bookcare">
+                                            Sách không hỗ trợ Bookcare
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="gift-price">
+                                    Miễn phí
+                                </div>
+                                <div class="gift-quantity">
+                                    Số lượng: 1
+                                </div>
+                                <div class="gift-total">
+                                    0<sup>đ</sup>
+                                </div>
+                                <div class="gift-actions"></div>
+                            </div>
+                        </div>
+
+                        <!-- Promotion banner -->
+                        <div class="promotion-banner">
+                            <div class="promotion-icon">
+                                <i class="fas fa-tag"></i>
+                            </div>
+                            <div class="promotion-text">
+                                <div>Đã giảm 25k</div>
+                                <div class="promotion-more">Mua thêm để giảm 40k cho đơn từ 399k <i
+                                        class="fas fa-chevron-right"></i></div>
+                            </div>
+                        </div>
+
+                        <!-- Freeship info -->
+                        <div class="freeship-info">
+                            <div class="freeship-icon">FREESHIP XTRA</div>
+                            <div class="freeship-text">Freeship 15k đơn từ 45k, Freeship 70k đơn từ 100k</div>
+                            <div class="freeship-info-icon">
+                                <i class="fas fa-info-circle"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column - Checkout Summary -->
+            <div class="col-lg-4">
+                <div class="checkout-summary">
+                    <div class="delivery-address">
+                        <div class="delivery-title">Giao tới</div>
+                        <div class="delivery-content">
+                            <div class="delivery-customer">
+                                <span class="customer-name">Quý Đặng</span>
+                                <span class="customer-phone">0975688272</span>
+                            </div>
+                            <div class="address-tag">Nhà</div>
+                            <div class="delivery-address-text">
+                                110/5 đông ánh, hạ nội, Phường Cửa Đông, Quận Hoàn Kiếm, Hà Nội
+                            </div>
+                            <div class="change-address">
+                                <a href="#">Thay đổi</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="checkout-coupon">
+                        <div class="coupon-header">
+                            <div class="tiki-promotion">Tiki Khuyến Mãi</div>
+                            <div class="coupon-selection">Có thể chọn 2 <i class="fas fa-info-circle"></i></div>
+                        </div>
+                        <div class="coupon-options">
+                            <div class="coupon-item">
+                                <div class="coupon-icon">
+                                    <i class="fas fa-truck"></i>
+                                </div>
+                                <div class="coupon-detail">
+                                    <div class="coupon-value">Giảm 50K</div>
+                                    <div class="coupon-info-icon">
+                                        <i class="fas fa-info-circle"></i>
+                                    </div>
+                                </div>
+                                <button class="coupon-select-btn">Bỏ Chọn</button>
+                            </div>
+                        </div>
+                        <div class="more-coupons">
+                            <i class="fas fa-ticket-alt"></i>
+                            <span>Mua thêm để freeship 100k cho đơn 499k</span>
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </div>
+
+                    <div class="checkout-summary-details">
+                        <div class="summary-row">
+                            <div class="summary-label">Tổng tiền hàng</div>
+                            <div class="summary-value">680.000<sup>đ</sup></div>
+                        </div>
+                        <div class="summary-row discount">
+                            <div class="summary-label">Giảm giá trực tiếp</div>
+                            <div class="summary-value">-381.000<sup>đ</sup></div>
+                        </div>
+                        <div class="summary-row discount">
+                            <div class="summary-label">Mã khuyến mãi từ nhà bán</div>
+                            <div class="summary-value">-25.000<sup>đ</sup></div>
+                        </div>
+                        <div class="summary-row total">
+                            <div class="summary-label">Tổng tiền thanh toán</div>
+                            <div class="summary-value total-value">274.000<sup>đ</sup></div>
+                        </div>
+                        <div class="summary-row saving">
+                            <div class="summary-value">Tiết kiệm 406.000<sup>đ</sup></div>
+                        </div>
+                        <div class="summary-note">(Đã bao gồm VAT nếu có)</div>
+                    </div>
+
+                    <button class="checkout-button">Mua Hàng (1)</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-light mt-5 py-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3">
+                    <h5 class="mb-3">Hỗ Trợ Khách Hàng</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-decoration-none text-secondary">Trung tâm trợ giúp</a></li>
+                        <li><a href="#" class="text-decoration-none text-secondary">Hướng dẫn mua hàng</a></li>
+                        <li><a href="#" class="text-decoration-none text-secondary">Phương thức vận chuyển</a></li>
+                        <li><a href="#" class="text-decoration-none text-secondary">Chính sách đổi trả</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3">
+                    <h5 class="mb-3">Về BookStore</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-decoration-none text-secondary">Giới thiệu</a></li>
+                        <li><a href="#" class="text-decoration-none text-secondary">Tuyển dụng</a></li>
+                        <li><a href="#" class="text-decoration-none text-secondary">Điều khoản sử dụng</a></li>
+                        <li><a href="#" class="text-decoration-none text-secondary">Chính sách bảo mật</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3">
+                    <h5 class="mb-3">Hợp tác & Liên kết</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-decoration-none text-secondary">Bán hàng cùng BookStore</a></li>
+                        <li><a href="#" class="text-decoration-none text-secondary">Đối tác giao hàng</a></li>
+                        <li><a href="#" class="text-decoration-none text-secondary">Đối tác thanh toán</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3">
+                    <h5 class="mb-3">Kết nối với chúng tôi</h5>
+                    <div class="d-flex gap-3 mb-3">
+                        <a href="#" class="text-decoration-none text-secondary">
+                            <i class="fab fa-facebook-square fa-2x"></i>
+                        </a>
+                        <a href="#" class="text-decoration-none text-secondary">
+                            <i class="fab fa-instagram fa-2x"></i>
+                        </a>
+                        <a href="#" class="text-decoration-none text-secondary">
+                            <i class="fab fa-youtube fa-2x"></i>
+                        </a>
+                        <a href="#" class="text-decoration-none text-secondary">
+                            <i class="fab fa-twitter-square fa-2x"></i>
+                        </a>
+                    </div>
+                    <h5 class="mb-3">Phương thức thanh toán</h5>
+                    <div class="d-flex gap-2 flex-wrap">
+                        <i class="fab fa-cc-visa fa-2x"></i>
+                        <i class="fab fa-cc-mastercard fa-2x"></i>
+                        <i class="fab fa-cc-paypal fa-2x"></i>
+                        <i class="fas fa-money-bill-wave fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-4">
+                <div class="col-12 text-center">
+                    <p class="text-muted">© 2025 BookStore. Tất cả các quyền được bảo lưu.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Quantity controls
+        const minusBtns = document.querySelectorAll('.quantity-btn:first-child');
+        const plusBtns = document.querySelectorAll('.quantity-btn:last-child');
+        const quantityInputs = document.querySelectorAll('.quantity-input');
+
+        minusBtns.forEach((btn, index) => {
+            btn.addEventListener('click', function () {
+                let value = parseInt(quantityInputs[index].value);
+                if (value > 1) {
+                    quantityInputs[index].value = value - 1;
+                    updateTotalPrice();
+                }
+            });
+        });
+
+        plusBtns.forEach((btn, index) => {
+            btn.addEventListener('click', function () {
+                let value = parseInt(quantityInputs[index].value);
+                quantityInputs[index].value = value + 1;
+                updateTotalPrice();
+            });
+        });
+
+        quantityInputs.forEach(input => {
+            input.addEventListener('change', function () {
+                let value = parseInt(this.value);
+                if (isNaN(value) || value < 1) {
+                    this.value = 1;
+                }
+                updateTotalPrice();
+            });
+        });
+
+        function updateTotalPrice() {
+            // Trong ứng dụng thực tế, bạn sẽ tính toán lại tổng giá trị
+            console.log('Updating total price...');
+        }
+
+        // Select all checkbox
+        const selectAllCheckbox = document.getElementById('select-all-checkbox');
+        const itemCheckboxes = document.querySelectorAll('.item-checkbox input[type="checkbox"]');
+        const sellerCheckbox = document.getElementById('seller-checkbox');
+
+        selectAllCheckbox.addEventListener('change', function () {
+            const isChecked = this.checked;
+            itemCheckboxes.forEach(cb => cb.checked = isChecked);
+            sellerCheckbox.checked = isChecked;
+        });
+
+        sellerCheckbox.addEventListener('change', function () {
+            const isChecked = this.checked;
+            const sellerItems = this.closest('.seller-group').querySelectorAll('.item-checkbox input[type="checkbox"]');
+            sellerItems.forEach(cb => cb.checked = isChecked);
+
+            // Check if all items are selected
+            const allSelected = Array.from(itemCheckboxes).every(cb => cb.checked);
+            selectAllCheckbox.checked = allSelected;
+        });
+
+        itemCheckboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', function () {
+                // Check if all items in this seller group are selected
+                const sellerGroup = this.closest('.seller-group');
+                const sellerItems = sellerGroup.querySelectorAll('.item-checkbox input[type="checkbox"]');
+                const allSellerItemsSelected = Array.from(sellerItems).every(cb => cb.checked);
+
+                // Update seller checkbox
+                const sellerCb = sellerGroup.querySelector('#seller-checkbox');
+                sellerCb.checked = allSellerItemsSelected;
+
+                // Check if all items are selected
+                const allSelected = Array.from(itemCheckboxes).every(cb => cb.checked);
+                selectAllCheckbox.checked = allSelected;
+            });
+        });
+    </script>
+</body>
+
+</html>
