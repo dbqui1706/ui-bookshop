@@ -3,7 +3,9 @@ body {
     background-color: #f6f6f6;
     color: #333;
 }
-
+.container {
+    max-width: 1300px; /* Tăng từ mặc định 1200px */
+}
 .breadcrumb {
     margin: 15px 0;
     font-size: 0.9rem;

@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/cart.css">
+    <link rel="stylesheet" href="css/cart-popup-modal.css">
 </head>
 
 <body>
@@ -85,15 +86,15 @@
     </header>
 
     <!-- Main Content -->
-    <main class="container mt-4">
-        <div class="row">
+    <main class="container p-0">
+        <div class="row no-gutters">
             <!-- Left Column - Cart Items -->
-            <div class="col-lg-8">
+            <div class="col-lg-9 cart-col">
                 <div class="cart-container">
                     <div class="cart-header">
                         <h2>GIỎ HÀNG</h2>
                     </div>
-
+                    <!-- Cart main -->
                     <div class="cart-main">
                         <!-- Cart header -->
                         <div class="cart-grid-header">
@@ -111,25 +112,27 @@
 
                         <!-- Seller group -->
                         <div class="seller-group">
-                            <!-- Cart item 1 -->
+                            <!-- Cart Item - Cấu trúc 4 cột với item-checkbox và item-content đã gộp -->
                             <div class="cart-item">
-                                <div class="item-checkbox">
-                                    <input type="checkbox" checked>
-                                </div>
-                                <div class="item-content">
-                                    <div class="item-image">
-                                        <img src="/asset/images/image.png" alt="Combo sách">
+                                <div class="item-content-wrapper">
+                                    <div class="item-checkbox">
+                                        <input type="checkbox" checked>
                                     </div>
-                                    <div class="item-details">
-                                        <div class="item-title">
-                                            COMBO 4 - (TRÍ TUỆ CỦA NGƯỜI XƯA - ĐẠO LÝ NGƯỜI XƯA - HIỂU NGƯỜI để DÙNG NGƯỜI -
-                                            CỔ HỌC TINH HOA)
+                                    <div class="item-content">
+                                        <div class="item-image">
+                                            <img src="/asset/images/image.png" alt="Combo sách">
                                         </div>
-                                        <div class="item-delivery">
-                                            <i class="fas fa-truck-fast"></i> Giao thứ 4, 02/04
-                                        </div>
-                                        <div class="no-bookcare">
-                                            Sách không hỗ trợ Bookcare
+                                        <div class="item-details">
+                                            <div class="item-title">
+                                                COMBO 4 - (TRÍ TUỆ CỦA NGƯỜI XƯA - ĐẠO LÝ NGƯỜI XƯA - HIỂU NGƯỜI để DÙNG
+                                                NGƯỜI - CỔ HỌC TINH HOA)
+                                            </div>
+                                            <div class="item-delivery">
+                                                <i class="fas fa-truck-fast"></i> Giao thứ 4, 02/04
+                                            </div>
+                                            <div class="no-bookcare">
+                                                Sách không hỗ trợ Bookcare
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -144,40 +147,48 @@
                                         <button class="quantity-btn">+</button>
                                     </div>
                                 </div>
-                                <div class="item-total">
-                                    274.000<sup>đ</sup>
-                                </div>
                                 <div class="item-actions">
                                     <i class="fas fa-trash-alt"></i>
                                 </div>
                             </div>
 
-                            <!-- Free Gift -->
-                            <div class="free-gift-item">
-                                <div class="gift-content">
-                                    <div class="gift-label">Quà tặng</div>
-                                    <div class="gift-image">
-                                        <img src="/asset/images/gift.png" alt="Gift">
+                            <div class="cart-item">
+                                <div class="item-content-wrapper">
+                                    <div class="item-checkbox">
+                                        <input type="checkbox" checked>
                                     </div>
-                                    <div class="gift-details">
-                                        <div class="gift-title">
-                                            DƯỠNG TÂM GIÀU CÓ DƯỠNG THẦN NGHÈO KHỔ - NGUYỄN ANH DŨNG
+                                    <div class="item-content">
+                                        <div class="item-image">
+                                            <img src="/asset/images/image.png" alt="Combo sách">
                                         </div>
-                                        <div class="gift-bookcare">
-                                            Sách không hỗ trợ Bookcare
+                                        <div class="item-details">
+                                            <div class="item-title">
+                                                COMBO 4 - (TRÍ TUỆ CỦA NGƯỜI XƯA - ĐẠO LÝ NGƯỜI XƯA - HIỂU NGƯỜI để DÙNG
+                                                NGƯỜI - CỔ HỌC TINH HOA)
+                                            </div>
+                                            <div class="item-delivery">
+                                                <i class="fas fa-truck-fast"></i> Giao thứ 4, 02/04
+                                            </div>
+                                            <div class="no-bookcare">
+                                                Sách không hỗ trợ Bookcare
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="gift-price">
-                                    Miễn phí
+                                <div class="item-price">
+                                    <div class="price-current">274.000<sup>đ</sup></div>
+                                    <div class="price-original">582.000<sup>đ</sup></div>
                                 </div>
-                                <div class="gift-quantity">
-                                    Số lượng: 1
+                                <div class="item-quantity">
+                                    <div class="quantity-controls">
+                                        <button class="quantity-btn">−</button>
+                                        <input type="text" class="quantity-input" value="1">
+                                        <button class="quantity-btn">+</button>
+                                    </div>
                                 </div>
-                                <div class="gift-total">
-                                    0<sup>đ</sup>
+                                <div class="item-actions">
+                                    <i class="fas fa-trash-alt"></i>
                                 </div>
-                                <div class="gift-actions"></div>
                             </div>
                         </div>
 
@@ -206,7 +217,7 @@
             </div>
 
             <!-- Right Column - Checkout Summary -->
-            <div class="col-lg-4">
+            <div class="col-lg-3 cart-col">
                 <div class="checkout-summary">
                     <div class="delivery-address">
                         <div class="delivery-title">Giao tới</div>
@@ -227,7 +238,7 @@
 
                     <div class="checkout-coupon">
                         <div class="coupon-header">
-                            <div class="tiki-promotion">Tiki Khuyến Mãi</div>
+                            <div class="tiki-promotion">Khuyến Mãi</div>
                             <div class="coupon-selection">Có thể chọn 2 <i class="fas fa-info-circle"></i></div>
                         </div>
                         <div class="coupon-options">
@@ -344,7 +355,7 @@
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
+    <!-- <script>
         // Quantity controls
         const minusBtns = document.querySelectorAll('.quantity-btn:first-child');
         const plusBtns = document.querySelectorAll('.quantity-btn:last-child');
@@ -420,7 +431,8 @@
                 selectAllCheckbox.checked = allSelected;
             });
         });
-    </script>
+    </script> -->
+    <script src="js/cart.js"></script>
 </body>
 
 </html>

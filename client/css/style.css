@@ -3,7 +3,10 @@ body {
     background-color: #f6f6f6;
     color: #333;
 }
-
+/* Cart Page Styles */
+.container {
+    max-width: 1300px; /* Tăng từ mặc định 1200px */
+}
 .navbar-brand {
     font-size: 2rem;
     font-weight: bold;
@@ -93,7 +96,7 @@ body {
     font-size: 1.2rem;
 }
 
-@media (max-width: 767.98px) {
+@media (max-width: 900px) {
     .commitment-item {
         justify-content: flex-start;
         margin-bottom: 10px;

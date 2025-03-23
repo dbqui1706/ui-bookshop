@@ -26,10 +26,10 @@ body {
     padding: 0;
 }
 
-/* Cart Grid Header */
+/* Cart Grid Header - Cấu trúc grid được cải thiện */
 .cart-grid-header {
     display: grid;
-    grid-template-columns: auto 1fr 1fr 1fr 40px;
+    grid-template-columns: 1fr 150px 150px 70px;
     padding: 12px 20px;
     background-color: #fff;
     border-bottom: 1px solid #f1f1f1;
@@ -41,19 +41,29 @@ body {
 .select-all {
     display: flex;
     align-items: center;
+    grid-column: 1;
 }
 
 .select-all input[type="checkbox"] {
     margin-right: 10px;
 }
 
-.grid-head-price, 
-.grid-head-quantity, 
-.grid-head-total {
+.grid-head-price {
+    grid-column: 2;
     text-align: center;
 }
 
+.grid-head-quantity {
+    grid-column: 3;
+    text-align: center;
+}
+
+.grid-head-total {
+    display: none; /* Ẩn cột total trong header */
+}
+
 .grid-head-actions {
+    grid-column: 4;
     text-align: center;
     color: #757575;
 }
@@ -94,24 +104,31 @@ body {
     color: #999;
 }
 
-/* Cart Item */
+/* Cart Item - Cấu trúc grid được cải thiện */
 .cart-item {
     display: grid;
-    grid-template-columns: auto 1fr 1fr 1fr 40px;
+    grid-template-columns: 1fr 150px 150px 70px;
     padding: 20px;
     border-bottom: 1px solid #f1f1f1;
     align-items: center;
 }
 
-.item-checkbox {
+/* Gộp item-checkbox và item-content thành một cột */
+.item-content-wrapper {
     display: flex;
     align-items: flex-start;
-    padding-right: 15px;
+    grid-column: 1;
+}
+
+.item-checkbox {
+    margin-right: 15px;
+    flex-shrink: 0;
 }
 
 .item-content {
     display: flex;
     align-items: flex-start;
+    flex: 1;
 }
 
 .item-image {
@@ -157,6 +174,7 @@ body {
 }
 
 .item-price {
+    grid-column: 2;
     text-align: center;
 }
 
@@ -173,6 +191,7 @@ body {
 }
 
 .item-quantity {
+    grid-column: 3;
     text-align: center;
 }
 
@@ -202,85 +221,17 @@ body {
 }
 
 .item-total {
-    text-align: center;
-    font-weight: 500;
-    color: #ff424e;
+    display: none; /* Ẩn cột total trong item */
 }
 
 .item-actions {
+    grid-column: 4;
     text-align: center;
     color: #757575;
     cursor: pointer;
-}
-
-/* Free Gift Item */
-.free-gift-item {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr 40px;
-    padding: 15px 20px;
-    background-color: #fffefb;
-    border-bottom: 1px solid #f1f1f1;
-    align-items: center;
-}
-
-.gift-content {
     display: flex;
-    align-items: flex-start;
-    grid-column: 1;
-}
-
-.gift-label {
-    padding: 2px 8px;
-    background-color: #ffe8e9;
-    color: #ff424e;
-    border-radius: 4px;
-    font-size: 12px;
-    font-weight: 500;
-    width: fit-content;
-    margin-right: 10px;
-    float: left;
-}
-
-.gift-image {
-    width: 60px;
-    height: 60px;
-    margin-right: 12px;
-    border: 1px solid #f1f1f1;
-    border-radius: 4px;
-    background-color: #fff;
-    float: left;
-}
-
-.gift-image img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-}
-
-.gift-details {
-    flex: 1;
-}
-
-.gift-title {
-    font-size: 13px;
-    color: #333;
-    margin-bottom: 4px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-}
-
-.gift-bookcare {
-    font-size: 12px;
-    color: #999;
-}
-
-.gift-price, .gift-quantity, .gift-total {
-    font-size: 14px;
-    color: #666;
-    text-align: center;
+    justify-content: center;
+    align-items: center;
 }
 
 /* Promotion Banner */
@@ -565,56 +516,52 @@ body {
     background-color: #e03a45;
 }
 
-/* Mobile Responsive */
+/* Mobile Responsive - Điều chỉnh phù hợp với cấu trúc grid mới */
 @media (max-width: 991.98px) {
     .cart-grid-header {
-        grid-template-columns: auto 1fr 1fr 40px;
-    }
-    
-    .cart-grid-header .grid-head-price {
-        display: none;
+        grid-template-columns: 1fr 120px 70px;
     }
     
     .cart-item {
-        grid-template-columns: auto 1fr 1fr 40px;
-    }
-    
-    .item-price {
-        display: none;
+        grid-template-columns: 1fr 120px 70px;
     }
     
     .free-gift-item {
-        grid-template-columns: 1fr 1fr 1fr 40px;
+        grid-template-columns: 1fr 120px 70px;
     }
     
-    .gift-price {
+    .grid-head-price, .item-price, .gift-price {
         display: none;
+    }
+    
+    .grid-head-quantity, .item-quantity, .gift-quantity {
+        grid-column: 2;
+    }
+    
+    .grid-head-actions, .item-actions, .gift-actions {
+        grid-column: 3;
     }
 }
 
 @media (max-width: 767.98px) {
     .cart-grid-header {
-        grid-template-columns: auto 1fr 40px;
-    }
-    
-    .cart-grid-header .grid-head-quantity {
-        display: none;
+        grid-template-columns: 1fr 70px;
     }
     
     .cart-item {
-        grid-template-columns: auto 1fr 40px;
-    }
-    
-    .item-quantity {
-        display: none;
+        grid-template-columns: 1fr 70px;
     }
     
     .free-gift-item {
-        grid-template-columns: 1fr 1fr 40px;
+        grid-template-columns: 1fr 70px;
     }
     
-    .gift-quantity {
+    .grid-head-quantity, .item-quantity, .gift-quantity {
         display: none;
+    }
+    
+    .grid-head-actions, .item-actions, .gift-actions {
+        grid-column: 2;
     }
 }
 
