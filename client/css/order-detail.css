@@ -1,7 +1,417 @@
+/* CSS cho trang Chi tiết đơn hàng */
+
 .order-detail-content {
     background-color: #fff;
     border-radius: 8px;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
     padding: 24px;
     height: 100%;
+}
+
+.order-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #f1f1f1;
+    margin-bottom: 20px;
+}
+
+.order-title {
+    font-size: 20px;
+    font-weight: 500;
+    color: #333;
+    margin-bottom: 8px;
+}
+
+.order-subtitle {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 4px;
+}
+
+.order-id {
+    font-weight: 600;
+    color: #0066cc;
+}
+
+.order-status {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-size: 13px;
+    font-weight: 500;
+    text-align: center;
+    min-width: 100px;
+}
+
+.status-completed {
+    background-color: #e8f5e9;
+    color: #1b873f;
+    border: 1px solid #b7dfb9;
+}
+
+.status-processing {
+    background-color: #fff8e1;
+    color: #f9a825;
+    border: 1px solid #ffecb3;
+}
+
+.status-shipped {
+    background-color: #e3f2fd;
+    color: #0066cc;
+    border: 1px solid #bbdefb;
+}
+
+.status-canceled {
+    background-color: #fbe9e7;
+    color: #d32f2f;
+    border: 1px solid #ffccbc;
+}
+
+.status-refunded {
+    background-color: #f3e5f5;
+    color: #7b1fa2;
+    border: 1px solid #e1bee7;
+}
+
+.order-actions {
+    margin-top: 12px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+}
+
+.btn-cancel-order {
+    background-color: transparent;
+    border: 1px solid #d32f2f;
+    color: #d32f2f;
+    padding: 8px 16px;
+    border-radius: 4px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-cancel-order:hover {
+    background-color: #fbe9e7;
+}
+
+.btn-contact-support {
+    background-color: transparent;
+    border: 1px solid #0066cc;
+    color: #0066cc;
+    padding: 8px 16px;
+    border-radius: 4px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-contact-support:hover {
+    background-color: #e3f2fd;
+}
+
+.btn-order-again {
+    background-color: #0066cc;
+    border: none;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 4px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-order-again:hover {
+    background-color: #0052a3;
+}
+
+.section-title {
+    font-size: 16px;
+    font-weight: 500;
+    margin-bottom: 16px;
+    color: #333;
+}
+
+.info-box {
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 24px;
+}
+
+.shipping-info p,
+.payment-info p {
+    margin-bottom: 8px;
+    font-size: 14px;
+    color: #333;
+}
+
+.info-label {
+    color: #666;
+    margin-right: 8px;
+}
+
+.tracking-box {
+    margin-bottom: 24px;
+}
+
+.tracking-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.tracking-number {
+    font-weight: 500;
+    color: #0066cc;
+}
+
+.btn-track {
+    background-color: transparent;
+    border: 1px solid #0066cc;
+    color: #0066cc;
+    padding: 4px 12px;
+    border-radius: 4px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-track:hover {
+    background-color: #e3f2fd;
+}
+
+.shipping-carrier {
+    font-size: 13px;
+    color: #666;
+}
+
+/* Order Items Table */
+.items-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 24px;
+}
+
+.items-table th {
+    text-align: left;
+    padding: 12px 8px;
+    border-bottom: 1px solid #f1f1f1;
+    color: #666;
+    font-weight: 500;
+    font-size: 13px;
+}
+
+.items-table td {
+    padding: 16px 8px;
+    border-bottom: 1px solid #f1f1f1;
+    font-size: 14px;
+    color: #333;
+    vertical-align: top;
+}
+
+.product-cell {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.product-image {
+    width: 60px;
+    height: 80px;
+    object-fit: contain;
+    border: 1px solid #eee;
+    background-color: #f9f9f9;
+    padding: 4px;
+}
+
+.product-title {
+    font-weight: 500;
+    margin-bottom: 4px;
+    line-height: 1.4;
+}
+
+.product-author {
+    font-size: 13px;
+    color: #666;
+    font-style: italic;
+}
+
+.quantity-cell {
+    font-weight: 500;
+}
+
+.price-cell {
+    font-weight: 500;
+}
+
+.subtotal-cell {
+    font-weight: 600;
+    color: #0066cc;
+}
+
+.order-summary {
+    border-top: 1px solid #f1f1f1;
+    padding-top: 16px;
+}
+
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    font-size: 14px;
+}
+
+.summary-label {
+    color: #666;
+}
+
+.summary-value {
+    font-weight: 500;
+}
+
+.total-row {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px dashed #eee;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.total-label {
+    color: #333;
+}
+
+.total-value {
+    color: #d32f2f;
+}
+
+.shipping-timeline {
+    margin: 30px 0;
+}
+
+.timeline {
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    margin-top: 24px;
+}
+
+.timeline::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 16px;
+    height: 3px;
+    background-color: #f1f1f1;
+    z-index: 1;
+}
+
+.timeline-item {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 25%;
+}
+
+.timeline-dot {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    background-color: #f1f1f1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 8px;
+    border: 1px solid #ddd;
+}
+
+.timeline-dot i {
+    color: #666;
+    font-size: 14px;
+}
+
+.timeline-item.active .timeline-dot {
+    background-color: #0066cc;
+    border-color: #0066cc;
+}
+
+.timeline-item.active .timeline-dot i {
+    color: white;
+}
+
+.timeline-item.completed .timeline-dot {
+    background-color: #1b873f;
+    border-color: #1b873f;
+}
+
+.timeline-item.completed .timeline-dot i {
+    color: white;
+}
+
+.timeline-label {
+    font-size: 13px;
+    color: #666;
+    text-align: center;
+    margin-bottom: 4px;
+}
+
+.timeline-date {
+    font-size: 12px;
+    color: #999;
+    text-align: center;
+}
+
+.timeline-item.active .timeline-label,
+.timeline-item.completed .timeline-label {
+    color: #333;
+    font-weight: 500;
+}
+
+.btn-review {
+    border: 1px solid #0066cc;
+    background-color: transparent;
+    color: #0066cc;
+    padding: 5px 10px;
+    font-size: 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 5px;
+    transition: all 0.2s;
+}
+
+.btn-review:hover {
+    background-color: #e3f2fd;
+}
+
+@media (max-width: 767.98px) {
+    .order-header {
+        flex-direction: column;
+    }
+    
+    .order-actions {
+        justify-content: flex-start;
+        margin-top: 20px;
+    }
+    
+    .timeline {
+        flex-wrap: wrap;
+    }
+    
+    .timeline-item {
+        width: 50%;
+        margin-bottom: 20px;
+    }
+    
+    .timeline::before {
+        display: none;
+    }
 }

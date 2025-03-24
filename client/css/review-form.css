@@ -1,0 +1,370 @@
+/* CSS cho Form Đánh Giá Sản Phẩm - Thiết kế mới gọn hơn */
+
+.review-modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.review-modal {
+    background-color: white;
+    border-radius: 8px;
+    width: 100%;
+    max-width: 800px; /* Đã tăng width để bố trí ngang */
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+    position: relative;
+    overflow: hidden;
+}
+
+.review-modal-header {
+    padding: 12px 16px;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #f9f9f9;
+}
+
+.review-modal-header h3 {
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+    margin: 0;
+}
+
+.review-close-btn {
+    background: none;
+    border: none;
+    font-size: 22px;
+    line-height: 1;
+    color: #666;
+    cursor: pointer;
+    padding: 0;
+}
+
+.review-close-btn:hover {
+    color: #0066cc;
+}
+
+.review-modal-body {
+    padding: 16px;
+}
+
+/* Layout hai cột mới */
+.review-layout {
+    display: flex;
+    gap: 20px;
+}
+
+.review-main-content {
+    flex: 3;
+}
+
+.review-options {
+    flex: 2;
+    border-left: 1px solid #eee;
+    padding-left: 16px;
+}
+
+.review-product-info {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 15px;
+}
+
+.review-product-image {
+    width: 50px;
+    height: 70px;
+    object-fit: contain;
+    margin-right: 12px;
+    border: 1px solid #eee;
+    padding: 3px;
+    background-color: #f9f9f9;
+}
+
+.review-product-title {
+    font-size: 15px;
+    font-weight: 600;
+    margin: 0 0 4px 0;
+    color: #333;
+}
+
+.review-product-author {
+    font-size: 13px;
+    color: #666;
+    margin: 0 0 6px 0;
+    font-style: italic;
+}
+
+/* Star Rating CSS - Smaller size */
+.star-rating {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: flex-start;
+}
+
+.star-rating input {
+    display: none;
+}
+
+.star-rating label {
+    cursor: pointer;
+    width: 24px;
+    height: 24px;
+    background-image: url("data:image/svg+xml;charset=UTF-8,<svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%23dddddd' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polygon points='12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2'/></svg>");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 20px;
+}
+
+.star-rating input:checked ~ label {
+    background-image: url("data:image/svg+xml;charset=UTF-8,<svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='%23ffc107' stroke='%23ffc107' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polygon points='12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2'/></svg>");
+}
+
+.star-rating label:hover,
+.star-rating label:hover ~ label,
+.star-rating input:checked + label:hover,
+.star-rating input:checked ~ label:hover,
+.star-rating label:hover ~ input:checked ~ label {
+    background-image: url("data:image/svg+xml;charset=UTF-8,<svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='%23ffb400' stroke='%23ffb400' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polygon points='12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2'/></svg>");
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-control {
+    width: 100%;
+    padding: 8px 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    color: #333;
+}
+
+.form-control:focus {
+    border-color: #0066cc;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.1);
+}
+
+/* Phần upload ảnh */
+.review-photos {
+    margin-bottom: 15px;
+}
+
+.review-photos p, .review-tags p {
+    margin-bottom: 8px;
+    font-weight: 500;
+    font-size: 14px;
+    color: #555;
+}
+
+.photo-upload-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.photo-upload-btn {
+    width: 60px;
+    height: 60px;
+    border: 1px dashed #ccc;
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    position: relative;
+}
+
+.photo-upload-btn:hover {
+    border-color: #0066cc;
+}
+
+.photo-upload-btn i {
+    font-size: 16px;
+    color: #666;
+    margin-bottom: 3px;
+}
+
+.photo-upload-btn span {
+    font-size: 11px;
+    color: #666;
+}
+
+.photo-input {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.photo-preview-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.photo-preview {
+    width: 60px;
+    height: 60px;
+    border-radius: 4px;
+    overflow: hidden;
+    position: relative;
+}
+
+.photo-preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.photo-remove-btn {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    width: 18px;
+    height: 18px;
+    border-radius: 0 0 0 4px;
+    font-size: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+/* Tags */
+.review-tags {
+    margin-top: 20px;
+}
+
+.tag-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.tag-option {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 10px;
+    background-color: #f5f5f5;
+    border-radius: 16px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.tag-option:hover {
+    background-color: #e3f2fd;
+}
+
+.tag-option input {
+    position: absolute;
+    opacity: 0;
+}
+
+.tag-option span {
+    font-size: 12px;
+    color: #333;
+}
+
+.tag-option input:checked + span {
+    color: #0066cc;
+    font-weight: 500;
+}
+
+.tag-option input:checked ~ .tag-option {
+    background-color: #e3f2fd;
+    border-color: #0066cc;
+}
+
+.review-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 15px;
+}
+
+.btn-cancel {
+    background-color: #f5f5f5;
+    border: 1px solid #ddd;
+    color: #333;
+    padding: 8px 16px;
+    border-radius: 4px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-cancel:hover {
+    background-color: #e9e9e9;
+}
+
+.btn-submit {
+    background-color: #0066cc;
+    border: none;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 4px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-submit:hover {
+    background-color: #0052a3;
+}
+
+/* Responsive */
+@media (max-width: 767px) {
+    .review-layout {
+        flex-direction: column;
+    }
+    
+    .review-options {
+        border-left: none;
+        border-top: 1px solid #eee;
+        padding-left: 0;
+        padding-top: 15px;
+        margin-top: 10px;
+    }
+}
+
+@media (max-width: 576px) {
+    .review-modal {
+        margin: 0;
+        border-radius: 0;
+        height: 100%;
+        max-width: none;
+    }
+    
+    .review-modal-overlay {
+        padding: 0;
+    }
+    
+    .review-actions {
+        position: sticky;
+        bottom: 0;
+        background: white;
+        padding: 10px 0;
+        margin-bottom: 0;
+        box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
+    }
+}

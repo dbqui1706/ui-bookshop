@@ -4,12 +4,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Giỏ hàng - BookStore</title>
+    <title>Chi tiết đơn hàng - BookStore</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/sidebar-account.css">
     <link rel="stylesheet" href="css/order-detail.css">
+    <link rel="stylesheet" href="css/review-form.css">
 </head>
 
 <body>
@@ -104,7 +105,7 @@
                         <div class="account-sidebar">
                             <div class="user-profile">
                                 <div class="user-avatar">
-                                    <img src="/asset/images/sunset.jpg" alt="Avatar">
+                                    <img src="https://avatar.iran.liara.run/public" alt="Avatar">
                                 </div>
                                 <div class="user-info">
                                     <h6>Tài khoản của</h6>
@@ -161,7 +162,280 @@
                     <div class="col-lg-9 col-md-8">
                         <div class="order-detail-content">
                             <!-- Detail Order -->
-                            
+                            <div class="order-header">
+                                <div>
+                                    <h1 class="order-title">Chi tiết đơn hàng</h1>
+                                    <p class="order-subtitle">Mã đơn hàng: <span class="order-id">#BK2025031802</span>
+                                    </p>
+                                    <p class="order-subtitle">Đặt ngày: 18/03/2025 15:30</p>
+                                </div>
+                                <div class="text-end">
+                                    <div class="order-status status-shipped">Đang giao hàng</div>
+                                    <div class="order-actions">
+                                        <button class="btn-cancel-order">Hủy đơn hàng</button>
+                                        <button class="btn-contact-support">Liên hệ hỗ trợ</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Shipping Timeline -->
+                            <div class="shipping-timeline">
+                                <h3 class="section-title">Trạng thái đơn hàng</h3>
+                                <div class="timeline">
+                                    <div class="timeline-item completed">
+                                        <div class="timeline-dot">
+                                            <i class="fas fa-check"></i>
+                                        </div>
+                                        <div class="timeline-label">Đã đặt hàng</div>
+                                        <div class="timeline-date">18/03 15:30</div>
+                                    </div>
+                                    <div class="timeline-item completed">
+                                        <div class="timeline-dot">
+                                            <i class="fas fa-check"></i>
+                                        </div>
+                                        <div class="timeline-label">Đã xác nhận</div>
+                                        <div class="timeline-date">18/03 16:45</div>
+                                    </div>
+                                    <div class="timeline-item active">
+                                        <div class="timeline-dot">
+                                            <i class="fas fa-truck"></i>
+                                        </div>
+                                        <div class="timeline-label">Đang giao hàng</div>
+                                        <div class="timeline-date">19/03 09:20</div>
+                                    </div>
+                                    <div class="timeline-item">
+                                        <div class="timeline-dot">
+                                            <i class="fas fa-box"></i>
+                                        </div>
+                                        <div class="timeline-label">Đã giao hàng</div>
+                                        <div class="timeline-date">Dự kiến 20/03</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Tracking Information -->
+                            <div class="tracking-box">
+                                <h3 class="section-title">Thông tin vận chuyển</h3>
+                                <div class="tracking-info">
+                                    <span class="shipping-carrier">Đơn vị vận chuyển: GiaoHangNhanh</span>
+                                    <span class="tracking-number">Mã vận đơn: GHN87652431</span>
+                                    <button class="btn-track">Theo dõi đơn hàng</button>
+                                </div>
+                            </div>
+
+                            <!-- Order Info Split -->
+                            <div class="row">
+                                <!-- Shipping Info -->
+                                <div class="col-md-6">
+                                    <h3 class="section-title">Thông tin giao hàng</h3>
+                                    <div class="info-box shipping-info">
+                                        <p><strong>Quý Đặng</strong></p>
+                                        <p>0912345678</p>
+                                        <p>123 Đường Nguyễn Văn Linh, Phường Tân Phong, Quận 7, TP.HCM</p>
+                                        <p><span class="info-label">Phương thức giao hàng:</span> Giao hàng nhanh (2-3
+                                            ngày)</p>
+                                        <p><span class="info-label">Ghi chú:</span> Gọi trước khi giao hàng</p>
+                                    </div>
+                                </div>
+
+                                <!-- Payment Info -->
+                                <div class="col-md-6">
+                                    <h3 class="section-title">Thông tin thanh toán</h3>
+                                    <div class="info-box payment-info">
+                                        <p><span class="info-label">Phương thức thanh toán:</span> Thanh toán khi nhận
+                                            hàng (COD)</p>
+                                        <p><span class="info-label">Trạng thái thanh toán:</span> Chưa thanh toán</p>
+                                        <p><span class="info-label">Mã giảm giá:</span> BOOK10 (-10%)</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Order Items -->
+                            <h3 class="section-title">Sản phẩm đã đặt</h3>
+                            <table class="items-table">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 55%;">Sản phẩm</th>
+                                        <th style="width: 15%;">Đơn giá</th>
+                                        <th style="width: 15%;">Số lượng</th>
+                                        <th style="width: 15%;">Thành tiền</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <div class="product-cell">
+                                                <img src="https://placehold.co/120x160" alt="Tôi tài giỏi, bạn cũng thế"
+                                                    class="product-image">
+                                                <div>
+                                                    <div class="product-title">Tôi tài giỏi, bạn cũng thế</div>
+                                                    <div class="product-author">Adam Khoo</div>
+                                                    <button class="btn-review">Đánh giá</button>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="price-cell">120.000đ</td>
+                                        <td class="quantity-cell">1</td>
+                                        <td class="subtotal-cell">120.000đ</td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div class="product-cell">
+                                                <img src="https://placehold.co/120x160" alt="Đắc nhân tâm"
+                                                    class="product-image">
+                                                <div>
+                                                    <div class="product-title">Đắc nhân tâm (Bìa cứng)</div>
+                                                    <div class="product-author">Dale Carnegie</div>
+                                                    <button class="btn-review">Đánh giá</button>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="price-cell">150.000đ</td>
+                                        <td class="quantity-cell">2</td>
+                                        <td class="subtotal-cell">300.000đ</td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div class="product-cell">
+                                                <img src="https://placehold.co/120x160" alt="Nhà giả kim"
+                                                    class="product-image">
+                                                <div>
+                                                    <div class="product-title">Nhà giả kim</div>
+                                                    <div class="product-author">Paulo Coelho</div>
+                                                    <button class="btn-review">Đánh giá</button>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="price-cell">85.000đ</td>
+                                        <td class="quantity-cell">1</td>
+                                        <td class="subtotal-cell">85.000đ</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <!-- Order Summary -->
+                            <div class="order-summary">
+                                <div class="summary-row">
+                                    <span class="summary-label">Tạm tính:</span>
+                                    <span class="summary-value">505.000đ</span>
+                                </div>
+                                <div class="summary-row">
+                                    <span class="summary-label">Giảm giá (BOOK10):</span>
+                                    <span class="summary-value">-50.500đ</span>
+                                </div>
+                                <div class="summary-row">
+                                    <span class="summary-label">Phí vận chuyển:</span>
+                                    <span class="summary-value">Miễn phí</span>
+                                </div>
+                                <div class="total-row">
+                                    <span class="total-label">Tổng cộng:</span>
+                                    <span class="total-value">454.500đ</span>
+                                </div>
+                            </div>
+
+                            <!-- Reorder Button -->
+                            <div class="text-end mt-4">
+                                <button class="btn-order-again">Đặt hàng lại</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Form đánh giá sản phẩm -->
+        <div class="review-modal-overlay" id="reviewModalOverlay">
+            <div class="review-modal">
+                <div class="review-modal-header">
+                    <h3>Đánh giá sản phẩm</h3>
+                    <button class="review-close-btn" id="closeReviewModal">&times;</button>
+                </div>
+                <div class="review-modal-body">
+                    <div class="review-layout">
+                        <!-- Cột trái: Thông tin sản phẩm và đánh giá chính -->
+                        <div class="review-main-content">
+                            <div class="review-product-info">
+                                <img src="https://placehold.co/120x160" alt="Sản phẩm" class="review-product-image"
+                                    id="reviewProductImage">
+                                <div>
+                                    <h4 class="review-product-title" id="reviewProductTitle">Tên sản phẩm</h4>
+                                    <p class="review-product-author" id="reviewProductAuthor">Tác giả</p>
+                                    <!-- Rating stars inline -->
+                                    <div class="star-rating">
+                                        <input type="radio" id="star5" name="rating" value="5" /><label for="star5"
+                                            title="Rất tốt"></label>
+                                        <input type="radio" id="star4" name="rating" value="4" /><label for="star4"
+                                            title="Tốt"></label>
+                                        <input type="radio" id="star3" name="rating" value="3" /><label for="star3"
+                                            title="Bình thường"></label>
+                                        <input type="radio" id="star2" name="rating" value="2" /><label for="star2"
+                                            title="Không tốt"></label>
+                                        <input type="radio" id="star1" name="rating" value="1" /><label for="star1"
+                                            title="Rất tệ"></label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <form id="reviewForm">
+                                <div class="form-group">
+                                    <input type="text" id="reviewTitle" class="form-control"
+                                        placeholder="Tiêu đề đánh giá">
+                                </div>
+
+                                <div class="form-group">
+                                    <textarea id="reviewContent" class="form-control" rows="3"
+                                        placeholder="Chia sẻ cảm nhận của bạn về sản phẩm này..."></textarea>
+                                </div>
+
+                                <div class="review-actions">
+                                    <button type="button" class="btn-cancel" id="cancelReview">Hủy</button>
+                                    <button type="submit" class="btn-submit" id="submitReview">Gửi đánh giá</button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <!-- Cột phải: Tùy chọn và ảnh -->
+                        <div class="review-options">
+                            <div class="review-photos">
+                                <p>Thêm hình ảnh:</p>
+                                <div class="photo-upload-container">
+                                    <div class="photo-upload-btn">
+                                        <i class="fas fa-camera"></i>
+                                        <span>Tải ảnh</span>
+                                        <input type="file" accept="image/*" multiple id="photoUpload"
+                                            class="photo-input">
+                                    </div>
+                                    <div class="photo-preview-container" id="photoPreviewContainer">
+                                        <!-- Previews will be added here -->
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="review-tags">
+                                <p>Những gì bạn thích:</p>
+                                <div class="tag-options">
+                                    <label class="tag-option">
+                                        <input type="checkbox" name="tags" value="Nội dung hay">
+                                        <span>Nội dung hay</span>
+                                    </label>
+                                    <label class="tag-option">
+                                        <input type="checkbox" name="tags" value="Chất lượng in ấn tốt">
+                                        <span>Chất lượng in tốt</span>
+                                    </label>
+                                    <label class="tag-option">
+                                        <input type="checkbox" name="tags" value="Đóng gói đẹp">
+                                        <span>Đóng gói đẹp</span>
+                                    </label>
+                                    <label class="tag-option">
+                                        <input type="checkbox" name="tags" value="Giá trị tốt">
+                                        <span>Giá trị tốt</span>
+                                    </label>
+                                    <label class="tag-option">
+                                        <input type="checkbox" name="tags" value="Giao hàng nhanh">
+                                        <span>Giao hàng nhanh</span>
+                                    </label>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -233,7 +507,8 @@
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="js/order.js"></script>
+    <script src="js/order-detail.js"></script>
+    <script src="js/review-form.js"></script>
 </body>
 
 </html>

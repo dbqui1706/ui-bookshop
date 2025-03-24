@@ -1,0 +1,211 @@
+.wishlist-content {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    padding: 24px;
+    height: 100%;
+}
+
+.wishlist-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #f1f1f1;
+    margin-bottom: 20px;
+}
+
+.wishlist-title {
+    font-size: 20px;
+    font-weight: 500;
+    color: #333;
+    margin-bottom: 8px;
+}
+
+/* Mã CSS mới thêm vào */
+.wishlist-items {
+    margin-bottom: 20px;
+}
+
+.wishlist-item {
+    display: flex;
+    padding: 20px 0;
+    border-bottom: 1px solid #f1f1f1;
+    position: relative;
+}
+
+.item-image {
+    width: 100px;
+    height: 140px;
+    overflow: hidden;
+    border-radius: 4px;
+    margin-right: 16px;
+    flex-shrink: 0;
+}
+
+.item-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.item-details {
+    flex-grow: 1;
+    padding-right: 16px;
+}
+
+.item-title {
+    font-size: 16px;
+    font-weight: 500;
+    margin-bottom: 4px;
+    color: #333;
+}
+
+.item-author {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 8px;
+}
+
+.item-rating {
+    margin-bottom: 8px;
+}
+
+.item-rating i {
+    color: #ffc107;
+    font-size: 14px;
+}
+
+.item-rating span {
+    color: #666;
+    font-size: 14px;
+    margin-left: 4px;
+}
+
+.item-price {
+    font-size: 16px;
+    font-weight: 600;
+    color: #d9534f;
+    margin-bottom: 0;
+}
+
+.original-price {
+    text-decoration: line-through;
+    color: #999;
+    font-weight: normal;
+    font-size: 14px;
+    margin-left: 8px;
+}
+
+.item-actions {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 10px;
+    min-width: 140px;
+}
+
+.add-to-cart-btn, .remove-btn {
+    font-size: 14px;
+    padding: 8px 12px;
+}
+
+.empty-wishlist {
+    padding: 40px 0;
+}
+
+.wishlist-actions {
+    padding-top: 16px;
+}
+
+/* CSS cho phần tìm kiếm và bộ lọc */
+.wishlist-search-filter {
+    padding: 15px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    margin-top: 20px;
+}
+
+.wishlist-search-filter .form-control:focus,
+.wishlist-search-filter .form-select:focus {
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.15);
+    border-color: #86b7fe;
+}
+
+.wishlist-search-filter .form-select {
+    cursor: pointer;
+}
+
+/* CSS cho phần phân trang */
+.wishlist-pagination .page-link {
+    color: #333;
+    border-color: #ddd;
+}
+
+.wishlist-pagination .page-item.active .page-link {
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+    color: white;
+}
+
+.wishlist-pagination .page-item.disabled .page-link {
+    color: #6c757d;
+}
+
+.wishlist-pagination .page-link:hover {
+    background-color: #f1f1f1;
+    color: #0d6efd;
+}
+
+.wishlist-pagination .page-link:focus {
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.15);
+}
+
+/* Điều chỉnh responsive */
+@media (max-width: 767px) {
+    .wishlist-search-filter .d-flex {
+        flex-direction: column;
+    }
+    
+    .wishlist-search-filter select.form-select {
+        width: 100% !important;
+        margin-bottom: 10px;
+    }
+    
+    .wishlist-search-filter .form-select:last-child {
+        margin-bottom: 0;
+    }
+    
+    .wishlist-pagination .pagination {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .wishlist-item {
+        flex-direction: column;
+    }
+    
+    .item-image {
+        width: 100%;
+        height: 200px;
+        margin-right: 0;
+        margin-bottom: 16px;
+    }
+    
+    .item-details {
+        padding-right: 0;
+        margin-bottom: 16px;
+    }
+    
+    .item-actions {
+        flex-direction: row;
+        width: 100%;
+    }
+    
+    .add-to-cart-btn, .remove-btn {
+        flex-grow: 1;
+    }
+}

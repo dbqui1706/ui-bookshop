@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thanh toán - BookStore</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/checkout-style.css">
+    <link rel="stylesheet" href="css/cart-popup-modal.css">
+</head>
+
+<body>
+    <!-- Header -->
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-light bg-white py-1">
+            <div class="container">
+                <a class="navbar-brand" href="#">
+                    <img src="/asset/logo.jpg" alt="BookStore Logo" class="navbar-logo">
+                </a>
+                <div class="search-bar mx-auto">
+                    <div class="input-group">
+                        <input type="text" class="form-control search-input"
+                            placeholder="Tìm kiếm sách, tác giả, thể loại...">
+                        <button class="btn search-button" type="button" id="searchBtn"><i
+                                class="fas fa-search me-1"></i> Tìm kiếm</button>
+                    </div>
+                </div>
+                <div class="user-menu">
+                    <a href="#" title="Trang chủ">
+                        <i class="fas fa-home"></i>
+                        <span>Trang chủ</span>
+                    </a>
+                    <a href="#" title="Tài khoản">
+                        <i class="fas fa-user-circle"></i>
+                        <span>Tài khoản</span>
+                    </a>
+                    <a href="#" class="cart-icon" title="Giỏ hàng">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span class="cart-count">2</span>
+                        <span>Giỏ hàng</span>
+                    </a>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Commitment Bar đã điều chỉnh -->
+        <div class="commitment-bar">
+            <div class="container">
+                <div class="row justify-content-center align-items-center">
+                    <div class="col-md-2 col-6 text-center">
+                        <div class="commitment-item">
+                            <i class="fas fa-shield-alt"></i>
+                            <span>100% hàng thật</span>
+                        </div>
+                    </div>
+                    <div class="col-md-2 col-6 text-center">
+                        <div class="commitment-item">
+                            <i class="fas fa-truck"></i>
+                            <span>Freeship mọi đơn</span>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-6 text-center">
+                        <div class="commitment-item">
+                            <i class="fas fa-undo"></i>
+                            <span>Hoàn 200% nếu hàng giả</span>
+                        </div>
+                    </div>
+                    <div class="col-md-2 col-6 text-center">
+                        <div class="commitment-item">
+                            <i class="fas fa-calendar-alt"></i>
+                            <span>30 ngày đổi trả</span>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-6 text-center">
+                        <div class="commitment-item">
+                            <i class="fas fa-bolt"></i>
+                            <span>Giao nhanh 2h</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container p-0">
+        <div class="row no-gutters">
+
+            <!-- Left Column - Product Items -->
+            <div class="col-lg-9">
+                <div class="checkout-container">
+                    <div class="checkout-header">
+                        <h2>Thanh toán</h2>
+                    </div>
+
+                    <!-- Product Items -->
+                    <div class="product-section">
+                        <div class="section-header">
+                            <h3 class="section-title">Sản phẩm</h3>
+                        </div>
+
+                        <div class="product-list">
+                            <!-- Sản phẩm 1 -->
+                            <div class="product-item">
+                                <div class="product-image">
+                                    <img src="/asset/images/image.png" alt="Chat GPT Thực Chiến">
+                                </div>
+                                <div class="product-details">
+                                    <div class="product-name">Chat GPT Thực Chiến</div>
+                                    <div class="product-seller">
+                                        Cung cấp bởi <span class="seller-name">BookStore</span>
+                                    </div>
+                                    <div class="product-price-mobile">
+                                        <span class="current-price">109.345đ</span>
+                                        <span class="original-price">159.000đ</span>
+                                    </div>
+                                    <div class="product-quantity">
+                                        <span>SL: x1</span>
+                                    </div>
+                                </div>
+                                <div class="product-price">
+                                    <span class="current-price">109.345đ</span>
+                                    <span class="original-price">159.000đ</span>
+                                </div>
+
+                            </div>
+
+                            <!-- Sản phẩm 2 -->
+                            <div class="product-item">
+                                <div class="product-image">
+                                    <img src="/asset/images/image.png" alt="Hiểu Thực Hóa Sự Nghiệp">
+                                </div>
+                                <div class="product-details">
+                                    <div class="product-name">Hiểu Thực Hóa Sự Nghiệp (Bìa Mềm)</div>
+                                    <div class="product-seller">
+                                        Cung cấp bởi <span class="seller-name">BookStore</span>
+                                    </div>
+                                    <div class="product-price-mobile">
+                                        <span class="current-price">30.000đ</span>
+                                        <span class="original-price">60.000đ</span>
+                                    </div>
+                                    <div class="product-quantity">
+                                        <span>SL: x1</span>
+                                    </div>
+                                </div>
+                                <div class="product-price">
+                                    <span class="current-price">30.000đ</span>
+                                    <span class="original-price">60.000đ</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Hình thức giao hàng -->
+                    <div class="shipping-section">
+                        <div class="section-header">
+                            <h3 class="section-title">Chọn hình thức giao hàng</h3>
+                        </div>
+
+                        <div class="shipping-options">
+                            <div class="shipping-option selected">
+                                <div class="option-radio">
+                                    <input type="radio" id="saving-delivery" name="saving-delivery" checked>
+                                </div>
+                                <div class="option-details">
+                                    <div class="option-description">Giao hàng tiết kiệm</div>
+                                    <div class="option-time">Nhận hàng vào thứ 4, trước 19h, 26/03</div>
+                                </div>
+                                <div class="option-price">
+                                    <div class="price-discount">32.200đ</div>
+                                    <div class="price-current">MIỄN PHÍ</div>
+                                </div>
+                            </div>
+
+                            <div class="shipping-option">
+                                <div class="option-radio">
+                                    <input type="radio" id="fast-delivery" name="fast-delivery">
+                                </div>
+                                <div class="option-details">
+                                    <div class="option-description">Giao hàng nhanh</div>
+                                    <div class="option-time">Nhận hàng vào thứ 3, trước 18h, 25/03</div>
+                                </div>
+                                <div class="option-price">
+                                    <div class="price-discount">45.000đ</div>
+                                    <div class="price-current">20.000đ</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Hình thức thanh toán -->
+                    <div class="payment-section">
+                        <div class="section-header">
+                            <h3 class="section-title">Chọn hình thức thanh toán</h3>
+                        </div>
+
+                        <div class="payment-options">
+                            <div class="payment-option selected">
+                                <div class="option-radio">
+                                    <input type="radio" id="cash-payment" name="cash-payment" checked>
+                                </div>
+                                <div class="option-icon">
+                                    <img src="/asset/icons/cash-icon.png" alt="Thanh toán tiền mặt">
+                                </div>
+                                <div class="option-details">
+                                    <div class="option-title">Thanh toán tiền mặt</div>
+                                    <div class="option-description">Thanh toán khi nhận hàng (COD)</div>
+                                </div>
+                            </div>
+
+                            <div class="payment-option">
+                                <div class="option-radio">
+                                    <input type="radio" id="vnpay-payment" name="vnpay-payment">
+                                </div>
+                                <div class="option-icon">
+                                    <img src="/asset/icons/vnpay.png" alt="VNPAY">
+                                </div>
+                                <div class="option-details">
+                                    <div class="option-title">VNPAY</div>
+                                    <div class="option-description">Quét Mã QR từ ứng dụng ngân hàng</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column - Checkout Summary -->
+            <div class="col-lg-3">
+                <div class="checkout-summary">
+
+                    <!-- Delivery Address -->
+                    <div class="delivery-address">
+                        <div class="delivery-title">Giao tới</div>
+                        <div class="delivery-content">
+                            <div class="delivery-customer">
+                                <span class="customer-name">Quý Đặng</span>
+                                <span class="customer-phone">0975688272</span>
+                            </div>
+                            <div class="address-tag">Nhà</div>
+                            <div class="delivery-address-text">
+                                110/5 đông ánh, hạ nội, Phường Cửa Đông, Quận Hoàn Kiếm, Hà Nội
+                            </div>
+                            <div class="change-address">
+                                <a href="#">Thay đổi</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Coupon -->
+                    <div class="checkout-coupon">
+                        <div class="coupon-header">
+                            <div class="tiki-promotion">Khuyến Mãi</div>
+                            <div class="coupon-selection">Có thể chọn 2 <i class="fas fa-info-circle"></i></div>
+                        </div>
+                        <div class="coupon-options">
+                            <div class="coupon-item">
+                                <div class="coupon-icon">
+                                    <i class="fas fa-truck"></i>
+                                </div>
+                                <div class="coupon-detail">
+                                    <div class="coupon-value">Giảm 50K</div>
+                                    <div class="coupon-info-icon">
+                                        <i class="fas fa-info-circle"></i>
+                                    </div>
+                                </div>
+                                <button class="coupon-select-btn">Bỏ Chọn</button>
+                            </div>
+                        </div>
+                        <div class="more-coupons">
+                            <i class="fas fa-ticket-alt"></i>
+                            <span>Mua thêm để freeship 100k cho đơn 499k</span>
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </div>
+
+                    <!-- Price Details -->
+                    <div class="checkout-summary-details">
+                        <div class="summary-row">
+                            <div class="summary-label">Tổng tiền hàng</div>
+                            <div class="summary-value">680.000<sup>đ</sup></div>
+                        </div>
+                        <div class="summary-row discount">
+                            <div class="summary-label">Giảm giá trực tiếp</div>
+                            <div class="summary-value">-381.000<sup>đ</sup></div>
+                        </div>
+                        <div class="summary-row discount">
+                            <div class="summary-label">Mã khuyến mãi từ nhà bán</div>
+                            <div class="summary-value">-25.000<sup>đ</sup></div>
+                        </div>
+                        <div class="summary-row total">
+                            <div class="summary-label">Tổng tiền thanh toán</div>
+                            <div class="summary-value total-value">274.000<sup>đ</sup></div>
+                        </div>
+                        <div class="summary-row saving">
+                            <div class="summary-value">Tiết kiệm 406.000<sup>đ</sup></div>
+                        </div>
+                        <div class="summary-note">(Đã bao gồm VAT nếu có)</div>
+                    </div>
+
+                    <!-- Checkout Button -->
+                    <button class="checkout-button">Mua Hàng (1)</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-light mt-5 py-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3">
+                    <h5 class="mb-3">Hỗ Trợ Khách Hàng</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-decoration-none text-secondary">Trung tâm trợ giúp</a></li>
+                        <li><a href="#" class="text-decoration-none text-secondary">Hướng dẫn mua hàng</a></li>
+                        <li><a href="#" class="text-decoration-none text-secondary">Phương thức vận chuyển</a></li>
+                        <li><a href="#" class="text-decoration-none text-secondary">Chính sách đổi trả</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3">
+                    <h5 class="mb-3">Về BookStore</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-decoration-none text-secondary">Giới thiệu</a></li>
+                        <li><a href="#" class="text-decoration-none text-secondary">Tuyển dụng</a></li>
+                        <li><a href="#" class="text-decoration-none text-secondary">Điều khoản sử dụng</a></li>
+                        <li><a href="#" class="text-decoration-none text-secondary">Chính sách bảo mật</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3">
+                    <h5 class="mb-3">Hợp tác & Liên kết</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-decoration-none text-secondary">Bán hàng cùng BookStore</a></li>
+                        <li><a href="#" class="text-decoration-none text-secondary">Đối tác giao hàng</a></li>
+                        <li><a href="#" class="text-decoration-none text-secondary">Đối tác thanh toán</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3">
+                    <h5 class="mb-3">Kết nối với chúng tôi</h5>
+                    <div class="d-flex gap-3 mb-3">
+                        <a href="#" class="text-decoration-none text-secondary">
+                            <i class="fab fa-facebook-square fa-2x"></i>
+                        </a>
+                        <a href="#" class="text-decoration-none text-secondary">
+                            <i class="fab fa-instagram fa-2x"></i>
+                        </a>
+                        <a href="#" class="text-decoration-none text-secondary">
+                            <i class="fab fa-youtube fa-2x"></i>
+                        </a>
+                        <a href="#" class="text-decoration-none text-secondary">
+                            <i class="fab fa-twitter-square fa-2x"></i>
+                        </a>
+                    </div>
+                    <h5 class="mb-3">Phương thức thanh toán</h5>
+                    <div class="d-flex gap-2 flex-wrap">
+                        <i class="fab fa-cc-visa fa-2x"></i>
+                        <i class="fab fa-cc-mastercard fa-2x"></i>
+                        <i class="fab fa-cc-paypal fa-2x"></i>
+                        <i class="fas fa-money-bill-wave fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-4">
+                <div class="col-12 text-center">
+                    <p class="text-muted">© 2025 BookStore. Tất cả các quyền được bảo lưu.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/cart.js"></script>
+</body>
+
+</html>
