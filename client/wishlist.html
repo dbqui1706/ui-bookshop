@@ -22,10 +22,11 @@
                 </a>
                 <div class="search-bar mx-auto">
                     <div class="input-group">
-                        <input type="text" class="form-control search-input"
+                        <input type="text" id="mainSearchInput" class="form-control search-input"
                             placeholder="Tìm kiếm sách, tác giả, thể loại...">
-                        <button class="btn search-button" type="button" id="searchBtn"><i
-                                class="fas fa-search me-1"></i> Tìm kiếm</button>
+                        <button class="btn search-button" type="button" id="mainSearchBtn">
+                            <i class="fas fa-search me-1"></i> Tìm kiếm
+                        </button>
                     </div>
                 </div>
                 <div class="user-menu">
@@ -210,14 +211,12 @@
                                 </div>
                             </div>
 
-
-
                             <!-- Wishlist Items -->
                             <div class="wishlist-items">
                                 <!-- Item 1 -->
                                 <div class="wishlist-item">
                                     <div class="item-image">
-                                        <img src="/asset/images/book1.jpg" alt="Sách 1">
+                                        <img src="https://placehold.co/120x160" alt="Sách 1">
                                     </div>
                                     <div class="item-details">
                                         <h3 class="item-title">Đắc Nhân Tâm</h3>
@@ -245,7 +244,7 @@
                                 <!-- Item 2 -->
                                 <div class="wishlist-item">
                                     <div class="item-image">
-                                        <img src="/asset/images/book2.jpg" alt="Sách 2">
+                                        <img src="https://placehold.co/120x160" alt="Sách 2">
                                     </div>
                                     <div class="item-details">
                                         <h3 class="item-title">Nhà Giả Kim</h3>
@@ -273,7 +272,7 @@
                                 <!-- Item 3 -->
                                 <div class="wishlist-item">
                                     <div class="item-image">
-                                        <img src="/asset/images/book3.jpg" alt="Sách 3">
+                                        <img src="https://placehold.co/120x160" alt="Sách 3">
                                     </div>
                                     <div class="item-details">
                                         <h3 class="item-title">Tư Duy Phản Biện</h3>
@@ -298,8 +297,6 @@
                                     </div>
                                 </div>
                             </div>
-
-
 
                             <!-- Empty Wishlist State (hidden by default) -->
                             <div class="empty-wishlist" style="display: none;">
