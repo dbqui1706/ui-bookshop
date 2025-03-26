@@ -90,8 +90,7 @@
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="#">Trang chủ</a></li>
-                    <li class="breadcrumb-item"><a href="#">Nhà Sách BookStore</a></li>
-                    <li class="breadcrumb-item active">English Books</li>
+                    <li class="breadcrumb-item active"><a href="#">Nhà Sách BookStore</a></li>
                 </ol>
             </nav>
 
@@ -112,31 +111,7 @@
                                 </p>
                                 <!-- Phần nội dung sử dụng collapse của Bootstrap -->
                                 <div class="collapse show" id="category-collapse">
-                                    <div class="filter-options">
-                                        <label class="filter-option">
-                                            <input type="checkbox" name="category" value="fiction"> Văn học
-                                            <span class="category-count">(142)</span>
-                                        </label>
-                                        <label class="filter-option">
-                                            <input type="checkbox" name="category" value="business"> Kinh tế
-                                            <span class="category-count">(89)</span>
-                                        </label>
-                                        <label class="filter-option">
-                                            <input type="checkbox" name="category" value="children"> Thiếu nhi
-                                            <span class="category-count">(75)</span>
-                                        </label>
-                                        <label class="filter-option">
-                                            <input type="checkbox" name="category" value="language"> Ngoại ngữ
-                                            <span class="category-count">(62)</span>
-                                        </label>
-                                        <label class="filter-option">
-                                            <input type="checkbox" name="category" value="life-skills"> Kỹ năng sống
-                                            <span class="category-count">(54)</span>
-                                        </label>
-                                        <label class="filter-option">
-                                            <input type="checkbox" name="category" value="education"> Giáo dục
-                                            <span class="category-count">(48)</span>
-                                        </label>
+                                    <div class="filter-options" id="category-container-filter">
                                     </div>
                                     <a href="#" class="filter-more">Xem thêm <i class="fas fa-chevron-down"></i></a>
                                 </div>
@@ -150,27 +125,7 @@
                                     <i class="fas fa-chevron-down"></i>
                                 </p>
                                 <div class="collapse show" id="publisher-collapse">
-                                    <div class="filter-options">
-                                        <label class="filter-option">
-                                            <input type="checkbox" name="publisher" value="kim-dong"> NXB Kim Đồng
-                                            <span class="category-count">(85)</span>
-                                        </label>
-                                        <label class="filter-option">
-                                            <input type="checkbox" name="publisher" value="tre"> NXB Trẻ
-                                            <span class="category-count">(67)</span>
-                                        </label>
-                                        <label class="filter-option">
-                                            <input type="checkbox" name="publisher" value="giao-duc"> NXB Giáo dục
-                                            <span class="category-count">(43)</span>
-                                        </label>
-                                        <label class="filter-option">
-                                            <input type="checkbox" name="publisher" value="tong-hop"> NXB Tổng hợp TPHCM
-                                            <span class="category-count">(39)</span>
-                                        </label>
-                                        <label class="filter-option">
-                                            <input type="checkbox" name="publisher" value="hoi-nha-van"> NXB Hội Nhà Văn
-                                            <span class="category-count">(32)</span>
-                                        </label>
+                                    <div class="filter-options" id="publisher-container-filter">
                                     </div>
                                     <a href="#" class="filter-more">Xem thêm <i class="fas fa-chevron-down"></i></a>
                                 </div>
@@ -290,8 +245,8 @@
                             </div>
                             <!-- Nút áp dụng bộ lọc -->
                             <div class="filter-actions">
-                                <button type="reset" class="btn-clear-filter">Xóa tất cả</button>
-                                <button type="submit" class="btn-apply-filter">Áp dụng</button>
+                                <button type="reset" class="btn-clear-filter" id="clearFilterBtn">Xóa tất cả</button>
+                                <button type="submit" class="btn-apply-filter" id="applyFilterBtn">Áp dụng</button>
                             </div>
                         </div>
                     </form>
@@ -299,12 +254,12 @@
 
                 <!-- Main Content Area -->
                 <div class="col-lg-9">
-                    <div class="title-section mb-4">
-                        <h1 class="section-title"><i class="fas fa-book me-2"></i>English Books</h1>
+                    <div class="title-section mb-2">
+                        <h1 class="section-title"><i class="fas fa-book me-2"></i>BookStore</h1>
                     </div>
 
                     <!-- Publisher Section 1 -->
-                    <div class="publisher-section mb-4">
+                    <div class="publisher-section mb-2">
                         <div class="publisher-header">
                             <div>
                                 <h3>BookStore - Top sách bán chạy - Giảm 40%</h3>
@@ -375,75 +330,15 @@
 
                     <!-- Book Grid -->
                     <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-3" id="productGrid">
-                        <!-- Book 1 -->
-                        <div class="col">
-                            <div class="book-card">
-                                <img src="/asset/images/image.png" alt="Book 1">
-                                <div class="book-info">
-                                    <div class="shipping-badge fast-shipping">FREESHIP XTRA</div>
-                                    <div class="shipping-badge authentic-badge">CHÍNH HÀNG</div>
-                                    <h5 class="book-title">Nexus</h5>
-                                    <div class="book-author">YUVAL NOAH HARARI</div>
-                                    <div class="book-price">202.900đ <span class="discount-tag">-38%</span></div>
-                                    <div class="rating">★★★★★</div>
-                                    <div class="sold-count">Đã bán 1000+</div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Book 6 -->
-                        <div class="col">
-                            <div class="book-card">
-                                <img src="/asset/images/image.png" alt="Book 6">
-                                <div class="book-info">
-                                    <div class="shipping-badge fast-shipping">FREESHIP XTRA</div>
-                                    <div class="shipping-badge authentic-badge">CHÍNH HÀNG</div>
-                                    <h5 class="book-title">Thinking, Fast and Slow</h5>
-                                    <div class="book-author">DANIEL KAHNEMAN</div>
-                                    <div class="book-price">289.000đ <span class="discount-tag">-12%</span></div>
-                                    <div class="rating">★★★★☆</div>
-                                    <div class="sold-count">Đã bán 850</div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Book 7 -->
-                        <div class="col">
-                            <div class="book-card">
-                                <img src="/asset/images/image.png" alt="Book 7">
-                                <div class="book-info">
-                                    <div class="shipping-badge fast-shipping">FREESHIP XTRA</div>
-                                    <div class="shipping-badge authentic-badge">CHÍNH HÀNG</div>
-                                    <h5 class="book-title">To Kill a Mockingbird</h5>
-                                    <div class="book-author">HARPER LEE</div>
-                                    <div class="book-price">195.000đ <span class="discount-tag">-8%</span></div>
-                                    <div class="rating">★★★★★</div>
-                                    <div class="sold-count">Đã bán 1200</div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Book 8 -->
-                        <div class="col">
-                            <div class="book-card">
-                                <img src="/asset/images/image.png" alt="Book 8">
-                                <div class="book-info">
-                                    <div class="shipping-badge deal-badge">TOP DEAL</div>
-                                    <div class="shipping-badge authentic-badge">CHÍNH HÀNG</div>
-                                    <h5 class="book-title">1984</h5>
-                                    <div class="book-author">GEORGE ORWELL</div>
-                                    <div class="book-price">168.000đ <span class="discount-tag">-15%</span></div>
-                                    <div class="rating">★★★★★</div>
-                                    <div class="sold-count">Đã bán 970</div>
-                                </div>
-                            </div>
-                        </div>
                     </div>
 
                     <!-- View More Button -->
-                    <div class="text-center mt-4 mb-4">
+                    <div class="text-center d-flex justify-content-center mt-4 mb-4">
                         <button class="btn btn-outline-primary" id="loadMoreBtn">Xem thêm</button>
                     </div>
 
                     <!-- Recently Viewed -->
-                    <div class="mt-5">
+                    <div class="viewed-section mt-5">
                         <h2 class="section-title">Sản Phẩm Đã Xem</h2>
                         <div class="row row-cols-2 row-cols-md-4 g-3" id="recentlyViewed">
                             <div class="col">
@@ -540,7 +435,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Add Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <!-- JavaScript để xử lý filter price -->
+    <!-- JavaScript -->
     <script src="js/app/home.js" type="module"></script>
 </body>
 

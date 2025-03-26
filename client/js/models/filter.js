@@ -8,9 +8,10 @@ export class Filter {
         };
         this.rating = null;
         this.services = [];
-        this.sortBy = null;
+        this.sortBy = 'popular'; // Mặc định sắp xếp theo phổ biến
         this.page = 1;
         this.limit = 12;
+        this.searchTerm = '';
     }
 
     setCategories(categories) {
@@ -41,13 +42,18 @@ export class Filter {
         this.page = page;
     }
 
+    setSearchTerm(searchTerm) {
+        this.searchTerm = searchTerm;
+    }
+
     toQueryParams() {
         const params = {};
         
+        if (this.searchTerm) params.q = this.searchTerm;
         if (this.categories.length) params.categories = this.categories.join(',');
         if (this.publishers.length) params.publishers = this.publishers.join(',');
-        if (this.priceRange.from) params.priceFrom = this.priceRange.from;
-        if (this.priceRange.to) params.priceTo = this.priceRange.to;
+        if (this.priceRange.from !== null) params.priceFrom = this.priceRange.from;
+        if (this.priceRange.to !== null) params.priceTo = this.priceRange.to;
         if (this.rating) params.rating = this.rating;
         if (this.services.length) params.services = this.services.join(',');
         if (this.sortBy) params.sortBy = this.sortBy;
@@ -64,7 +70,8 @@ export class Filter {
         this.priceRange = { from: null, to: null };
         this.rating = null;
         this.services = [];
-        this.sortBy = null;
+        this.sortBy = 'popular';
         this.page = 1;
+        this.searchTerm = '';
     }
 }
