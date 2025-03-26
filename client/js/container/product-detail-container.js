@@ -32,9 +32,7 @@ export class ProductDetailContainer {
         // Thông tin sản phẩm
         this.titleElement = document.getElementById('product-title');
         this.productPriceElement = document.getElementById('product-price');
-        this.priceElement = document.getElementById('product-price');
-        this.originalPriceElement = document.getElementById('original-price');
-        this.discountElement = document.getElementById('discount-percent');
+        
         this.ratingElement = document.getElementById('rating-stars');
         this.ratingAverageElement = document.getElementById('rating-average');
         this.ratingCountElement = document.getElementById('rating-count');

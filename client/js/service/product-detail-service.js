@@ -1,5 +1,5 @@
 const API_URL = {
-    "PRODUCT_DETAIL": "http://localhost:8080/api/products",
+    "PRODUCT_DETAIL": "http://localhost:8080/api/product",
     "PRODUCT_REVIEWS": "http://localhost:8080/api/reviews",
     "RELATED_PRODUCTS": "http://localhost:8080/api/related-products",
     "RECENTLY_VIEWED": "http://localhost:8080/api/recently-viewed"
@@ -9,12 +9,13 @@ export class ProductDetailService {
     async getProductDetail(productId) {
         try {
             // Trong môi trường thực tế, bỏ comment dòng dưới và xóa phần mockProductDetail
-            // const response = await fetch(`${API_URL.PRODUCT_DETAIL}/${productId}`);
-            // const data = await response.json();
-            // return data;
+            const response = await fetch(`${API_URL.PRODUCT_DETAIL}?id=${productId}`);
+            const data = await response.json();
+            console.log("Get product detail:", data);
+            return data;
             
             // Dữ liệu giả cho mục đích phát triển
-            return this.mockProductDetail(productId);
+            // return this.mockProductDetail(productId);
         } catch (error) {
             console.error('Lỗi khi tải chi tiết sản phẩm:', error);
             return null;
