@@ -15,66 +15,74 @@
 <body>
     <!-- Header -->
     <header>
-        <nav class="navbar navbar-expand-lg navbar-light bg-white py-1">
-            <div class="container">
-                <a class="navbar-brand" href="#">
-                    <img src="/asset/logo.jpg" alt="BookStore Logo" class="navbar-logo">
-                </a>
-                <div class="search-bar mx-auto">
-                    <div class="input-group">
-                        <input type="text" class="form-control search-input"
-                            placeholder="Tìm kiếm sách, tác giả, thể loại...">
-                        <button class="btn search-button" type="button" id="searchBtn"><i
-                                class="fas fa-search me-1"></i> Tìm kiếm</button>
+        <div class="container">
+            <!-- Logo và thanh tìm kiếm -->
+            <div class="row py-3 align-items-center">
+                <div class="col-md-2 col-sm-4 col-5 mb-2 mb-md-0">
+                    <a class="navbar-brand" href="/">
+                        <img src="/asset/logo.jpg" alt="BookStore Logo" class="navbar-logo img-fluid">
+                    </a>
+                </div>
+                <div class="col-md-7 col-sm-8 col-12 mb-2 mb-md-0">
+                    <div class="search-bar">
+                        <div class="input-group">
+                            <input type="text" class="form-control search-input"
+                                placeholder="Tìm kiếm sách, tác giả, thể loại...">
+                            <button class="btn search-button" type="button" id="searchBtn">
+                                <i class="fas fa-search me-1 d-none d-sm-inline-block"></i> Tìm kiếm
+                            </button>
+                        </div>
                     </div>
                 </div>
-                <div class="user-menu">
-                    <a href="#" title="Trang chủ">
-                        <i class="fas fa-home"></i>
-                        <span>Trang chủ</span>
-                    </a>
-                    <a href="#" title="Tài khoản">
-                        <i class="fas fa-user-circle"></i>
-                        <span>Tài khoản</span>
-                    </a>
-                    <a href="#" class="cart-icon" title="Giỏ hàng">
-                        <i class="fas fa-shopping-cart"></i>
-                        <span class="cart-count">2</span>
-                        <span>Giỏ hàng</span>
-                    </a>
+                <div class="col-md-3 col-12">
+                    <div class="user-menu">
+                        <a href="/client/index.html" title="Trang chủ" class="menu-item">
+                            <i class="fas fa-home"></i>
+                            <span>Trang chủ</span>
+                        </a>
+                        <a href="/client/account-info.html" title="Tài khoản" class="menu-item">
+                            <i class="fas fa-user-circle"></i>
+                            <span>Tài khoản</span>
+                        </a>
+                        <a href="/client/cart.html" class="cart-icon menu-item" title="Giỏ hàng">
+                            <i class="fas fa-shopping-cart"></i>
+                            <span class="cart-count">0</span>
+                            <span>Giỏ hàng</span>
+                        </a>
+                    </div>
                 </div>
             </div>
-        </nav>
+        </div>
 
-        <!-- Commitment Bar đã điều chỉnh -->
+        <!-- Commitment Bar -->
         <div class="commitment-bar">
             <div class="container">
-                <div class="row justify-content-center align-items-center">
-                    <div class="col-md-2 col-6 text-center">
+                <div class="row">
+                    <div class="col-lg col-md-4 col-6 commitment-item-wrapper">
                         <div class="commitment-item">
                             <i class="fas fa-shield-alt"></i>
                             <span>100% hàng thật</span>
                         </div>
                     </div>
-                    <div class="col-md-2 col-6 text-center">
+                    <div class="col-lg col-md-4 col-6 commitment-item-wrapper">
                         <div class="commitment-item">
                             <i class="fas fa-truck"></i>
                             <span>Freeship mọi đơn</span>
                         </div>
                     </div>
-                    <div class="col-md-3 col-6 text-center">
+                    <div class="col-lg col-md-4 col-6 commitment-item-wrapper">
                         <div class="commitment-item">
                             <i class="fas fa-undo"></i>
                             <span>Hoàn 200% nếu hàng giả</span>
                         </div>
                     </div>
-                    <div class="col-md-2 col-6 text-center">
+                    <div class="col-lg col-md-4 col-6 commitment-item-wrapper">
                         <div class="commitment-item">
                             <i class="fas fa-calendar-alt"></i>
                             <span>30 ngày đổi trả</span>
                         </div>
                     </div>
-                    <div class="col-md-3 col-6 text-center">
+                    <div class="col-lg col-md-4 col-6 commitment-item-wrapper">
                         <div class="commitment-item">
                             <i class="fas fa-bolt"></i>
                             <span>Giao nhanh 2h</span>
@@ -235,7 +243,7 @@
                                                 <p class="price-label">Thành tiền:</p>
                                                 <p class="price-value">359.000đ</p>
                                             </div>
-                                        </div>      
+                                        </div>
                                         <!-- Product 2 -->
                                         <div class="order-body">
                                             <div class="product-info">
@@ -257,7 +265,7 @@
                                         <div class="remaining-products">
                                             <span>+2 sản phẩm khác</span>
                                         </div>
-                                       
+
                                         <div class="order-footer">
                                             <button class="btn-detail">Xem chi tiết</button>
                                             <button class="btn-rebuy">Mua lại</button>
@@ -342,63 +350,113 @@
     </main>
 
     <!-- Footer -->
-    <footer class="bg-light mt-5 py-4">
+    <footer class="modern-footer">
         <div class="container">
-            <div class="row">
-                <div class="col-md-3">
-                    <h5 class="mb-3">Hỗ Trợ Khách Hàng</h5>
-                    <ul class="list-unstyled">
-                        <li><a href="#" class="text-decoration-none text-secondary">Trung tâm trợ giúp</a></li>
-                        <li><a href="#" class="text-decoration-none text-secondary">Hướng dẫn mua hàng</a></li>
-                        <li><a href="#" class="text-decoration-none text-secondary">Phương thức vận chuyển</a></li>
-                        <li><a href="#" class="text-decoration-none text-secondary">Chính sách đổi trả</a></li>
-                    </ul>
-                </div>
-                <div class="col-md-3">
-                    <h5 class="mb-3">Về BookStore</h5>
-                    <ul class="list-unstyled">
-                        <li><a href="#" class="text-decoration-none text-secondary">Giới thiệu</a></li>
-                        <li><a href="#" class="text-decoration-none text-secondary">Tuyển dụng</a></li>
-                        <li><a href="#" class="text-decoration-none text-secondary">Điều khoản sử dụng</a></li>
-                        <li><a href="#" class="text-decoration-none text-secondary">Chính sách bảo mật</a></li>
-                    </ul>
-                </div>
-                <div class="col-md-3">
-                    <h5 class="mb-3">Hợp tác & Liên kết</h5>
-                    <ul class="list-unstyled">
-                        <li><a href="#" class="text-decoration-none text-secondary">Bán hàng cùng BookStore</a></li>
-                        <li><a href="#" class="text-decoration-none text-secondary">Đối tác giao hàng</a></li>
-                        <li><a href="#" class="text-decoration-none text-secondary">Đối tác thanh toán</a></li>
-                    </ul>
-                </div>
-                <div class="col-md-3">
-                    <h5 class="mb-3">Kết nối với chúng tôi</h5>
-                    <div class="d-flex gap-3 mb-3">
-                        <a href="#" class="text-decoration-none text-secondary">
-                            <i class="fab fa-facebook-square fa-2x"></i>
-                        </a>
-                        <a href="#" class="text-decoration-none text-secondary">
-                            <i class="fab fa-instagram fa-2x"></i>
-                        </a>
-                        <a href="#" class="text-decoration-none text-secondary">
-                            <i class="fab fa-youtube fa-2x"></i>
-                        </a>
-                        <a href="#" class="text-decoration-none text-secondary">
-                            <i class="fab fa-twitter-square fa-2x"></i>
-                        </a>
+            <!-- Footer Top - Logo và Newsletter -->
+            <div class="footer-top">
+                <div class="row align-items-center">
+                    <div class="col-lg-4 col-md-6 mb-4 mb-md-0">
+                        <div class="footer-brand d-flex align-items-center">
+                            <div class="footer-logo-container me-3">
+                                <img src="/asset/logo.jpg" alt="BookStore Logo" class="footer-logo">
+                            </div>
+                            <p class="mb-0 footer-description">BookStore - Nơi tri thức gặp gỡ đam mê đọc sách của bạn.
+                                Cung cấp hàng nghìn đầu sách chất lượng với dịch vụ giao hàng nhanh chóng.</p>
+                        </div>
                     </div>
-                    <h5 class="mb-3">Phương thức thanh toán</h5>
-                    <div class="d-flex gap-2 flex-wrap">
-                        <i class="fab fa-cc-visa fa-2x"></i>
-                        <i class="fab fa-cc-mastercard fa-2x"></i>
-                        <i class="fab fa-cc-paypal fa-2x"></i>
-                        <i class="fas fa-money-bill-wave fa-2x"></i>
+                    <div class="col-lg-5 offset-lg-3 col-md-6">
+                        <div class="newsletter-box">
+                            <h5>Đăng ký nhận thông tin</h5>
+                            <p>Nhận thông báo về sách mới và ưu đãi đặc biệt</p>
+                            <div class="newsletter-form">
+                                <div class="input-group">
+                                    <input type="email" class="form-control" placeholder="Email của bạn">
+                                    <button class="btn btn-primary" type="button">Đăng ký</button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="row mt-4">
-                <div class="col-12 text-center">
-                    <p class="text-muted">© 2025 BookStore. Tất cả các quyền được bảo lưu.</p>
+
+            <hr class="footer-divider">
+
+            <!-- Footer Main - Menu Links -->
+            <div class="footer-main">
+                <div class="row">
+                    <div class="col-lg-3 col-md-6 col-sm-6 mb-2 mb-lg-0">
+                        <div class="footer-widget">
+                            <h5 class="widget-title">Hỗ Trợ Khách Hàng</h5>
+                            <ul class="footer-links">
+                                <li><a href="#">Trung tâm trợ giúp</a></li>
+                                <li><a href="#">Hướng dẫn mua hàng</a></li>
+                                <li><a href="#">Phương thức vận chuyển</a></li>
+                                <li><a href="#">Chính sách đổi trả</a></li>
+                                <li><a href="#">Câu hỏi thường gặp</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 col-sm-6 mb-2 mb-lg-0">
+                        <div class="footer-widget">
+                            <h5 class="widget-title">Về BookStore</h5>
+                            <ul class="footer-links">
+                                <li><a href="#">Giới thiệu</a></li>
+                                <li><a href="#">Tuyển dụng</a></li>
+                                <li><a href="#">Điều khoản sử dụng</a></li>
+                                <li><a href="#">Chính sách bảo mật</a></li>
+                                <li><a href="#">Liên hệ</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 col-sm-6 mb-2 mb-lg-0">
+                        <div class="footer-widget">
+                            <h5 class="widget-title">Hợp tác & Liên kết</h5>
+                            <ul class="footer-links">
+                                <li><a href="#">Bán hàng cùng BookStore</a></li>
+                                <li><a href="#">Đối tác giao hàng</a></li>
+                                <li><a href="#">Đối tác thanh toán</a></li>
+                                <li><a href="#">Chương trình affiliate</a></li>
+                                <li><a href="#">Hợp tác xuất bản</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 col-sm-6 mb-2 mb-lg-0">
+                        <div class="footer-widget">
+                            <h5 class="widget-title">Kết nối với chúng tôi</h5>
+                            <div class="social-links">
+                                <a href="#" class="social-link facebook"><i class="fab fa-facebook-f"></i></a>
+                                <a href="#" class="social-link instagram"><i class="fab fa-instagram"></i></a>
+                                <a href="#" class="social-link youtube"><i class="fab fa-youtube"></i></a>
+                                <a href="#" class="social-link twitter"><i class="fab fa-twitter"></i></a>
+                                <a href="#" class="social-link tiktok"><i class="fab fa-tiktok"></i></a>
+                            </div>
+
+                            <h5 class="widget-title mt-4">Phương thức thanh toán</h5>
+                            <div class="payment-methods">
+                                <div class="payment-icon visa"><i class="fab fa-cc-visa"></i></div>
+                                <div class="payment-icon mastercard"><i class="fab fa-cc-mastercard"></i></div>
+                                <div class="payment-icon paypal"><i class="fab fa-cc-paypal"></i></div>
+                                <div class="payment-icon jcb"><i class="fab fa-cc-jcb"></i></div>
+                                <div class="payment-icon cash"><i class="fas fa-money-bill-wave"></i></div>
+                                <div class="payment-icon momo">MoMo</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <hr class="footer-divider">
+
+            <!-- Footer Bottom - App Download & Copyright -->
+            <div class="footer-bottom">
+                <div class="row align-items-center">
+
+                    <div class="col-lg-6 col-md-6">
+                        <div class="copyright">
+                            <p>© 2025 BookStore. Tất cả các quyền được bảo lưu.</p>
+                            <p class="address">Địa chỉ: 123 Đường Sách, Phường Văn Chương, Quận Đống Đa, Hà Nội</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
