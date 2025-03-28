@@ -1,8 +1,15 @@
 import { ProductDetailService } from '../service/product-detail-service.js';
+import { UserService } from '../service/user-service.js';
+import { CartService } from '../service/cart-service.js';
+import { Utils } from '../utils/index.js';
+
 
 export class ProductDetailContainer {
     constructor() {
         this.service = new ProductDetailService();
+        this.userService = new UserService();
+        this.cartService = new CartService();
+
         this.productId = this.getProductIdFromUrl();
         this.product = null;
         this.quantity = 1;
@@ -23,6 +30,7 @@ export class ProductDetailContainer {
         this.initializeElements();
         this.bindEvents();
         this.loadInitialData();
+        this.updateCartCount();
     }
 
     getProductIdFromUrl() {
@@ -31,6 +39,11 @@ export class ProductDetailContainer {
     }
 
     initializeElements() {
+        // Lấy thông tin người dùng từ local storage
+        this.user = JSON.parse(localStorage.getItem('user'));
+        this.token = localStorage.getItem('token');
+        this.cart = JSON.parse(localStorage.getItem('cart'));
+
         this.breadcrumbs = document.getElementById('breadcrumb-item-active');
 
         // Hình ảnh sản phẩm
@@ -125,8 +138,6 @@ export class ProductDetailContainer {
                 this.service.getProductReviews(this.productId, this.filterReviews),
             ]);
 
-
-
             // Lưu thông tin sản phẩm và đánh giá
             this.product = product;
             this.relatedProducts = await this.service.getRelatedProducts(this.product.categoryId)
@@ -180,18 +191,18 @@ export class ProductDetailContainer {
         const discount = this.product.discount
 
         this.productPriceElement.innerHTML = discount > 0 ? `
-            <span class="current-price">${this.formatPrice(price * (1 - discount / 100))}</span>
-            <span class="original-price">${this.formatPrice(price)}</span>
+            <span class="current-price">${Utils.formatPrice(price * (1 - discount / 100))}</span>
+            <span class="original-price">${Utils.formatPrice(price)}</span>
             <span class="discount-percent">-${discount}%</span>
         ` : `
-            <span class="current-price">${this.formatPrice(price)}</span>
+            <span class="current-price">${Utils.formatPrice(price)}</span>
         `
 
         // Cập nhật đánh giá
-        this.ratingElement.innerHTML = this.createRatingStars(this.product.averageRatingScore);
+        this.ratingElement.innerHTML = Utils.createRatingStars(this.product.averageRatingScore);
         this.ratingAverageElement.textContent = this.product.averageRatingScore;
         this.ratingCountElement.textContent = `(${this.product.totalProductReviews})`;
-        this.soldCountElement.textContent = `| Đã bán ${this.formatNumber(this.product.totalBuy)}`;
+        this.soldCountElement.textContent = `| Đã bán ${Utils.formatNumber(this.product.totalBuy)}`;
 
         // Cập nhật tổng tiền
         this.updateTotalPrice();
@@ -224,6 +235,49 @@ export class ProductDetailContainer {
         }
     }
 
+    // Thêm vào giỏ hàng
+    async handleAddToCart() {
+        // Tạo giỏ hàng nếu chưa có
+        if (!this.cart) {
+            localStorage.setItem('cart', JSON.stringify([]));
+        }
+
+        // Lấy thông tin sản phẩm và số lượng
+        const productId = this.product.id;
+        const quantity = this.quantity;
+
+        // Nếu không có user thì lưu sản phẩm vào giỏ hàng trong local storage
+        if (!this.user) {
+            const cart = JSON.parse(localStorage.getItem('cart'));
+
+            // kiểm tra xem sản phẩm đã có trong giỏ hàng chưa
+            const productIndex = cart.findIndex(item => item.productId === productId);
+            if (productIndex !== -1) {
+                cart[productIndex].quantity += quantity;
+            } else {
+                cart.push({
+                    productId: productId,
+                    productName: this.product.name,
+                    productImage: this.product.image || "/asset/images/image.png",
+                    productPrice: this.product.price,
+                    productDiscount: this.product.discount || 0,
+                    quantity: quantity
+                });
+            }
+
+            localStorage.setItem('cart', JSON.stringify(cart));
+            this.cart = cart;
+        } else {
+            // Nếu có user thì gọi API thêm vào giỏ hàng
+            this.cartService.addToCart(productId, quantity, this.user.id);
+        }
+
+        // Cập nhật số lượng sản phẩm trong giỏ hàng
+        this.updateCartCount();
+        // Hiển thị thông báo thêm vào giỏ hàng thành công
+        this.showAddToCartNotification();
+    }
+
     handleQuantityChange(action) {
         let value = parseInt(this.quantityInput.value);
         if (action === 'decrease' && value > 1) {
@@ -250,7 +304,7 @@ export class ProductDetailContainer {
         if (!this.product) return;
         const currentPrice = (1 - this.product.discount / 100) * this.product.price
         const total = currentPrice * this.quantity;
-        this.totalPriceElement.innerHTML = this.formatPrice(total);
+        this.totalPriceElement.innerHTML = Utils.formatPrice(total);
     }
 
     async handleReviewFilterChange(filterBtn) {
@@ -296,12 +350,13 @@ export class ProductDetailContainer {
         }
 
     }
+
     renderRatingSummary(ratingsSummary) {
         if (!this.ratingSummaryContainer) return;
 
         this.ratingSummaryContainer.innerHTML = `
             <div class="rating-average">${ratingsSummary.averageRating}</div>
-            <div class="rating-stars">${this.createRatingStars(ratingsSummary.averageRating)}</div>
+            <div class="rating-stars">${Utils.createRatingStars(ratingsSummary.averageRating)}</div>
             <div class="total-ratings">${ratingsSummary.totalReviews} đánh giá</div>
         `;
     }
@@ -326,7 +381,7 @@ export class ProductDetailContainer {
 
     renderReviews(reviews) {
         if (!this.reviewContainer) return;
-        
+
         // Render danh sách đánh giá
         this.reviewContainer.innerHTML = reviews.length > 0
             ? reviews.map(review => this.createReviewHTML(review)).join('')
@@ -427,10 +482,10 @@ export class ProductDetailContainer {
                                 <h5 class="book-title">${product.name}</h5>
                                 <div class="book-author">${product.author}</div>
                                 <div class="book-price">
-                                    ${this.formatPrice(product.price * (1 - product.discount / 100))}
+                                    ${Utils.formatPrice(product.price * (1 - product.discount / 100))}
                                     ${product.discount ? `<span class="discount-tag">-${product.discount}%</span>` : ''}
                                 </div>
-                                <div class="sold-count">Đã bán ${this.formatNumber(product.totalBuy)}</div>
+                                <div class="sold-count">Đã bán ${Utils.formatNumber(product.totalBuy)}</div>
                             </div>
                         </div>
                     </div>
@@ -451,7 +506,7 @@ export class ProductDetailContainer {
                     <div class="reviewer-avatar">
                         ${review.avatar
                 ? `<img src="https://avatar.iran.liara.run/public" alt="${review.userName}">`
-                : `<span class="avatar-placeholder">${this.getInitials(review.userName)}</span>`
+                : `<span class="avatar-placeholder">${Utils.getInitials(review.userName)}</span>`
             }
                     </div>
                     <div class="reviewer-details">
@@ -461,9 +516,9 @@ export class ProductDetailContainer {
                 <div class="review-content">
                     <div class="review-rating">
                         <div class="rating-stars">
-                            ${this.createRatingStars(review.rating)}
+                            ${Utils.createRatingStars(review.rating)}
                         </div>
-                        <span class="review-label">${this.getRatingLabel(review.rating)}</span>
+                        <span class="review-label">${Utils.getRatingLabel(review.rating)}</span>
                     </div>
                     <div class="review-purchase-info">
                         <i class="fas fa-check-circle verified-badge"></i> Đã mua hàng
@@ -504,78 +559,31 @@ export class ProductDetailContainer {
                     <div class="book-info">
                         <h5 class="book-title">${product.title}</h5>
                         <div class="book-price">
-                            ${this.formatPrice(product.price)}
+                            ${Utils.formatPrice(product.price)}
                             ${product.discount ? `<span class="discount-tag">-${product.discount}%</span>` : ''}
                         </div>
-                        <div class="rating">${this.createRatingStars(product.rating)}</div>
-                        <div class="sold-count">Đã bán ${this.formatNumber(product.soldCount)}</div>
+                        <div class="rating">${Utils.createRatingStars(product.rating)}</div>
+                        <div class="sold-count">Đã bán ${Utils.formatNumber(product.soldCount)}</div>
                     </div>
                 </div>
             </div>
         `).join('');
     }
 
-    // Utility methods
-    formatPrice(price) {
-        return new Intl.NumberFormat('vi-VN', {
-            style: 'currency',
-            currency: 'VND'
-        }).format(price);
+    showAddToCartNotification() {
+        // Tìm phần tử giỏ hàng message
+        const message = document.getElementById('cart-success-message');
+        message.style.display = 'flex';
+
+        // Tự động ẩn thông báo sau 2.5 giây
+        setTimeout(() => {
+            message.style.display = 'none';
+        }, 2500);
     }
-
-    formatNumber(number) {
-        if (number >= 1000) {
-            return (number / 1000).toFixed(1) + 'k';
-        }
-        return number.toString();
-    }
-
-    createRatingStars(rating) {
-        const fullStars = Math.floor(rating);
-        const hasHalfStar = rating % 1 >= 0.5;
-        const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
-
-        return `
-            ${'<i class="fas fa-star"></i>'.repeat(fullStars)}
-            ${hasHalfStar ? '<i class="fas fa-star-half-alt"></i>' : ''}
-            ${'<i class="far fa-star"></i>'.repeat(emptyStars)}
-        `;
-    }
-
-    getInitials(name) {
-        return name
-            .split(' ')
-            .map(word => word[0])
-            .join('')
-            .toUpperCase()
-            .slice(0, 2);
-    }
-
-    getRatingLabel(rating) {
-        const labels = {
-            5: 'Cực kì hài lòng',
-            4: 'Hài lòng',
-            3: 'Bình thường',
-            2: 'Không hài lòng',
-            1: 'Rất không hài lòng'
-        };
-        return labels[rating] || '';
-    }
-
-    showLoading(isLoading) {
-        // Implement loading UI
-    }
-
-    showError(message) {
-        // Implement error UI
-    }
-
-    showToast(message, type = 'info') {
-        // Implement toast notification
-    }
-
     async updateCartCount() {
-        // Implement cart count update
+        // Cập nhật số lượng sản phẩm trong giỏ hàng
+        const cartCountElement = document.getElementById('cart-count');
+        cartCountElement.textContent = this.cart.length;
     }
 }
 

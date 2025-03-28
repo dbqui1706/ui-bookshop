@@ -417,7 +417,7 @@
 
 textarea.form-control {
     resize: vertical;
-    min-height: 60px;
+    min-height: 40px;
 }
 
 .address-note {

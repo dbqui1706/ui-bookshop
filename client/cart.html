@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/cart.css">
     <link rel="stylesheet" href="css/cart-popup-modal.css">
+
 </head>
 
 <body>
@@ -40,15 +41,29 @@
                             <i class="fas fa-home"></i>
                             <span>Trang chủ</span>
                         </a>
-                        <a href="/client/account-info.html" title="Tài khoản" class="menu-item">
-                            <i class="fas fa-user-circle"></i>
-                            <span>Tài khoản</span>
-                        </a>
-                        <a href="/client/cart.html" class="cart-icon menu-item" title="Giỏ hàng">
-                            <i class="fas fa-shopping-cart"></i>
-                            <span class="cart-count">0</span>
-                            <span>Giỏ hàng</span>
-                        </a>
+                        <div class="account-dropdown">
+                            <a href="/client/login.html" class="menu-item dropdown-toggle" id="accountMenu">
+                                <i class="fas fa-user-circle"></i>
+                                <span>Tài khoản</span>
+                            </a>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" href="/client/account-info.html">Thông tin tài khoản</a>
+                                <a class="dropdown-item" href="/client/order-info.html">Đơn hàng của tôi</a>
+                                <a class="dropdown-item" href="#">Trung tâm hỗ trợ</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="#">Đăng xuất</a>
+                            </div>
+                        </div>
+
+                        <!-- Giỏ hàng -->
+                        <div class="cart-container">
+                            <a href="/client/cart.html" class="cart-icon menu-item" title="Giỏ hàng">
+                                <i class="fas fa-shopping-cart"></i>
+                                <span class="cart-count" id="cart-count">0</span>
+                                <span>Giỏ hàng</span>
+                            </a>
+
+                        </div>
                     </div>
                 </div>
             </div>
@@ -96,19 +111,28 @@
     <!-- Main Content -->
     <main class="container p-2">
         <div class="row no-gutters">
-            <!-- Left Column - Cart Items -->
+            <!-- Giỏ hàng trống -->
+            <div class="col-lg-12 cart-col d-none">
+                <div class="cart-empty">
+                    <i class="fas fa-shopping-cart"></i>
+                    <h2>Giỏ hàng của bạn đang trống</h2>
+                    <p>Thêm sản phẩm vào giỏ hàng để bắt đầu một đơn hàng</p>
+                </div>
+            </div>
+
+            <!-- Left Column - Cart Items (Khi có sản phẩm trong giỏ hàng)-->
             <div class="col-lg-9 cart-col">
-                <div class="cart-container">
+                <div class="cart-main-container">
                     <div class="cart-header">
                         <h2>GIỎ HÀNG</h2>
                     </div>
                     <!-- Cart main -->
-                    <div class="cart-main">
+                    <div class="cart-main" id="cart-main">
                         <!-- Cart header -->
                         <div class="cart-grid-header">
                             <div class="select-all">
                                 <input type="checkbox" id="select-all-checkbox" checked>
-                                <label for="select-all-checkbox">Tất cả (1 sản phẩm)</label>
+                                <label for="select-all-checkbox" id="select-all-label">Tất cả (1 sản phẩm)</label>
                             </div>
                             <div class="grid-head-price">Đơn giá</div>
                             <div class="grid-head-quantity">Số lượng</div>
@@ -119,85 +143,8 @@
                         </div>
 
                         <!-- Seller group -->
-                        <div class="seller-group">
+                        <div class="seller-group" id="seller-group">
                             <!-- Cart Item - Cấu trúc 4 cột với item-checkbox và item-content đã gộp -->
-                            <div class="cart-item">
-                                <div class="item-content-wrapper">
-                                    <div class="item-checkbox">
-                                        <input type="checkbox" checked>
-                                    </div>
-                                    <div class="item-content">
-                                        <div class="item-image">
-                                            <img src="/asset/images/image.png" alt="Combo sách">
-                                        </div>
-                                        <div class="item-details">
-                                            <div class="item-title">
-                                                COMBO 4 - (TRÍ TUỆ CỦA NGƯỜI XƯA - ĐẠO LÝ NGƯỜI XƯA - HIỂU NGƯỜI để DÙNG
-                                                NGƯỜI - CỔ HỌC TINH HOA)
-                                            </div>
-                                            <div class="item-delivery">
-                                                <i class="fas fa-truck-fast"></i> Giao thứ 4, 02/04
-                                            </div>
-                                            <div class="no-bookcare">
-                                                Sách không hỗ trợ Bookcare
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="item-price">
-                                    <div class="price-current">274.000<sup>đ</sup></div>
-                                    <div class="price-original">582.000<sup>đ</sup></div>
-                                </div>
-                                <div class="item-quantity">
-                                    <div class="quantity-controls">
-                                        <button class="quantity-btn">−</button>
-                                        <input type="text" class="quantity-input" value="1">
-                                        <button class="quantity-btn">+</button>
-                                    </div>
-                                </div>
-                                <div class="item-actions">
-                                    <i class="fas fa-trash-alt"></i>
-                                </div>
-                            </div>
-
-                            <div class="cart-item">
-                                <div class="item-content-wrapper">
-                                    <div class="item-checkbox">
-                                        <input type="checkbox" checked>
-                                    </div>
-                                    <div class="item-content">
-                                        <div class="item-image">
-                                            <img src="/asset/images/image.png" alt="Combo sách">
-                                        </div>
-                                        <div class="item-details">
-                                            <div class="item-title">
-                                                COMBO 4 - (TRÍ TUỆ CỦA NGƯỜI XƯA - ĐẠO LÝ NGƯỜI XƯA - HIỂU NGƯỜI để DÙNG
-                                                NGƯỜI - CỔ HỌC TINH HOA)
-                                            </div>
-                                            <div class="item-delivery">
-                                                <i class="fas fa-truck-fast"></i> Giao thứ 4, 02/04
-                                            </div>
-                                            <div class="no-bookcare">
-                                                Sách không hỗ trợ Bookcare
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="item-price">
-                                    <div class="price-current">274.000<sup>đ</sup></div>
-                                    <div class="price-original">582.000<sup>đ</sup></div>
-                                </div>
-                                <div class="item-quantity">
-                                    <div class="quantity-controls">
-                                        <button class="quantity-btn">−</button>
-                                        <input type="text" class="quantity-input" value="1">
-                                        <button class="quantity-btn">+</button>
-                                    </div>
-                                </div>
-                                <div class="item-actions">
-                                    <i class="fas fa-trash-alt"></i>
-                                </div>
-                            </div>
                         </div>
 
                         <!-- Promotion banner -->
@@ -227,23 +174,26 @@
             <!-- Right Column - Checkout Summary -->
             <div class="col-lg-3 cart-col">
                 <div class="checkout-summary">
+
+                    <!-- Delivery address -->
                     <div class="delivery-address">
                         <div class="delivery-title">Giao tới</div>
                         <div class="delivery-content">
                             <div class="delivery-customer">
-                                <span class="customer-name">Quý Đặng</span>
-                                <span class="customer-phone">0975688272</span>
+                                <span class="customer-name" id="customer-name">Quý Đặng</span>
+                                <span class="customer-phone" id="customer-phone">0975688272</span>
                             </div>
-                            <div class="address-tag">Nhà</div>
-                            <div class="delivery-address-text">
+                            <div class="address-tag" id="address-tag">Nhà</div>
+                            <div class="delivery-address-text" id="delivery-address-text">
                                 110/5 đông ánh, hạ nội, Phường Cửa Đông, Quận Hoàn Kiếm, Hà Nội
                             </div>
                             <div class="change-address">
-                                <a href="#">Thay đổi</a>
+                                <a href="#" id="change-address">Thay đổi</a>
                             </div>
                         </div>
                     </div>
 
+                    <!-- Coupon -->
                     <div class="checkout-coupon">
                         <div class="coupon-header">
                             <div class="tiki-promotion">Khuyến Mãi</div>
@@ -263,36 +213,29 @@
                                 <button class="coupon-select-btn">Bỏ Chọn</button>
                             </div>
                         </div>
-                        <div class="more-coupons">
+                        <div class="more-coupons" id="more-coupons">
                             <i class="fas fa-ticket-alt"></i>
                             <span>Mua thêm để freeship 100k cho đơn 499k</span>
                             <i class="fas fa-chevron-right"></i>
                         </div>
                     </div>
 
+                    <!-- Checkout summary details -->
                     <div class="checkout-summary-details">
                         <div class="summary-row">
                             <div class="summary-label">Tổng tiền hàng</div>
-                            <div class="summary-value">680.000<sup>đ</sup></div>
+                            <div class="summary-value" id="total-price"><sup>đ</sup></div>
                         </div>
                         <div class="summary-row discount">
                             <div class="summary-label">Giảm giá trực tiếp</div>
-                            <div class="summary-value">-381.000<sup>đ</sup></div>
-                        </div>
-                        <div class="summary-row discount">
-                            <div class="summary-label">Mã khuyến mãi từ nhà bán</div>
-                            <div class="summary-value">-25.000<sup>đ</sup></div>
+                            <div class="summary-value" id="discount-price"></div>
                         </div>
                         <div class="summary-row total">
                             <div class="summary-label">Tổng tiền thanh toán</div>
-                            <div class="summary-value total-value">274.000<sup>đ</sup></div>
-                        </div>
-                        <div class="summary-row saving">
-                            <div class="summary-value">Tiết kiệm 406.000<sup>đ</sup></div>
+                            <div class="summary-value total-value" id="total-payment"></div>
                         </div>
                         <div class="summary-note">(Đã bao gồm VAT nếu có)</div>
                     </div>
-
                     <button class="checkout-button">Mua Hàng (1)</button>
                 </div>
             </div>
@@ -490,7 +433,8 @@
             });
         });
     </script> -->
-    <script src="js/cart.js"></script>
+    <!-- <script src="js/cart.js"></script> -->
+    <script src="js/app/cart.js" type="module"></script>
 </body>
 
 </html>

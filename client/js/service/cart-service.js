@@ -1,5 +1,6 @@
 const API_URL = {
-    CART: 'http://localhost:8080/api/cart'
+    CART: 'http://localhost:8080/api/cart',
+    ADD_TO_CART: 'http://localhost:8080/api/cart/add'
 }
 
 const headers = {
@@ -8,7 +9,7 @@ const headers = {
 }
 
 export class CartService {
-    async getCart() {
+    async getCart(userId, productId) {
         try {
             const response = await fetch(API_URL.CART, {
                 headers: headers
@@ -24,12 +25,12 @@ export class CartService {
         }
     }
 
-    async addToCart(productId, quantity) {
+    async addToCart(productId, quantity, userId) {
         try {
-            const response = await fetch(API_URL.CART, {
+            const response = await fetch(API_URL.ADD_TO_CART, {
                 method: 'POST',
                 headers: headers,
-                body: JSON.stringify({ productId, quantity })
+                body: JSON.stringify({ productId, quantity, userId })
             });
             const data = await response.json();
             return data;
@@ -65,6 +66,6 @@ export class CartService {
         } catch (error) {
             console.error('Lỗi khi xóa sản phẩm khỏi giỏ hàng:', error);
             return null;
-        }   
+        }
     }
 }

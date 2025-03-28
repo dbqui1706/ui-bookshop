@@ -174,6 +174,44 @@ a[title="Tài khoản"]::after,
 }
 
 /* Cart icon */
+.cart-container {
+    position: relative;
+    display: inline-block;
+}
+
+.cart-success-message {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    margin-top: 5px;
+    background-color: #4CAF50;
+    color: white;
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-size: 14px;
+    display: none;
+    /* Ẩn mặc định */
+    align-items: center;
+    white-space: nowrap;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    z-index: 999;
+}
+
+.cart-success-message i {
+    margin-right: 8px;
+}
+
+.message-arrow {
+    position: absolute;
+    top: -7px;
+    right: 20px;
+    width: 0;
+    height: 0;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-bottom: 8px solid #4CAF50;
+}
+
 .cart-icon {
     position: relative;
 }

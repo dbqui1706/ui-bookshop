@@ -45,10 +45,12 @@ export class LoginContainer {
         this.loginFormContainer = document.getElementById('login-form');
         this.forgotPasswordFormContainer = document.getElementById('forgot-password-form');
         this.registerFormContainer = document.getElementById('register-form');
+        this.resetPasswordFormContainer = document.getElementById('reset-password-form');
 
         this.loginForm = document.getElementById('loginForm');
         this.forgotPasswordForm = document.getElementById('forgotPasswordForm');
         this.registerForm = document.getElementById('registerForm');
+        this.resetPasswordForm = document.getElementById('resetPasswordForm');
 
         // Các trường nhập liệu
         this.loginEmail = document.getElementById('login-email');
@@ -59,6 +61,8 @@ export class LoginContainer {
         this.registerPassword = document.getElementById('register-password');
         this.registerConfirmPassword = document.getElementById('register-confirm-password');
         this.forgotEmail = document.getElementById('forgot-email');
+        this.resetPassword = document.getElementById('reset-password');
+        this.resetConfirmPassword = document.getElementById('reset-confirm-password');
         this.registerGender = document.querySelector('input[name="gender"]:checked');
 
         // Nút chuyển đổi
@@ -66,6 +70,8 @@ export class LoginContainer {
         this.showRegister = document.getElementById('show-register');
         this.backToLoginFromForgot = document.getElementById('back-to-login-from-forgot');
         this.backToLoginFromRegister = document.getElementById('back-to-login-from-register');
+        this.showResetPassword = document.getElementById('show-reset-password');
+
 
         // Sidebar
         this.sidebarTitle = document.getElementById('sidebar-title');
@@ -76,6 +82,7 @@ export class LoginContainer {
 
         // Password strength
         this.passwordStrengthBar = document.querySelector('.password-strength .progress-bar');
+        this.resetPasswordStrengthBar = document.querySelector('.reset-password-strength .progress-bar');
 
         // Social buttons
         this.googleLoginBtn = document.querySelector('.social-btn:nth-child(2)');
@@ -87,6 +94,7 @@ export class LoginContainer {
         this.loginForm.addEventListener('submit', this.handleLogin.bind(this));
         this.registerForm.addEventListener('submit', this.handleRegister.bind(this));
         this.forgotPasswordForm.addEventListener('submit', this.handleForgotPassword.bind(this));
+        this.resetPasswordForm.addEventListener('submit', this.handleResetPassword.bind(this));
 
         // Form switching
         this.showForgotPassword.addEventListener('click', this.switchToForgotPassword.bind(this));
@@ -100,8 +108,11 @@ export class LoginContainer {
         });
 
         // Password strength meter
-        if (this.registerPassword && this.passwordStrengthBar) {
+        if ((this.registerPassword && this.passwordStrengthBar)) {
             this.registerPassword.addEventListener('input', this.updatePasswordStrength.bind(this));
+        }
+        if (this.resetPassword && this.resetPasswordStrengthBar) {
+            this.resetPassword.addEventListener('input', this.updateResetPasswordStrength.bind(this))
         }
 
         // Social login
@@ -178,9 +189,10 @@ export class LoginContainer {
     updatePasswordStrength() {
         const password = this.registerPassword.value;
         const strength = this.calculatePasswordStrength(password);
-
-        // Cập nhật progress bar
+        
+        // Cập nhật progress bar 
         this.passwordStrengthBar.style.width = strength + '%';
+
 
         // Đổi màu dựa trên độ mạnh
         if (strength < 30) {
@@ -189,6 +201,23 @@ export class LoginContainer {
             this.passwordStrengthBar.className = 'progress-bar bg-warning';
         } else {
             this.passwordStrengthBar.className = 'progress-bar bg-success';
+        }
+    }
+
+    updateResetPasswordStrength() {
+        const password = this.resetPassword.value;
+        const strength = this.calculatePasswordStrength(password);
+
+        // Cập nhật progress bar 
+        this.resetPasswordStrengthBar.style.width = strength + '%';
+        
+        // Đổi màu dựa trên độ mạnh
+        if (strength < 30) {
+            this.resetPasswordStrengthBar.className = 'progress-bar bg-danger';
+        } else if (strength < 60) {
+            this.resetPasswordStrengthBar.className = 'progress-bar bg-warning';
+        } else {
+            this.resetPasswordStrengthBar.className = 'progress-bar bg-success';
         }
     }
 
@@ -330,6 +359,27 @@ export class LoginContainer {
         } catch (error) {
             console.error('Lỗi quên mật khẩu:', error);
             this.showNotification('Có lỗi xảy ra khi gửi yêu cầu', 'error');
+        }
+    }
+
+    async handleResetPassword(e) {
+        e.preventDefault();
+
+        try {
+            // Validate form
+            if (!this.validateResetPasswordForm()) {
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('email', this.forgotEmail.value);
+            formData.append('password', CryptoJS.MD5(this.registerPassword.value).toString().toUpperCase());
+            formData.append('confirmPassword', CryptoJS.MD5(this.registerConfirmPassword.value).toString().toUpperCase());
+
+            const response = await this.userService.resetPassword(formData);
+        } catch (error) {
+            console.error('Lỗi đặt lại mật khẩu:', error);
+            this.showNotification('Có lỗi xảy ra khi đặt lại mật khẩu', 'error');
         }
     }
 
