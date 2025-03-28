@@ -7,6 +7,19 @@ export class ProductDetailContainer {
         this.product = null;
         this.quantity = 1;
 
+        // Đánh giá sản phẩm
+        this.ratingsSummary = null;
+        this.totalReviews = 0;
+        this.currentPageReviews = 1;
+        this.totalPagesReviews = 1;
+        this.hasMoreReviews = false;
+        this.reviews = [];
+        this.filterReviews = {
+            page: 1,
+            limit: 2,
+            filter: 'newest',
+        }
+
         this.initializeElements();
         this.bindEvents();
         this.loadInitialData();
@@ -18,6 +31,8 @@ export class ProductDetailContainer {
     }
 
     initializeElements() {
+        this.breadcrumbs = document.getElementById('breadcrumb-item-active');
+
         // Hình ảnh sản phẩm
         this.mainImage = document.querySelector('.product-image img');
         this.thumbnails = document.querySelectorAll('.thumbnail');
@@ -32,7 +47,7 @@ export class ProductDetailContainer {
         // Thông tin sản phẩm
         this.titleElement = document.getElementById('product-title');
         this.productPriceElement = document.getElementById('product-price');
-        
+
         this.ratingElement = document.getElementById('rating-stars');
         this.ratingAverageElement = document.getElementById('rating-average');
         this.ratingCountElement = document.getElementById('rating-count');
@@ -51,13 +66,17 @@ export class ProductDetailContainer {
         this.addToCartBtn = document.getElementById('btn-add-cart');
         this.wishlistBtn = document.getElementById('btn-wishlist');
 
-        // Đánh giá
-        this.reviewContainer = document.querySelector('.review-list');
+        // Nút lọc review
         this.reviewFilters = document.querySelectorAll('.filter-btn-simple');
-        this.loadMoreReviewBtn = document.querySelector('.load-more-btn');
+
+        // Đánh giá sản phẩm
+        this.ratingSummaryContainer = document.querySelector('.rating-summary');
+        this.ratingBarsContainer = document.querySelector('.rating-bars');
+        this.reviewContainer = document.querySelector('.review-list');
+        this.loadMoreReviewBtn = document.getElementById('load-more-btn');
 
         // Sản phẩm liên quan
-        this.relatedProductsContainer = document.querySelector('.publisher-section .row');
+        this.relatedProductsContainer = document.getElementById('discover-swiper-wrapper');
 
         // Sản phẩm đã xem
         this.recentlyViewedContainer = document.querySelector('#recentlyViewedProducts');
@@ -86,14 +105,11 @@ export class ProductDetailContainer {
         this.wishlistBtn.addEventListener('click', () => this.handleAddToWishlist());
 
         // Sự kiện cho filter đánh giá
-        this.reviewFilters.forEach(filter => {
-            filter.addEventListener('click', () => this.handleReviewFilterChange(filter));
+        this.reviewFilters.forEach(filterBtn => {
+            filterBtn.addEventListener('click', () => this.handleReviewFilterChange(filterBtn));
         });
 
-        // Sự kiện load thêm đánh giá
-        if (this.loadMoreReviewBtn) {
-            this.loadMoreReviewBtn.addEventListener('click', () => this.loadMoreReviews());
-        }
+
     }
 
     async loadInitialData() {
@@ -104,19 +120,32 @@ export class ProductDetailContainer {
 
         try {
             // Tải song song các dữ liệu
-            const [product, reviews, relatedProducts] = await Promise.all([
+            const [product, reviews] = await Promise.all([
                 this.service.getProductDetail(this.productId),
-                // this.service.getProductReviews(this.productId),
-                // this.service.getRelatedProducts(this.productId)
+                this.service.getProductReviews(this.productId, this.filterReviews),
             ]);
 
-            // Lưu thông tin sản phẩm
+
+
+            // Lưu thông tin sản phẩm và đánh giá
             this.product = product;
+            this.relatedProducts = await this.service.getRelatedProducts(this.product.categoryId)
+
+            this.ratingsSummary = reviews.ratingsSummary;
+            this.reviews = reviews.reviews;
+            this.totalReviews = reviews.total;
+            this.currentPageReviews = reviews.currentPage;
+            this.totalPagesReviews = reviews.totalPages;
+            this.hasMoreReviews = reviews.hasMore;
+
 
             // Render các phần của trang
+            this.breadcrumbs.textContent = this.product.categoryBreadcrumb;
             this.renderProductInfo();
-            // this.renderReviews(reviews);
-            // this.renderRelatedProducts(relatedProducts);
+            this.renderRatingSummary(this.ratingsSummary);
+            this.renderRatingBars(this.ratingsSummary);
+            this.renderReviews(this.reviews);
+            this.renderRelatedProducts();
 
             // Thêm vào danh sách đã xem
             // await this.service.addToRecentlyViewed(this.productId);
@@ -160,6 +189,7 @@ export class ProductDetailContainer {
 
         // Cập nhật đánh giá
         this.ratingElement.innerHTML = this.createRatingStars(this.product.averageRatingScore);
+        this.ratingAverageElement.textContent = this.product.averageRatingScore;
         this.ratingCountElement.textContent = `(${this.product.totalProductReviews})`;
         this.soldCountElement.textContent = `| Đã bán ${this.formatNumber(this.product.totalBuy)}`;
 
@@ -223,143 +253,107 @@ export class ProductDetailContainer {
         this.totalPriceElement.innerHTML = this.formatPrice(total);
     }
 
-    async handleBuyNow() {
-        if (!this.product) return;
-
-        try {
-            // Thêm vào giỏ hàng
-            await this.handleAddToCart();
-            // Chuyển đến trang thanh toán
-            window.location.href = '/checkout';
-        } catch (error) {
-            console.error('Lỗi khi mua ngay:', error);
-            this.showToast('Có lỗi xảy ra khi thực hiện mua hàng', 'error');
-        }
-    }
-
-    async handleAddToCart() {
-        if (!this.product) return;
-
-        try {
-            // Gọi API thêm vào giỏ hàng
-            const response = await fetch('/api/cart', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    productId: this.product.id,
-                    quantity: this.quantity
-                })
-            });
-
-            if (response.ok) {
-                this.showToast('Đã thêm vào giỏ hàng thành công', 'success');
-                // Cập nhật số lượng trong giỏ hàng
-                this.updateCartCount();
-            } else {
-                throw new Error('Lỗi khi thêm vào giỏ hàng');
-            }
-        } catch (error) {
-            console.error('Lỗi khi thêm vào giỏ hàng:', error);
-            this.showToast('Có lỗi xảy ra khi thêm vào giỏ hàng', 'error');
-        }
-    }
-
-    async handleAddToWishlist() {
-        if (!this.product) return;
-
-        try {
-            const response = await fetch('/api/wishlist', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    productId: this.product.id
-                })
-            });
-
-            if (response.ok) {
-                this.showToast('Đã thêm vào danh sách yêu thích', 'success');
-                this.wishlistBtn.classList.add('active');
-            } else {
-                throw new Error('Lỗi khi thêm vào danh sách yêu thích');
-            }
-        } catch (error) {
-            console.error('Lỗi khi thêm vào wishlist:', error);
-            this.showToast('Có lỗi xảy ra khi thêm vào danh sách yêu thích', 'error');
-        }
-    }
-
-    async handleReviewFilterChange(filter) {
+    async handleReviewFilterChange(filterBtn) {
         // Xóa active class từ tất cả filters
         this.reviewFilters.forEach(f => f.classList.remove('active'));
 
         // Thêm active class cho filter được chọn
-        filter.classList.add('active');
+        filterBtn.classList.add('active');
 
         // Lấy giá trị filter
-        const filterValue = filter.dataset.value;
+        this.filterReviews.filter = filterBtn.value
+        this.filterReviews.page = 1
 
         // Tải lại đánh giá với filter mới
-        const reviews = await this.service.getProductReviews(this.productId, {
-            filter: filterValue
-        });
+        const reviews = await this.service.getProductReviews(this.productId, this.filterReviews);
+        this.reviews = reviews.reviews
+        this.totalReviews = reviews.total
+        this.currentPageReviews = reviews.currentPage
+        this.totalPagesReviews = reviews.totalPages
+        this.hasMoreReviews = reviews.hasMore
 
         // Render lại đánh giá
-        this.renderReviews(reviews);
+        this.renderReviews(this.reviews);
     }
 
     async loadMoreReviews() {
-        // Lấy trang hiện tại
-        const currentPage = parseInt(this.loadMoreReviewBtn.dataset.page) || 1;
-
-        // Lấy filter hiện tại
-        const activeFilter = document.querySelector('.filter-btn-simple.active');
-        const filterValue = activeFilter ? activeFilter.dataset.value : null;
-
-        // Tải thêm đánh giá
-        const reviews = await this.service.getProductReviews(this.productId, {
-            page: currentPage + 1,
-            filter: filterValue
-        });
+        // Call API
+        this.filterReviews.page = this.currentPageReviews + 1
+        const reviews = await this.service.getProductReviews(this.productId, this.filterReviews);
+        this.hasMoreReviews = reviews.hasMore
+        this.currentPageReviews = reviews.currentPage
+        this.totalPagesReviews = reviews.totalPages
+        this.reviews = [...this.reviews, ...reviews.reviews]
 
         // Thêm đánh giá mới vào danh sách
-        this.appendReviews(reviews);
+        this.appendReviews(reviews.reviews);
 
-        // Cập nhật trang hiện tại
-        this.loadMoreReviewBtn.dataset.page = currentPage + 1;
-
-        // Ẩn nút nếu không còn đánh giá
-        if (reviews.reviews.length === 0) {
+        // Kiểm tra xem có hiển thị nút load more hay không
+        if (this.hasMoreReviews) {
+            this.loadMoreReviewBtn.style.display = 'block';
+        } else {
             this.loadMoreReviewBtn.style.display = 'none';
         }
+
+    }
+    renderRatingSummary(ratingsSummary) {
+        if (!this.ratingSummaryContainer) return;
+
+        this.ratingSummaryContainer.innerHTML = `
+            <div class="rating-average">${ratingsSummary.averageRating}</div>
+            <div class="rating-stars">${this.createRatingStars(ratingsSummary.averageRating)}</div>
+            <div class="total-ratings">${ratingsSummary.totalReviews} đánh giá</div>
+        `;
     }
 
-    renderReviews(reviewData) {
+    renderRatingBars(ratingsSummary) {
+        if (!this.ratingBarsContainer) return;
+        const percent = ratingsSummary.percentages
+        const distribution = Object.entries(ratingsSummary.distribution).reverse()
+
+        this.ratingBarsContainer.innerHTML = `
+            ${distribution.map(([star, count]) => `
+                <div class="rating-bar-item">
+                    <div class="rating-label">${star}</div>
+                    <div class="rating-bar">
+                        <div class="rating-bar-fill" style="width: ${percent[star]}%"></div>
+                    </div>
+                    <div class="rating-count">${count}</div>
+                </div>
+            `).join('')}
+        `;
+    }
+
+    renderReviews(reviews) {
         if (!this.reviewContainer) return;
-
-        const { reviews, summary } = reviewData;
-
-        // Render tổng quan đánh giá
-        this.renderReviewSummary(summary);
-
+        
         // Render danh sách đánh giá
-        this.reviewContainer.innerHTML = reviews.map(review => this.createReviewHTML(review)).join('');
+        this.reviewContainer.innerHTML = reviews.length > 0
+            ? reviews.map(review => this.createReviewHTML(review)).join('')
+            : `     
+                <div class="no-reviews d-flex flex-column align-items-center justify-content-center mt-5">
+                    <p>Không có đánh giá</p>
+                </div>
+            `;
 
-        // Hiển thị/ẩn nút load more
-        if (this.loadMoreReviewBtn) {
-            this.loadMoreReviewBtn.style.display = reviews.length < summary.total ? 'block' : 'none';
-            this.loadMoreReviewBtn.dataset.page = 1;
-        }
+        // Hiển thị/ẩn nút load more khi hasMoreReviews là true
+        const loadMoreHTML = `
+            <button class="load-more-btn" id="load-more-btn">
+                <i class="fas fa-spinner"></i> Xem thêm đánh giá
+            </button>
+        `;
+        this.reviewContainer.insertAdjacentHTML('beforeend', loadMoreHTML);
+        const loadMoreBtn = document.getElementById('load-more-btn');
+        loadMoreBtn.style.display = this.hasMoreReviews ? 'block' : 'none';
+
+        this.loadMoreReviewBtn = document.getElementById('load-more-btn');
+        this.loadMoreReviewBtn.addEventListener('click', () => this.loadMoreReviews());
     }
 
     appendReviews(reviewData) {
-        const { reviews } = reviewData;
 
         // Thêm HTML của đánh giá mới
-        const reviewsHTML = reviews.map(review => this.createReviewHTML(review)).join('');
+        const reviewsHTML = reviewData.map(review => this.createReviewHTML(review)).join('');
 
         // Chèn vào trước nút load more
         if (this.loadMoreReviewBtn) {
@@ -386,19 +380,82 @@ export class ProductDetailContainer {
         });
     }
 
+    // Thêm phương thức này vào class ProductDetailContainer
+    initializeSwiper() {
+        // Khởi tạo Swiper cho phần "Khám phá thêm"
+        const discoverSwiper = new Swiper('.discover-swiper', {
+            slidesPerView: 1,
+            spaceBetween: 16,
+            pagination: {
+                el: '.discover-pagination',
+                clickable: true,
+            },
+            navigation: {
+                nextEl: '.discover-next',
+                prevEl: '.discover-prev',
+            },
+            breakpoints: {
+                576: {
+                    slidesPerView: 2,
+                },
+                768: {
+                    slidesPerView: 3,
+                },
+                992: {
+                    slidesPerView: 4,
+                }
+            }
+        });
+    }
+
+    // Cập nhật phương thức renderRelatedProducts để sử dụng Swiper
+    renderRelatedProducts() {
+        if (!this.relatedProductsContainer) return;
+
+        // Thay đổi HTML để sử dụng cấu trúc Swiper
+        const relatedProducts = this.relatedProducts
+        this.relatedProductsContainer.innerHTML = `
+        <div class="swiper discover-swiper">
+            <div class="swiper-wrapper">
+                ${relatedProducts.map(product => `
+                    <div class="swiper-slide">
+                        <div class="book-card">
+                            <img src="/asset/images/image.png" alt="${product.name}">
+                            <div class="book-info">
+                                <span class="shipping-badge sponsored-tag">Tài trợ</span>
+                                <div class="shipping-badge authentic-badge">Chính hãng</div>
+                                <h5 class="book-title">${product.name}</h5>
+                                <div class="book-author">${product.author}</div>
+                                <div class="book-price">
+                                    ${this.formatPrice(product.price * (1 - product.discount / 100))}
+                                    ${product.discount ? `<span class="discount-tag">-${product.discount}%</span>` : ''}
+                                </div>
+                                <div class="sold-count">Đã bán ${this.formatNumber(product.totalBuy)}</div>
+                            </div>
+                        </div>
+                    </div>
+                `).join('')}
+            </div>
+            <div class="swiper-pagination discover-pagination"></div>
+        </div>
+    `;
+
+        // Khởi tạo Swiper
+        this.initializeSwiper();
+    }
+
     createReviewHTML(review) {
         return `
-            <div class="review-item">
+            <div class="review-item" data-id="${review.id}">
                 <div class="reviewer-info">
                     <div class="reviewer-avatar">
                         ${review.avatar
-                ? `<img src="${review.avatar}" alt="${review.name}">`
-                : `<span class="avatar-placeholder">${this.getInitials(review.name)}</span>`
+                ? `<img src="https://avatar.iran.liara.run/public" alt="${review.userName}">`
+                : `<span class="avatar-placeholder">${this.getInitials(review.userName)}</span>`
             }
                     </div>
                     <div class="reviewer-details">
-                        <div class="reviewer-name">${review.name}</div>
-                        <div class="reviewer-joined">Đã tham gia ${review.joinedTime}</div>
+                        <div class="reviewer-name">${review.userName}</div>
                     </div>
                 </div>
                 <div class="review-content">
@@ -408,23 +465,14 @@ export class ProductDetailContainer {
                         </div>
                         <span class="review-label">${this.getRatingLabel(review.rating)}</span>
                     </div>
-                    ${review.verified ? `
-                        <div class="review-purchase-info">
-                            <i class="fas fa-check-circle verified-badge"></i> Đã mua hàng
-                        </div>
-                    ` : ''}
+                    <div class="review-purchase-info">
+                        <i class="fas fa-check-circle verified-badge"></i> Đã mua hàng
+                    </div>
                     <div class="review-text">${review.content}</div>
-                    ${review.images ? `
-                        <div class="review-images">
-                            ${review.images.map(img => `
-                                <img src="${img}" alt="Review Image">
-                            `).join('')}
-                        </div>
-                    ` : ''}
+                    
                     <div class="review-metadata">
                         <span class="review-date">
-                            Đánh giá vào ${review.reviewTime}
-                            ${review.usageTime ? ` · Đã dùng ${review.usageTime}` : ''}
+                            Đánh giá vào ${review.reviewDate}
                         </span>
                     </div>
                     <div class="review-actions">
@@ -443,31 +491,6 @@ export class ProductDetailContainer {
                 </div>
             </div>
         `;
-    }
-
-    renderRelatedProducts(products) {
-        if (!this.relatedProductsContainer || !products.length) return;
-
-        this.relatedProductsContainer.innerHTML = products.map(product => `
-            <div class="col">
-                <div class="book-card">
-                    <img src="${product.image}" alt="${product.title}">
-                    <div class="book-info">
-                        ${product.sponsored ? '<span class="sponsored-tag">Tài trợ</span>' : ''}
-                        ${product.freeShipping ? '<div class="shipping-badge fast-shipping">Freeship</div>' : ''}
-                        <div class="shipping-badge authentic-badge">Chính hãng</div>
-                        <h5 class="book-title">${product.title}</h5>
-                        <div class="book-author">${product.author}</div>
-                        <div class="book-price">
-                            ${this.formatPrice(product.price)}
-                            ${product.discount ? `<span class="discount-tag">-${product.discount}%</span>` : ''}
-                        </div>
-                        <div class="rating">${this.createRatingStars(product.rating)}</div>
-                        <div class="sold-count">Đã bán ${this.formatNumber(product.soldCount)}</div>
-                    </div>
-                </div>
-            </div>
-        `).join('');
     }
 
     async loadRecentlyViewed() {

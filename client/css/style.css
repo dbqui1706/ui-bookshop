@@ -3,33 +3,46 @@ body {
     background-color: #f6f6f6;
     color: #333;
 }
+
 /* Cart Page Styles */
 .container {
-    max-width: 1300px; /* Tăng từ mặc định 1200px */
+    max-width: 1300px;
+    /* Tăng từ mặc định 1200px */
 }
+
+/* Header styles */
+header {
+    background-color: #fff;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Logo styling */
 .navbar-brand {
-    font-size: 2rem;
-    font-weight: bold;
-    display: flex;
-    align-items: center;
+    display: block;
 }
 
 .navbar-logo {
-    height: 120px;
-    object-fit: contain;
+    max-height: 70px;
+    width: auto;
 }
 
+/* Search bar */
 .search-bar {
     width: 100%;
-    max-width: 650px;
 }
 
 .search-input {
     border-radius: 20px 0 0 20px;
     border-right: none;
     padding-left: 20px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    box-shadow: none;
     border: 1px solid #e0e0e0;
+    height: 45px;
+}
+
+.search-input:focus {
+    box-shadow: none;
+    border-color: #1a73e8;
 }
 
 .search-button {
@@ -37,69 +50,212 @@ body {
     color: white;
     border-radius: 0 20px 20px 0;
     border: 1px solid #1a73e8;
-    padding: 0.5rem 1.5rem;
+    padding: 0 1.5rem;
+    height: 45px;
+    transition: background-color 0.2s;
 }
 
-.search-button:hover {
+.search-button:hover,
+.search-button:focus {
     background-color: #1558b7;
+    color: white;
 }
 
-.category-nav {
-    padding: 10px 0;
-    background-color: white;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-    margin-bottom: 20px;
-}
-
-.top-category {
+/* User menu */
+.user-menu {
     display: flex;
-    overflow-x: auto;
-    white-space: nowrap;
-    padding: 10px 0;
-    gap: 15px;
+    justify-content: space-around;
+    align-items: center;
+    width: 100%;
 }
 
-.top-category a {
+.user-menu .menu-item {
     color: #555;
     text-decoration: none;
-    padding: 8px 16px;
-    border-radius: 20px;
-    background-color: #f5f5f5;
-    transition: all 0.3s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 5px;
+    transition: color 0.2s;
 }
 
-.top-category a:hover {
-    background-color: #e9ecef;
+.user-menu .menu-item:hover {
     color: #1a73e8;
 }
 
+.user-menu .menu-item i {
+    font-size: 1.3rem;
+    margin-bottom: 5px;
+}
+
+.user-menu .menu-item span {
+    font-size: 0.8rem;
+    text-align: center;
+}
+
+.account-dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-toggle::after {
+    content: '';
+    display: inline-block;
+    margin-left: 6px;
+    vertical-align: middle;
+    border-top: 5px solid;
+    border-right: 5px solid transparent;
+    border-left: 5px solid transparent;
+}
+
+.dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    /* Căn giữa menu với nút */
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    min-width: 200px;
+    display: none;
+    z-index: 1000;
+    border: 1px solid #eee;
+    /* Khoảng cách từ nút đến menu */
+}
+
+/* Mũi tên nhỏ phía trên dropdown */
+.dropdown-menu::before {
+    content: '';
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 5px;
+    border-style: solid;
+    border-color: transparent transparent #fff transparent;
+    z-index: 1001;
+}
+
+/* Show dropdown on hover */
+.account-dropdown:hover .dropdown-menu {
+    display: block;
+}
+
+.dropdown-item {
+    display: block;
+    padding: 10px 10px;
+    color: #333;
+    text-decoration: none;
+    transition: background 0.2s;
+    text-align: left;
+}
+
+.dropdown-item:hover {
+    background-color: #f8f9fa;
+}
+
+.dropdown-divider {
+    height: 0;
+    margin: 0.5rem 0;
+    overflow: hidden;
+    border-top: 1px solid #e9ecef;
+}
+
+/* Ẩn mũi tên dropdown màu xanh */
+.account-dropdown .dropdown-toggle::after,
+.dropdown-toggle::after,
+#accountMenu::after,
+.menu-item.dropdown-toggle::after,
+a[title="Tài khoản"]::after,
+.dropdown::after,
+.dropdown>a::after {
+    display: none !important;
+}
+
+/* Cart icon */
+.cart-icon {
+    position: relative;
+}
+
+.cart-count {
+    position: absolute;
+    top: -5px;
+    right: 20%;
+    transform: translateX(1x);
+    background-color: #ff4d4d;
+    color: white;
+    border-radius: 50%;
+    width: 18px;
+    height: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+}
+
+/* Commitment bar */
 .commitment-bar {
-    background-color: white;
-    padding: 15px 0;
+    background-color: #f8f9fa;
+    padding: 10px 0;
+    border-top: 1px solid #eee;
     border-bottom: 1px solid #eee;
-    margin-bottom: 20px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.commitment-item-wrapper {
+    padding: 4px 0;
+    background-color: #f8f9fa;
 }
 
 .commitment-item {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 0.9rem;
-    color: #333;
-    gap: 10px;
-    padding: 5px 0;
+    gap: 5px;
+    color: #555;
+    font-size: 0.8rem;
 }
 
 .commitment-item i {
     color: #1a73e8;
-    font-size: 1.2rem;
+    font-size: 0.8rem;
 }
 
-@media (max-width: 900px) {
+/* Media Queries */
+@media (max-width: 991.98px) {
+    .commitment-item {
+        justify-content: center;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .navbar-logo {
+        max-height: 60px;
+    }
+
+    .user-menu {
+        margin-top: 10px;
+        border-top: 1px solid #eee;
+        padding-top: 10px;
+    }
+
     .commitment-item {
         justify-content: flex-start;
-        margin-bottom: 10px;
+        font-size: 0.8rem;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .search-button {
+        padding: 0 0.8rem;
+    }
+
+    .commitment-item {
+        font-size: 0.75rem;
+    }
+
+    .commitment-item i {
+        font-size: 1rem;
     }
 }
 
@@ -193,7 +349,6 @@ body {
     -webkit-box-orient: vertical;
     overflow: hidden;
     line-height: 1.4;
-    height: 2.8em;
 }
 
 .book-author {
@@ -372,7 +527,6 @@ body {
 .user-menu {
     display: flex;
     align-items: center;
-    gap: 20px;
 }
 
 .user-menu a {
@@ -440,25 +594,274 @@ body {
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
 }
 
-footer {
+/* CSS cho Footer hiện đại */
+.modern-footer {
     background-color: #fff;
-    padding: 50px 0 20px;
+    padding: 30px 0 30px;
     box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
-    margin-top: 60px;
+    color: #555;
+    font-size: 14px;
 }
 
-footer h5 {
+/* Footer Top - Logo và Newsletter */
+.footer-top {
+    margin-bottom: 40px;
+}
+
+.footer-logo {
+    max-height: 60px;
+    width: auto;
+}
+
+.footer-brand p {
+    color: #666;
+    font-size: 14px;
+    line-height: 1.6;
+    margin-top: 15px;
+}
+
+.newsletter-box {
+    background-color: #f8f9fa;
+    padding: 25px;
+    border-radius: 8px;
+}
+
+.newsletter-box h5 {
     font-weight: 700;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     color: #333;
 }
 
-footer a {
-    transition: color 0.2s;
+.newsletter-box p {
+    font-size: 14px;
+    margin-bottom: 15px;
+    color: #666;
 }
 
-footer a:hover {
-    color: #1a73e8 !important;
+.newsletter-form .form-control {
+    height: 45px;
+    border-radius: 4px 0 0 4px;
+    border: 1px solid #ddd;
+}
+
+.newsletter-form .btn {
+    border-radius: 0 4px 4px 0;
+    padding: 0 20px;
+    background-color: #1a73e8;
+    border-color: #1a73e8;
+}
+
+.newsletter-form .btn:hover {
+    background-color: #1558b7;
+    border-color: #1558b7;
+}
+
+/* Footer Divider */
+.footer-divider {
+    margin: 30px 0;
+    border-color: #eee;
+    opacity: 0.7;
+}
+
+/* Footer Main - Menu Links */
+.footer-widget {
+    margin-bottom: 30px;
+}
+
+.widget-title {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 18px;
+    color: #333;
+    position: relative;
+    padding-bottom: 10px;
+}
+
+.widget-title:after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 40px;
+    height: 2px;
+    background-color: #1a73e8;
+}
+
+.footer-links {
+    list-style: none;
+    padding-left: 0;
+    margin-bottom: 0;
+}
+
+.footer-links li {
+    margin-bottom: 10px;
+}
+
+.footer-links a {
+    color: #666;
+    text-decoration: none;
+    transition: color 0.2s;
+    display: block;
+}
+
+.footer-links a:hover {
+    color: #1a73e8;
+    padding-left: 5px;
+}
+
+/* Social Media Links */
+.social-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.social-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    color: #fff;
+    text-decoration: none;
+    transition: all 0.3s;
+}
+
+.social-link:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+}
+
+.social-link.facebook {
+    background-color: #4267B2;
+}
+
+.social-link.instagram {
+    background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+}
+
+.social-link.youtube {
+    background-color: #FF0000;
+}
+
+.social-link.twitter {
+    background-color: #1DA1F2;
+}
+
+.social-link.tiktok {
+    background-color: #000;
+}
+
+/* Payment Methods */
+.payment-methods {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.payment-icon {
+    width: 40px;
+    height: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f8f9fa;
+    border-radius: 4px;
+    border: 1px solid #eee;
+    font-size: 16px;
+    color: #666;
+}
+
+.payment-icon.visa {
+    color: #1A1F71;
+}
+
+.payment-icon.mastercard {
+    color: #EB001B;
+}
+
+.payment-icon.paypal {
+    color: #009cde;
+}
+
+.payment-icon.jcb {
+    color: #0d4fa2;
+}
+
+.payment-icon.cash {
+    color: #28a745;
+}
+
+.payment-icon.momo {
+    color: #A50064;
+    font-weight: 700;
+    font-size: 12px;
+}
+
+/* Footer Bottom - App Download & Copyright */
+.app-download p {
+    margin-bottom: 10px;
+    font-weight: 600;
+}
+
+.app-badges {
+    display: flex;
+    gap: 10px;
+}
+
+.app-badge {
+    display: block;
+    max-width: 120px;
+}
+
+.copyright {
+    font-size: 13px;
+    color: #3b3b3b;
+}
+
+.copyright p {
+    margin-bottom: 5px;
+}
+
+.address {
+    font-size: 12px;
+    opacity: 0.8;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 991px) {
+    .modern-footer {
+        padding: 40px 0 20px;
+    }
+
+    .footer-top {
+        margin-bottom: 20px;
+    }
+}
+
+@media (max-width: 767px) {
+    .widget-title {
+        margin-top: 10px;
+    }
+
+    .footer-bottom {
+        text-align: center;
+    }
+
+    .copyright {
+        margin-top: 15px;
+        text-align: center !important;
+    }
+
+    .app-download {
+        text-align: center;
+    }
+
+    .app-badges {
+        justify-content: center;
+    }
 }
 
 .btn-outline-primary {
