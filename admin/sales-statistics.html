@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Thống Kê Bán Hàng - Quản Trị Hệ Thống</title>
+
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" />
+
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.bootstrap5.min.css">
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Thêm Select2 CSS và JS -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/style.css" />
+</head>
+
+<body>
+    <div class="wrapper">
+        <!-- Sidebar -->
+        <nav id="sidebar">
+            <div class="sidebar-header">
+                <h5 class="mb-0 d-flex align-items-center">
+                    <i class="bi bi-boxes me-2 text-primary"></i>
+                    <span>Hệ Thống Quản Lý</span>
+                </h5>
+            </div>
+
+            <ul class="components">
+                <li>
+                    <a href="#" class="">
+                        <i class="bi bi-speedometer2"></i>
+                        <span>Trang Chủ</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#productSubmenu" data-bs-toggle="collapse" aria-expanded="false"
+                        class="dropdown-toggle">
+                        <i class="bi bi-box-seam"></i>
+                        <span>Sản Phẩm</span>
+                    </a>
+                    <ul class="collapse submenu" id="productSubmenu">
+                        <li>
+                            <a href="#" class="">
+                                Danh Sách Sản Phẩm
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="">
+                                Danh Mục Sản Phẩm
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#orderSubmenu" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+                        <i class="bi bi-cart3"></i>
+                        <span>Đơn Hàng</span>
+                        <span class="badge bg-danger rounded-pill">5</span>
+                    </a>
+                    <ul class="collapse submenu" id="orderSubmenu">
+                        <li>
+                            <a href="#">Tất Cả Đơn Hàng</a>
+                        </li>
+                        <li>
+                            <a href="#">Đơn Hàng Mới</a>
+                        </li>
+                        <li>
+                            <a href="#">Đơn Đang Xử Lý</a>
+                        </li>
+                        <li>
+                            <a href="#">Đơn Đã Hoàn Thành</a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#customerSubmenu" data-bs-toggle="collapse" aria-expanded="false" class="">
+                        <i class="bi bi-people"></i>
+                        <span>Khách Hàng</span>
+                    </a>
+                    <ul class="collapse submenu" id="customerSubmenu">
+                        <li>
+                            <a href="#" class="">
+                                Danh Sách Khách Hàng
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="">
+                                Phản Hồi Khách Hàng
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <div class="sidebar-heading">Báo Cáo</div>
+                <li>
+                    <a href="#">
+                        <i class="bi bi-graph-up"></i>
+                        <span>Báo Cáo Doanh Thu</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="active">
+                        <i class="bi bi-bar-chart"></i>
+                        <span>Thống Kê Bán Hàng</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <i class="bi bi-pie-chart"></i>
+                        <span>Phân Tích Xu Hướng</span>
+                    </a>
+                </li>
+
+                <div class="sidebar-heading">Hệ Thống</div>
+                <li>
+                    <a href="#">
+                        <i class="bi bi-gear"></i>
+                        <span>Thiết Lập Hệ Thống</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <i class="bi bi-person-badge"></i>
+                        <span>Quản Lý Người Dùng</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <i class="bi bi-shield-lock"></i>
+                        <span>Phân Quyền</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+        <!-- Page Content -->
+        <div id="content">
+            <!-- Navbar -->
+            <nav class="navbar navbar-expand-lg mb-4">
+                <div class="container-fluid">
+                    <button type="button" id="sidebarCollapse" class="btn btn-primary">
+                        <i class="bi bi-list"></i>
+                    </button>
+                    <button class="btn btn-dark d-inline-block d-lg-none ms-auto" type="button"
+                        data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+                        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                        <i class="bi bi-three-dots"></i>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="nav navbar-nav ms-auto">
+                            <li class="nav-item">
+                                <a class="nav-link" href="#" title="Thông báo">
+                                    <i class="bi bi-bell position-relative">
+                                        <span
+                                            class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle">
+                                            <span class="visually-hidden">Thông báo mới</span>
+                                        </span>
+                                    </i>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#" title="Tin nhắn">
+                                    <i class="bi bi-envelope"></i>
+                                </a>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle d-flex align-items-center" href="#"
+                                    id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <img src="https://via.placeholder.com/30" class="rounded-circle me-2" alt="Admin" />
+                                    <span>Admin</span>
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                    <li>
+                                        <a class="dropdown-item" href="#"><i class="bi bi-person me-2"></i>Hồ sơ</a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" href="#"><i class="bi bi-gear me-2"></i>Cài đặt</a>
+                                    </li>
+                                    <li>
+                                        <hr class="dropdown-divider" />
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" href="#"><i class="bi bi-box-arrow-right me-2"></i>Đăng
+                                            xuất</a>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+
+            <!-- Dashboard Header -->
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="bg-primary text-white rounded p-3">
+                        <div class="row align-items-center">
+                            <div class="col-md-6">
+                                <h2>Thống Kê Bán Hàng</h2>
+                            </div>
+                            <div class="col-md-6 text-md-end">
+                                <button class="btn btn-light me-2">
+                                    <i class="bi bi-file-earmark-pdf"></i> Xuất PDF
+                                </button>
+                                <button class="btn btn-light">
+                                    <i class="bi bi-file-earmark-excel"></i> Xuất Excel
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filter Section -->
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-body">
+                            <form class="row g-3">
+                                <div class="col-md-4">
+                                    <label class="form-label">Khoảng thời gian</label>
+                                    <select class="form-select" id="reportTimeRange">
+                                        <option value="today">Hôm nay</option>
+                                        <option value="yesterday">Hôm qua</option>
+                                        <option value="thisWeek">Tuần này</option>
+                                        <option value="lastWeek">Tuần trước</option>
+                                        <option value="thisMonth" selected>Tháng này</option>
+                                        <option value="lastMonth">Tháng trước</option>
+                                        <option value="thisQuarter">Quý này</option>
+                                        <option value="lastQuarter">Quý trước</option>
+                                        <option value="thisYear">Năm nay</option>
+                                        <option value="lastYear">Năm trước</option>
+                                        <option value="custom">Tùy chỉnh...</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label">Từ ngày</label>
+                                    <input type="date" class="form-control" id="startDate" disabled>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label">Đến ngày</label>
+                                    <input type="date" class="form-control" id="endDate" disabled>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label">Khu vực</label>
+                                    <select class="form-select" id="region">
+                                        <option value="all" selected>Tất cả khu vực</option>
+                                        <option value="north">Miền Bắc</option>
+                                        <option value="central">Miền Trung</option>
+                                        <option value="south">Miền Nam</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label">Chi nhánh</label>
+                                    <select class="form-select" id="branch">
+                                        <option value="all" selected>Tất cả chi nhánh</option>
+                                        <option value="hanoi">Hà Nội</option>
+                                        <option value="danang">Đà Nẵng</option>
+                                        <option value="hcm">TP. Hồ Chí Minh</option>
+                                        <option value="cantho">Cần Thơ</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label">Nhân viên</label>
+                                    <select class="form-select" id="employee">
+                                        <option value="all" selected>Tất cả nhân viên</option>
+                                        <option value="1">Nguyễn Văn A</option>
+                                        <option value="2">Trần Thị B</option>
+                                        <option value="3">Lê Văn C</option>
+                                        <option value="4">Phạm Thị D</option>
+                                    </select>
+                                </div>
+                                <div class="col-12 text-end">
+                                    <button type="button" class="btn btn-secondary me-2">Đặt lại</button>
+                                    <button type="button" class="btn btn-primary">Áp dụng</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Summary Stats -->
+            <div class="row mb-4">
+                <div class="col-md-3">
+                    <div class="card border-0 shadow-sm h-100">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <div class="flex-shrink-0">
+                                    <div class="stat-icon bg-primary bg-opacity-10 p-3 rounded text-primary">
+                                        <i class="bi bi-cart-check fs-3"></i>
+                                    </div>
+                                </div>
+                                <div class="flex-grow-1 ms-3">
+                                    <h6 class="mb-1">Tổng đơn hàng</h6>
+                                    <h3 class="mb-0">8,427</h3>
+                                    <span class="text-success"><i class="bi bi-arrow-up"></i> 9.2%</span>
+                                    <small class="text-muted">so với kỳ trước</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card border-0 shadow-sm h-100">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <div class="flex-shrink-0">
+                                    <div class="stat-icon bg-success bg-opacity-10 p-3 rounded text-success">
+                                        <i class="bi bi-check-circle fs-3"></i>
+                                    </div>
+                                </div>
+                                <div class="flex-grow-1 ms-3">
+                                    <h6 class="mb-1">Tỷ lệ chuyển đổi</h6>
+                                    <h3 class="mb-0">3.8%</h3>
+                                    <span class="text-success"><i class="bi bi-arrow-up"></i> 0.4%</span>
+                                    <small class="text-muted">so với kỳ trước</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card border-0 shadow-sm h-100">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <div class="flex-shrink-0">
+                                    <div class="stat-icon bg-info bg-opacity-10 p-3 rounded text-info">
+                                        <i class="bi bi-box2 fs-3"></i>
+                                    </div>
+                                </div>
+                                <div class="flex-grow-1 ms-3">
+                                    <h6 class="mb-1">Số lượng đã bán</h6>
+                                    <h3 class="mb-0">24,356</h3>
+                                    <span class="text-success"><i class="bi bi-arrow-up"></i> 12.5%</span>
+                                    <small class="text-muted">so với kỳ trước</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card border-0 shadow-sm h-100">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <div class="flex-shrink-0">
+                                    <div class="stat-icon bg-warning bg-opacity-10 p-3 rounded text-warning">
+                                        <i class="bi bi-arrow-return-left fs-3"></i>
+                                    </div>
+                                </div>
+                                <div class="flex-grow-1 ms-3">
+                                    <h6 class="mb-1">Tỷ lệ hoàn trả</h6>
+                                    <h3 class="mb-0">2.1%</h3>
+                                    <span class="text-danger"><i class="bi bi-arrow-up"></i> 0.3%</span>
+                                    <small class="text-muted">so với kỳ trước</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sales Overview -->
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0">Tổng quan đơn hàng</h5>
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-sm btn-outline-secondary active">Ngày</button>
+                                <button type="button" class="btn btn-sm btn-outline-secondary">Tuần</button>
+                                <button type="button" class="btn btn-sm btn-outline-secondary">Tháng</button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <canvas id="salesOverviewChart" height="300"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sales by Region and Channel -->
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <div class="card border-0 shadow-sm h-100">
+                        <div class="card-header bg-white">
+                            <h5 class="mb-0">Doanh số theo khu vực</h5>
+                        </div>
+                        <div class="card-body">
+                            <canvas id="regionChart" height="300"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card border-0 shadow-sm h-100">
+                        <div class="card-header bg-white">
+                            <h5 class="mb-0">Doanh số theo chi nhánh</h5>
+                        </div>
+                        <div class="card-body">
+                            <canvas id="branchChart" height="300"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Order Status -->
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <div class="card border-0 shadow-sm h-100">
+                        <div class="card-header bg-white">
+                            <h5 class="mb-0">Trạng thái đơn hàng</h5>
+                        </div>
+                        <div class="card-body">
+                            <canvas id="orderStatusChart" height="300"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card border-0 shadow-sm h-100">
+                        <div class="card-header bg-white">
+                            <h5 class="mb-0">Phương thức thanh toán</h5>
+                        </div>
+                        <div class="card-body">
+                            <canvas id="paymentMethodChart" height="300"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Top Sellers -->
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-header bg-white">
+                            <h5 class="mb-0">Nhân viên bán hàng xuất sắc</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th width="60">STT</th>
+                                            <th>Nhân viên</th>
+                                            <th class="text-end">Đơn hàng</th>
+                                            <th class="text-end">Sản phẩm đã bán</th>
+                                            <th class="text-end">Doanh số</th>
+                                            <th class="text-end">Tỷ lệ hoàn thành</th>
+                                            <th class="text-center">Xu hướng</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>1</td>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <img src="https://via.placeholder.com/40" class="rounded-circle me-3" alt="">
+                                                    <div>
+                                                        <div class="fw-semibold">Nguyễn Văn A</div>
+                                                        <div class="small text-muted">Chi nhánh Hà Nội</div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="text-end">245</td>
+                                            <td class="text-end">789</td>
+                                            <td class="text-end">735,000,000đ</td>
+                                            <td class="text-end">125%</td>
+                                            <td class="text-center">
+                                                <div style="height: 30px;">
+                                                    <canvas class="sparkline"></canvas>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>2</td>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <img src="https://via.placeholder.com/40" class="rounded-circle me-3" alt="">
+                                                    <div>
+                                                        <div class="fw-semibold">Trần Thị B</div>
+                                                        <div class="small text-muted">Chi nhánh TP. Hồ Chí Minh</div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="text-end">198</td>
+                                            <td class="text-end">634</td>
+                                            <td class="text-end">592,450,000đ</td>
+                                            <td class="text-end">115%</td>
+                                            <td class="text-center">
+                                                <div style="height: 30px;">
+                                                    <canvas class="sparkline"></canvas>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>3</td>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <img src="https://via.placeholder.com/40" class="rounded-circle me-3" alt="">
+                                                    <div>
+                                                        <div class="fw-semibold">Lê Văn C</div>
+                                                        <div class="small text-muted">Chi nhánh Đà Nẵng</div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="text-end">167</td>
+                                            <td class="text-end">532</td>
+                                            <td class="text-end">487,920,000đ</td>
+                                            <td class="text-end">108%</td>
+                                            <td class="text-center">
+                                                <div style="height: 30px;">
+                                                    <canvas class="sparkline"></canvas>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>4</td>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <img src="https://via.placeholder.com/40" class="rounded-circle me-3" alt="">
+                                                    <div>
+                                                        <div class="fw-semibold">Phạm Thị D</div>
+                                                        <div class="small text-muted">Chi nhánh Cần Thơ</div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="text-end">145</td>
+                                            <td class="text-end">468</td>
+                                            <td class="text-end">412,580,000đ</td>
+                                            <td class="text-end">102%</td>
+                                            <td class="text-center">
+                                                <div style="height: 30px;">
+                                                    <canvas class="sparkline"></canvas>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>5</td>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <img src="https://via.placeholder.com/40" class="rounded-circle me-3" alt="">
+                                                    <div>
+                                                        <div class="fw-semibold">Hoàng Văn E</div>
+                                                        <div class="small text-muted">Chi nhánh Hà Nội</div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="text-end">129</td>
+                                            <td class="text-end">398</td>
+                                            <td class="text-end">378,450,000đ</td>
+                                            <td class="text-end">97%</td>
+                                            <td class="text-center">
+                                                <div style="height: 30px;">
+                                                    <canvas class="sparkline"></canvas>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Order Analysis -->
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-header bg-white">
+                            <h5 class="mb-0">Phân tích đơn hàng theo giờ</h5>
+                        </div>
+                        <div class="card-body">
+                            <canvas id="hourlyOrdersChart" height="300"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Customer Demographics -->
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <div class="card border-0 shadow-sm h-100">
+                        <div class="card-header bg-white">
+                            <h5 class="mb-0">Phân bố khách hàng theo độ tuổi</h5>
+                        </div>
+                        <div class="card-body">
+                            <canvas id="ageDistributionChart" height="300"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card border-0 shadow-sm h-100">
+                        <div class="card-header bg-white">
+                            <h5 class="mb-0">Phân bố khách hàng theo giới tính</h5>
+                        </div>
+                        <div class="card-body">
+                            <canvas id="genderDistributionChart" height="300"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <footer class="bg-white text-center py-3 mt-2 rounded">
+                <p class="mb-0 text-muted">
+                    © 2025 Hệ Thống Quản Lý. Thiết kế bởi
+                    <a href="#" class="text-decoration-none">BookShopTeam</a>
+                </p>
+            </footer>
+        </div>
+    </div>
+
+    <!-- Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Alert Sweet -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <!-- Custom JS -->
+    <script src="js/app/index.js"></script>
+</body>
+
+</html>

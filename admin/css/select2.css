@@ -1,0 +1,33 @@
+ /* Ẩn container của Select2 để không thay đổi giao diện */
+ .select2-container--default .select2-selection--single {
+    height: 100%;
+    border: 1px solid #ced4da;
+    /* Giữ border giống Bootstrap */
+    border-radius: 0.375rem;
+    /* Border radius giống Bootstrap */
+    padding: 0.1rem 0.75rem;
+}
+
+/* Giữ nguyên vị trí và kích thước của mũi tên dropdown */
+.select2-container--default .select2-selection--single .select2-selection__arrow {
+    height: 100%;
+    right: 10px;
+}
+
+/* Đảm bảo văn bản được hiển thị đúng vị trí */
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+    line-height: 1.5;
+    padding-left: 0;
+    color: #212529;
+    /* Màu chữ giống Bootstrap */
+}
+
+/* Đảm bảo form-floating hoạt động đúng */
+.form-floating .select2-container {
+    height: 100%;
+}
+
+.form-floating .select2-container--default .select2-selection--single {
+    padding-top: 1.62rem;
+    padding-bottom: 0.62rem;
+}

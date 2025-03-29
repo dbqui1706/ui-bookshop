@@ -43,7 +43,7 @@ export class LoginModal {
                                     <button class="btn btn-primary btn-login" style="padding: 12px 20px; font-weight: 600; background-color: #2575fc; border-color: #2575fc; transition: all 0.3s;" id="modalLoginButton">
                                         <i class="fas fa-sign-in-alt me-2"></i>Đăng nhập
                                     </button>
-                                    <button class="btn btn-outline-primary" style="padding: 12px 20px; font-weight: 600; color: #2575fc; border-color: #2575fc; transition: all 0.3s;" id="modalRegisterButton">
+                                    <button class="btn btn-outline-primary btn-register" style="padding: 12px 20px; font-weight: 600; color: #2575fc; border-color: #2575fc;" id="modalRegisterButton">
                                         <i class="fas fa-user-plus me-2"></i>Đăng ký tài khoản mới
                                     </button>
                                 </div>
@@ -89,6 +89,12 @@ export class LoginModal {
             transform: translateY(-2px);
         }
         
+        .btn-register:hover {
+            background-color:rgb(238, 244, 255) !important;
+            border-color: #1a68e5 !important;
+            transform: translateY(-2px);
+        }
+
         .social-btn:hover {
             transform: translateY(-3px);
             box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
