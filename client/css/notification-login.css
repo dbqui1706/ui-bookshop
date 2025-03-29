@@ -1,0 +1,40 @@
+/* Hover effects */
+.btn-login:hover {
+    background-color: #1a68e5 !important;
+    border-color: #1a68e5 !important;
+    transform: translateY(-2px);
+}
+
+.btn-register:hover {
+    background-color: #e0ecff !important;
+    border-color: #e0ecff !important;
+    color: #1a68e5 !important;
+    transform: translateY(-2px);
+}
+
+.social-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Animation cho modal */
+.modal.fade .modal-dialog {
+    transition: transform 0.3s ease-out;
+}
+
+/* Hiệu ứng khi modal xuất hiện */
+.modal.show .modal-dialog {
+    animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
