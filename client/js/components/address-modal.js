@@ -19,6 +19,7 @@ export class AddressModal {
         this.userAddress = userAddress;
         this.onAddressUpdated = onAddressUpdated;
         this.createModal();
+        document.head.appendChild(this.createModalCSS());
         this.setupEventListeners();
         this.loadProvinces();
     }
@@ -131,6 +132,238 @@ export class AddressModal {
         document.body.appendChild(this.modalElement);
     }
 
+    createModalCSS() {
+        const style = document.createElement('style');
+        style.textContent = `
+            /* 2. Styling cho Modal Backdrop */
+            .modal-backdrop {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-color: rgba(0, 0, 0, 0.5);
+                z-index: 1050;
+            }
+
+            .address-modal {
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                width: 90%;
+                max-width: 550px;
+                background-color: white;
+                border-radius: 8px;
+                z-index: 1100;
+                max-height: 90vh;
+                animation: modalFadeIn 0.3s ease-out;
+            }
+
+            .modal-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 15px 20px;
+                border-bottom: 1px solid #f1f1f1;
+            }
+
+            .modal-header h4 {
+                font-size: 18px;
+                font-weight: 500;
+                margin: 0;
+            }
+
+            .close-modal {
+                background: none;
+                border: none;
+                font-size: 16px;
+                color: #757575;
+                cursor: pointer;
+            }
+
+            .modal-body {
+                padding: 20px;
+            }
+
+            .form-row {
+                display: flex;
+                margin-bottom: 15px;
+                align-items: center;
+            }
+
+            .form-label {
+                width: 130px;
+                font-weight: 500;
+                margin-bottom: 0;
+                font-size: 14px;
+            }
+
+            .form-input {
+                flex: 1;
+            }
+
+            .form-control, .form-select {
+                padding: 8px 12px;
+                border: 1px solid #ddd;
+                border-radius: 4px;
+                font-size: 14px;
+                width: 100%;
+            }
+
+            textarea.form-control {
+                resize: vertical;
+                min-height: 40px;
+            }
+
+            .address-note {
+                padding-left: 130px;
+                font-size: 12px;
+                color: #757575;
+                margin-top: 5px;
+                margin-bottom: 15px;
+            }
+
+            .address-types {
+                display: flex;
+                gap: 20px;
+            }
+
+            .address-type {
+                display: flex;
+                align-items: center;
+            }
+
+            .address-type input[type="radio"] {
+                margin-right: 8px;
+            }
+
+            .default-address {
+                padding-left: 130px;
+                display: flex;
+                align-items: center;
+                margin-top: 5px;
+                margin-bottom: 15px;
+            }
+
+            .default-address input[type="checkbox"] {
+                margin-right: 8px;
+                width: 18px;
+                height: 18px;
+            }
+
+            .form-actions {
+                display: flex;
+                justify-content: flex-end;
+                gap: 15px;
+                margin-top: 20px;
+            }
+
+            .btn-cancel {
+                padding: 8px 20px;
+                background-color: #f1f1f1;
+                border: 1px solid #ddd;
+                border-radius: 4px;
+                font-size: 14px;
+                cursor: pointer;
+                min-width: 120px;
+                text-align: center;
+            }
+
+            .btn-update {
+                padding: 8px 20px;
+                background-color: #1a94ff;
+                color: white;
+                border: none;
+                border-radius: 4px;
+                font-size: 14px;
+                cursor: pointer;
+                min-width: 120px;
+                text-align: center;
+            }
+
+            @keyframes modalFadeIn {
+                from {
+                    opacity: 0;
+                    transform: translate(-50%, -60%);
+                }
+                to {
+                    opacity: 1;
+                    transform: translate(-50%, -50%);
+                }
+            }
+
+            @media (max-width: 600px) {
+                .form-row {
+                    flex-direction: column;
+                    align-items: flex-start;
+                }
+                
+                .form-label {
+                    width: 100%;
+                    margin-bottom: 5px;
+                }
+                
+                .form-input {
+                    width: 100%;
+                }
+                
+                .address-note, .default-address {
+                    padding-left: 0;
+                }
+                
+                .address-types {
+                    flex-direction: column;
+                    gap: 10px;
+                }
+                
+                .form-actions {
+                    flex-direction: column;
+                }
+                
+                .btn-cancel, .btn-update {
+                    width: 100%;
+                }
+            }
+
+            /* Animation for modals */
+            .coupon-modal, .address-modal {
+                animation: modalFadeIn 0.3s ease-out;
+            }
+
+            @keyframes modalFadeIn {
+                from {
+                    opacity: 0;
+                    transform: translate(-50%, -60%);
+                }
+                to {
+                    opacity: 1;
+                    transform: translate(-50%, -50%);
+                }
+            }
+
+            /* Responsive adjustments */
+            @media (max-width: 767.98px) {
+                .coupon-modal, .address-modal {
+                    width: 95%;
+                    max-width: none;
+                }
+                
+                .coupon-card-right {
+                    flex-direction: column;
+                    align-items: flex-start;
+                }
+                
+                .coupon-status {
+                    margin-top: 10px;
+                    width: 100%;
+                    justify-content: flex-end;
+                }
+            }
+        `;
+        return style;
+    }
+
     setupEventListeners() {
         // Xử lý đóng modal
         const closeBtn = this.modalElement.querySelector('.close-modal');
@@ -229,7 +462,7 @@ export class AddressModal {
             districtSelect.disabled = false;
 
             // Nếu đã có dữ liệu địa chỉ cũ, chọn quận/huyện tương ứng
-            if (this.userAddress && this.userAddress.districtCode && 
+            if (this.userAddress && this.userAddress.districtCode &&
                 this.userAddress.provinceCode == provinceCode) {
                 districtSelect.value = this.userAddress.districtCode;
                 this.loadWards(this.userAddress.districtCode);
@@ -265,7 +498,7 @@ export class AddressModal {
             wardSelect.disabled = false;
 
             // Nếu đã có dữ liệu địa chỉ cũ, chọn phường/xã tương ứng
-            if (this.userAddress && this.userAddress.wardCode && 
+            if (this.userAddress && this.userAddress.wardCode &&
                 this.userAddress.districtCode == districtCode) {
                 wardSelect.value = this.userAddress.wardCode;
             }
@@ -289,7 +522,7 @@ export class AddressModal {
         const addressType = this.modalElement.querySelector('#company').checked ? 'company' : 'home';
 
         // Validate dữ liệu
-        if (!fullname || !phone || !provinceSelect.value || !districtSelect.value || 
+        if (!fullname || !phone || !provinceSelect.value || !districtSelect.value ||
             !wardSelect.value || !address) {
             alert('Vui lòng điền đầy đủ thông tin.');
             return;

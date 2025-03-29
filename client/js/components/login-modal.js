@@ -162,8 +162,6 @@ export class LoginModal {
 
     // Xử lý khi người dùng nhấn đăng nhập
     handleLogin() {
-        // Đặt một flag trong localStorage để cho biết muốn hiển thị form đăng ký
-        localStorage.setItem('showRegisterForm', 'true');
         // Chuyển hướng đến trang login
         window.location.href = '/client/login.html';
     }

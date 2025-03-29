@@ -19,6 +19,7 @@ export class CouponModal {
     show(onCouponSelected) {
         this.onCouponSelected = onCouponSelected;
         this.createModal();
+        document.head.appendChild(this.createModalCSS());
         this.setupEventListeners();
     }
 
@@ -113,6 +114,432 @@ export class CouponModal {
         `;
 
         document.body.appendChild(this.modalElement);
+    }
+
+    createModalCSS() {
+        const style = document.createElement('style');
+        style.textContent = `
+            /* CSS cho Popover và Modal */
+            /* 1. Styling cho Coupon Popover */
+            .coupon-popover {
+                position: absolute;
+                width: 300px;
+                background-color: #fff;
+                border-radius: 4px;
+                box-shadow: 0 2px 20px rgba(0, 0, 0, 0.15);
+                z-index: 1100;
+                display: none;
+                font-size: 14px;
+            }
+
+            /* Tạo mũi tên ở dưới popover (với CSS tương thích nhiều trình duyệt) */
+            .coupon-popover:after {
+                content: '';
+                position: absolute;
+                bottom: -10px;
+                left: 50%;
+                margin-left: -10px;
+                border-width: 10px 10px 0;
+                border-style: solid;
+                border-color: #fff transparent transparent;
+            }
+
+            .popover-header {
+                background-color: #f5f5fa;
+                padding: 12px 15px;
+                border-radius: 4px 4px 0 0;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                border-bottom: 1px solid #eee;
+            }
+
+            .popover-code {
+                font-weight: 600;
+                color: #1a94ff;
+                display: flex;
+                align-items: center;
+                gap: 5px;
+                position: relative;
+            }
+
+            .popover-code i {
+                cursor: pointer;
+                color: #999;
+                font-size: 12px;
+                transition: color 0.2s;
+            }
+
+            .popover-code i:hover {
+                color: #1a94ff;
+            }
+
+            /* Tooltip khi copy thành công */
+            .copy-tooltip {
+                position: absolute;
+                right: -20px;
+                top: -30px;
+                background-color: rgba(0, 0, 0, 0.7);
+                color: white;
+                padding: 4px 8px;
+                border-radius: 4px;
+                font-size: 11px;
+                visibility: hidden;
+                opacity: 0;
+                transition: opacity 0.3s;
+                white-space: nowrap;
+            }
+
+            .copy-tooltip:after {
+                content: '';
+                position: absolute;
+                bottom: -5px;
+                left: 50%;
+                margin-left: -5px;
+                border-width: 5px 5px 0;
+                border-style: solid;
+                border-color: rgba(0, 0, 0, 0.7) transparent transparent;
+            }
+
+            .popover-content {
+                padding: 15px;
+            }
+
+            .popover-detail {
+                font-size: 13px;
+            }
+
+            .detail-row {
+                margin-bottom: 12px;
+            }
+
+            .detail-label {
+                color: #666;
+                display: block;
+                margin-bottom: 5px;
+                font-weight: 500;
+            }
+
+            .detail-value {
+                color: #333;
+            }
+
+            .detail-conditions {
+                list-style-type: disc;
+                margin: 0;
+                padding-left: 18px;
+                color: #333;
+            }
+
+            .detail-conditions li {
+                margin-bottom: 6px;
+                line-height: 1.3;
+            }
+
+            /* 2. Styling cho Modal Backdrop */
+            .modal-backdrop {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-color: rgba(0, 0, 0, 0.5);
+                z-index: 1050;
+            }
+
+            /* 3. Styling cho Modal Coupon */
+            .coupon-modal {
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                width: 90%;
+                max-width: 600px;
+                background-color: white;
+                border-radius: 8px;
+                z-index: 1100;
+                max-height: 90vh;
+                overflow-y: auto;
+            }
+
+            .modal-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 15px 20px;
+                border-bottom: 1px solid #f1f1f1;
+            }
+
+            .modal-header h4 {
+                font-size: 18px;
+                font-weight: 500;
+                margin: 0;
+            }
+
+            .close-modal {
+                background: none;
+                border: none;
+                font-size: 16px;
+                color: #757575;
+                cursor: pointer;
+            }
+
+            .modal-body {
+                padding: 20px;
+            }
+
+            .coupon-search {
+                display: flex;
+                margin-bottom: 20px;
+                gap: 10px;
+            }
+
+            .coupon-input {
+                flex: 1;
+                padding: 10px 15px;
+                border: 1px solid #ddd;
+                border-radius: 4px;
+                font-size: 14px;
+            }
+
+            .btn-apply-coupon {
+                background-color: #f1f1f1;
+                border: 1px solid #ddd;
+                padding: 10px 20px;
+                border-radius: 4px;
+                font-weight: 500;
+                cursor: pointer;
+            }
+
+            .section-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 15px;
+            }
+
+            .section-header h5 {
+                font-size: 16px;
+                font-weight: 500;
+                margin: 0;
+            }
+
+            .section-badge {
+                color: #757575;
+                font-size: 13px;
+            }
+
+            .coupon-list {
+                display: flex;
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .coupon-card {
+                display: flex;
+                border: 1px solid #e0e0e0;
+                border-radius: 4px;
+                overflow: hidden;
+            }
+
+            .coupon-card.selected {
+                border-color: #1a94ff;
+            }
+
+            .coupon-card-left {
+                width: 100px;
+                background-color: #f5f5f5;
+                padding: 15px;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                text-align: center;
+            }
+
+            .coupon-card-left img {
+                width: 70px;
+                height: 70px;
+                object-fit: contain;
+            }
+
+            .coupon-card-right {
+                flex: 1;
+                display: flex;
+                padding: 15px;
+                justify-content: space-between;
+                align-items: center;
+            }
+
+            .coupon-info {
+                flex: 1;
+            }
+
+            .coupon-title {
+                font-weight: 500;
+                margin-bottom: 4px;
+                position: relative;
+            }
+
+            .coupon-code {
+                font-size: 12px;
+                color: #1a94ff;
+                margin-left: 8px;
+                display: inline-flex;
+                align-items: center;
+                gap: 5px;
+                position: relative;
+            }
+
+            .coupon-desc {
+                color: #757575;
+                font-size: 13px;
+                margin-bottom: 4px;
+            }
+
+            .coupon-date {
+                color: #757575;
+                font-size: 12px;
+            }
+
+            .coupon-status {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+            }
+
+            .status-badge {
+                font-size: 12px;
+                color: #757575;
+                padding: 4px 8px;
+                background-color: #f5f5f5;
+                border-radius: 4px;
+                white-space: nowrap;
+            }
+
+            .btn-select-coupon {
+                background-color: #1a94ff;
+                color: white;
+                border: none;
+                padding: 8px 15px;
+                border-radius: 4px;
+                font-size: 14px;
+                cursor: pointer;
+            }
+
+            .btn-select-coupon.selected {
+                background-color: #f1f1f1;
+                color: #333;
+            }
+
+            .coupon-info-trigger {
+                color: #999;
+                cursor: pointer;
+            }
+
+            .freeship-xtra {
+                background-color: #00AB56;
+                color: white;
+                padding: 15px 10px;
+            }
+
+            .xtra-logo {
+                font-weight: 700;
+                font-size: 15px;
+                margin-bottom: 5px;
+                line-height: 1.2;
+            }
+
+            .xtra-free {
+                font-size: 12px;
+                line-height: 1.2;
+            }
+
+            .mt-4 {
+                margin-top: 20px;
+            }
+
+            @keyframes modalFadeIn {
+                from {
+                    opacity: 0;
+                    transform: translate(-50%, -60%);
+                }
+                to {
+                    opacity: 1;
+                    transform: translate(-50%, -50%);
+                }
+            }
+
+            @media (max-width: 600px) {
+                .form-row {
+                    flex-direction: column;
+                    align-items: flex-start;
+                }
+                
+                .form-label {
+                    width: 100%;
+                    margin-bottom: 5px;
+                }
+                
+                .form-input {
+                    width: 100%;
+                }
+                
+                .address-note, .default-address {
+                    padding-left: 0;
+                }
+                
+                .address-types {
+                    flex-direction: column;
+                    gap: 10px;
+                }
+                
+                .form-actions {
+                    flex-direction: column;
+                }
+                
+                .btn-cancel, .btn-update {
+                    width: 100%;
+                }
+            }
+
+            /* Animation for modals */
+            .coupon-modal, .address-modal {
+                animation: modalFadeIn 0.3s ease-out;
+            }
+
+            @keyframes modalFadeIn {
+                from {
+                    opacity: 0;
+                    transform: translate(-50%, -60%);
+                }
+                to {
+                    opacity: 1;
+                    transform: translate(-50%, -50%);
+                }
+            }
+
+            /* Responsive adjustments */
+            @media (max-width: 767.98px) {
+                .coupon-modal, .address-modal {
+                    width: 95%;
+                    max-width: none;
+                }
+                
+                .coupon-card-right {
+                    flex-direction: column;
+                    align-items: flex-start;
+                }
+                
+                .coupon-status {
+                    margin-top: 10px;
+                    width: 100%;
+                    justify-content: flex-end;
+                }
+            }
+        `;
+        
+        return style;
     }
 
     setupEventListeners() {
