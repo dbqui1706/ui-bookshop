@@ -122,6 +122,12 @@ export class ProductDetailContainer {
             filterBtn.addEventListener('click', () => this.handleReviewFilterChange(filterBtn));
         });
 
+        // Sư kiện scroll cho sidebar
+        window.addEventListener('scroll', () => {
+            const headerHeight = document.querySelector('header').offsetHeight + 10;
+            document.querySelector('.product-sidebar').style.top = headerHeight + 'px';
+        });
+
 
     }
 

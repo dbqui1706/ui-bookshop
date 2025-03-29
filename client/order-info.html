@@ -94,7 +94,7 @@
     </header>
 
     <main>
-        <div class="container">
+        <div class="container py-2">
             <!-- Breadcrumb -->
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
@@ -169,28 +169,26 @@
                     <div class="col-lg-9 col-md-8">
                         <div class="order-content">
                             <h3 class="order-title">Đơn hàng của tôi</h3>
-
-                            <!-- HTML cho phần đơn hàng (thay thế đoạn comment "My Order" trong file HTML của bạn) -->
                             <div class="order-wrapper">
                                 <!-- Order Tabs -->
                                 <div class="order-tabs">
                                     <ul class="nav-tabs">
-                                        <li class="tab-item active">
+                                        <li class="tab-item active" id="all-orders">
                                             <a href="#">Tất cả đơn</a>
                                         </li>
-                                        <li class="tab-item">
+                                        <li class="tab-item" id="pending-orders">
                                             <a href="#">Chờ thanh toán</a>
                                         </li>
-                                        <li class="tab-item">
+                                        <li class="tab-item" id="processing-orders">
                                             <a href="#">Đang xử lý</a>
                                         </li>
-                                        <li class="tab-item">
+                                        <li class="tab-item" id="shipping-orders">
                                             <a href="#">Đang vận chuyển</a>
                                         </li>
-                                        <li class="tab-item">
+                                        <li class="tab-item" id="delivered-orders">
                                             <a href="#">Đã giao</a>
                                         </li>
-                                        <li class="tab-item">
+                                        <li class="tab-item" id="cancelled-orders">
                                             <a href="#">Đã hủy</a>
                                         </li>
                                     </ul>
@@ -200,24 +198,24 @@
                                 <div class="order-search">
                                     <div class="search-input-wrapper">
                                         <i class="fas fa-search search-icon"></i>
-                                        <input type="text" class="search-input"
+                                        <input type="text" class="search-input" id="search-input"
                                             placeholder="Tìm đơn hàng theo Mã đơn hàng, Nhà bán hoặc Tên sản phẩm">
                                     </div>
-                                    <button class="search-button">Tìm đơn hàng</button>
+                                    <button class="search-button" id="search-button">Tìm đơn hàng</button>
                                 </div>
 
                                 <!-- Empty Order List Message -->
-                                <div class="empty-order">
+                                <div class="empty-order" style="display: none;">
                                     <div class="empty-order-image">
-                                        <img src="/asset/images/empty-order.png" alt="Không có đơn hàng">
+                                        <i class="fas fa-box-open"></i>
                                     </div>
                                     <p class="empty-order-text">Chưa có đơn hàng</p>
                                 </div>
 
                                 <!-- Example Order List (Initially Hidden) -->
-                                <div class="order-list" style="display: none;">
+                                <div class="order-list" id="order-list">
                                     <!-- Order Item 1 -->
-                                    <div class="order-item">
+                                    <div class="order-item" id="order-item-1">
                                         <div class="order-header">
                                             <div class="order-info">
                                                 <span class="order-id">Đơn hàng: #2345678</span>
@@ -274,7 +272,7 @@
                                     </div>
 
                                     <!-- Order Item 2 -->
-                                    <div class="order-item">
+                                    <div class="order-item" id="order-item-2">
                                         <div class="order-header">
                                             <div class="order-info">
                                                 <span class="order-id">Đơn hàng: #2335597</span>
@@ -308,7 +306,7 @@
                                     </div>
 
                                     <!-- Order Item 3 -->
-                                    <div class="order-item">
+                                    <div class="order-item" id="order-item-3">
                                         <div class="order-header">
                                             <div class="order-info">
                                                 <span class="order-id">Đơn hàng: #2324456</span>
@@ -340,6 +338,29 @@
                                             <button class="btn-track">Theo dõi đơn</button>
                                         </div>
                                     </div>
+                                </div>
+
+                                <!-- Pagination -->
+                                <div class="pagination justify-content-center">
+                                    <nav aria-label="Page navigation">
+                                        <ul class="pagination" style="display: none;" id="pagination">
+                                            <li class="page-item disabled">
+                                                <a class="page-link" href="#" tabindex="-1" aria-label="Previous">
+                                                    <span aria-hidden="true">&laquo;</span>
+                                                    <span class="sr-only">Previous</span>   
+                                                </a>
+                                            </li>
+                                            <li class="page-item"><a class="page-link" href="#">1</a></li>
+                                            <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                            <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                            <li class="page-item">
+                                                <a class="page-link" href="#" aria-label="Next">
+                                                    <span aria-hidden="true">&raquo;</span>
+                                                    <span class="sr-only">Next</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </nav>
                                 </div>
                             </div>
                         </div>

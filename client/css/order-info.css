@@ -70,7 +70,7 @@
 /* Order Search */
 .order-search {
     display: flex;
-    margin-bottom: 24px;
+    margin-bottom: 20px;
 }
 
 .search-input-wrapper {
@@ -89,7 +89,7 @@
 
 .search-input {
     width: 100%;
-    padding: 10px 12px 10px 36px;
+    padding: 5px 7px 5px 31px;
     border: 1px solid #ddd;
     border-radius: 4px;
     font-size: 14px;
@@ -115,22 +115,51 @@
 /* Empty Order State */
 .empty-order {
     text-align: center;
-    padding: 40px 0;
+    padding: 50px 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    max-width: 500px;
+    margin: 30px auto;
+    transition: all 0.3s ease;
+}
+
+.empty-order:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
 
 .empty-order-image {
     margin-bottom: 20px;
 }
 
-.empty-order-image img {
-    width: 120px;
-    height: auto;
-    opacity: 0.7;
+.empty-order-image i {
+    font-size: 70px;
+    color: #2979ff;
+    opacity: 0.8;
+    padding: 20px;
+    background-color: rgba(41, 121, 255, 0.1);
+    border-radius: 50%;
+    margin-bottom: 15px;
+    display: inline-block;
 }
 
 .empty-order-text {
-    color: #666;
-    font-size: 16px;
+    color: #555;
+    font-size: 18px;
+    font-weight: 500;
+    margin: 0;
+    letter-spacing: 0.5px;
+}
+
+/* Thêm một dòng phụ nhỏ nếu muốn */
+.empty-order-text::after {
+    content: "Đơn hàng của bạn sẽ xuất hiện ở đây";
+    display: block;
+    font-size: 14px;
+    color: #888;
+    margin-top: 8px;
+    font-weight: normal;
 }
 
 /* Order List */
