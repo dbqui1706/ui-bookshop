@@ -1,3 +1,4 @@
+import loginModal from '../components/login-modal.js';
 import { CartService } from '../service/cart-service.js';
 
 export class CartContainer {
@@ -349,11 +350,11 @@ export class CartContainer {
             alert('Vui lòng chọn ít nhất một sản phẩm để mua hàng.');
             return;
         }
-
-        // Chuyển đến trang thanh toán
-        window.location.href = '/client/checkout.html';
+        // Chuyển đến trang thanh toán nếu đã đăng nhập 
+        // hiển thị thông báo vui lòng đăng nhập (hiển thị modal thông báo đăng nhập)
+        loginModal.show();
     }
-
+    
     initPopoversAndModals() {
         // Khởi tạo popover cho icon thông tin khuyến mãi
         this.initCouponInfoPopovers();

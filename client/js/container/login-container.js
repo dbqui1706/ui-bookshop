@@ -38,8 +38,21 @@ export class LoginContainer {
 
         // Gắn sự kiện
         this.bindEvents();
+
+        // Gắn sự kiện cho các một hành động từ modal từ trang khác
+        this.initModalEvents();
     }
 
+    initModalEvents() {
+        // Kiểm tra flag từ localStorage
+        if (localStorage.getItem('showRegisterForm') === 'true') {
+            // Xóa flag
+            localStorage.removeItem('showRegisterForm');
+
+            // Kích hoạt nút "Đăng ký ngay" có sẵn
+            document.getElementById('show-register')?.click();
+        }
+    }
     initElements() {
         // Forms
         this.loginFormContainer = document.getElementById('login-form');
@@ -189,7 +202,7 @@ export class LoginContainer {
     updatePasswordStrength() {
         const password = this.registerPassword.value;
         const strength = this.calculatePasswordStrength(password);
-        
+
         // Cập nhật progress bar 
         this.passwordStrengthBar.style.width = strength + '%';
 
@@ -210,7 +223,7 @@ export class LoginContainer {
 
         // Cập nhật progress bar 
         this.resetPasswordStrengthBar.style.width = strength + '%';
-        
+
         // Đổi màu dựa trên độ mạnh
         if (strength < 30) {
             this.resetPasswordStrengthBar.className = 'progress-bar bg-danger';
