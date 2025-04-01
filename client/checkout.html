@@ -188,7 +188,7 @@
                         </div>
 
                         <div class="shipping-options" id="shipping-options">
-                            <div class="shipping-option selected">
+                            <!-- <div class="shipping-option selected">
                                 <div class="option-radio">
                                     <input type="radio" id="saving-delivery" name="saving-delivery" checked>
                                 </div>
@@ -200,9 +200,9 @@
                                     <div class="price-discount">32.200đ</div>
                                     <div class="price-current">MIỄN PHÍ</div>
                                 </div>
-                            </div>
+                            </div> -->
 
-                            <div class="shipping-option">
+                            <!-- <div class="shipping-option">
                                 <div class="option-radio">
                                     <input type="radio" id="fast-delivery" name="fast-delivery">
                                 </div>
@@ -214,7 +214,7 @@
                                     <div class="price-discount">45.000đ</div>
                                     <div class="price-current">20.000đ</div>
                                 </div>
-                            </div>
+                            </div> -->
                         </div>
                     </div>
 
@@ -224,34 +224,7 @@
                             <h3 class="section-title">Chọn hình thức thanh toán</h3>
                         </div>
 
-                        <div class="payment-options" id="payment-options">
-                            <!-- Thanh toán tiền mặt -->
-                            <div class="payment-option selected">
-                                <div class="option-radio">
-                                    <input type="radio" id="cash-payment" name="cash-payment" checked>
-                                </div>
-                                <div class="option-icon">
-                                    <img src="/asset/icons/cash-icon.png" alt="Thanh toán tiền mặt">
-                                </div>
-                                <div class="option-details">
-                                    <div class="option-title">Thanh toán tiền mặt</div>
-                                    <div class="option-description">Thanh toán khi nhận hàng (COD)</div>
-                                </div>
-                            </div>
-                            <!-- Thanh toán qua VNPAY -->
-                            <div class="payment-option">
-                                <div class="option-radio">
-                                    <input type="radio" id="vnpay-payment" name="vnpay-payment">
-                                </div>
-                                <div class="option-icon">
-                                    <img src="/asset/icons/vnpay.png" alt="VNPAY">
-                                </div>
-                                <div class="option-details">
-                                    <div class="option-title">VNPAY</div>
-                                    <div class="option-description">Quét Mã QR từ ứng dụng ngân hàng</div>
-                                </div>
-                            </div>
-                        </div>
+                        <div class="payment-options" id="payment-options"></div>
                     </div>
                 </div>
             </div>
@@ -321,6 +294,10 @@
                         <div class="summary-row discount">
                             <div class="summary-label">Mã khuyến mãi từ nhà bán</div>
                             <div class="summary-value" id="promotion-price">-25.000<sup>đ</sup></div>
+                        </div>
+                        <div class="summary-row discount">
+                            <div class="summary-label">Phí vận chuyển</div>
+                            <div class="summary-value" id="shipping-price">+32.200<sup>đ</sup></div>
                         </div>
                         <div class="summary-row total">
                             <div class="summary-label">Tổng tiền thanh toán</div>

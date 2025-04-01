@@ -1,10 +1,12 @@
-import { STORAGE_KEYS } from '../constants/api-constants.js';
+import { STORAGE_KEYS } from '../constants/index.js';
 
-API_URL = {
+const API_URL = {
     GET_ORDERS: 'http://localhost:8080/api/orders',
     GET_ORDER_DETAIL: 'http://localhost:8080/api/orders?orderId=${orderId}',
     ADD_TO_CART: 'http://localhost:8080/api/cart/add-multiple',
     CANCEL_ORDER: 'http://localhost:8080/api/orders/${orderId}/cancel',
+    GET_DELIVERY_METHODS: 'http://localhost:8080/api/delivery-methods',
+    GET_PAYMENT_METHODS: 'http://localhost:8080/api/payment-methods',
 }
 
 export class OrderService {
@@ -98,7 +100,63 @@ export class OrderService {
             };
         }
     }
+
+    /**
+     * Lấy danh sách phương thức giao hàng
+     * @returns {Object} Kết quả và dữ liệu phương thức giao hàng
+     */
+    async getDeliveryMethods() {
+        try {
+            const response = await fetch(API_URL.GET_DELIVERY_METHODS);
+            if (!response.ok) {
+                return {
+                    success: false,
+                    message: 'Không thể tải danh sách phương thức giao hàng'
+                };
+            }
+            
+            const data = await response.json();
+            
+            return {
+                success: true,
+                data: data
+            };
+        } catch (error) {
+            console.error('Lỗi khi lấy danh sách phương thức giao hàng:', error);
+            return {
+                success: false,
+                message: 'Có lỗi xảy ra khi tải danh sách phương thức giao hàng'
+            };
+        }
+    }
     
+    /**
+     * Lấy danh sách phương thức thanh toán
+     * @returns {Object} Kết quả và dữ liệu phương thức thanh toán
+     */
+    async getPaymentMethods() {
+        try {
+            const response = await fetch(API_URL.GET_PAYMENT_METHODS);
+            if (!response.ok) {
+                return {
+                    success: false,
+                    message: 'Không thể tải danh sách phương thức thanh toán'
+                };  
+            }
+            
+            const data = await response.json();
+            return {
+                success: true,
+                data: data
+            };          
+        } catch (error) {
+            console.error('Lỗi khi lấy danh sách phương thức thanh toán:', error);
+            return {
+                success: false,
+                message: 'Có lỗi xảy ra khi tải danh sách phương thức thanh toán'
+            };
+        }
+    }
     /**
      * Mô phỏng dữ liệu đơn hàng
      * @param {string} status Trạng thái đơn hàng
