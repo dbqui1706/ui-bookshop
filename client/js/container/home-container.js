@@ -255,7 +255,6 @@ export class ProductContainer {
 
     async loadProducts(append = false) {
         try {
-            console.log("Loading products with filters:", this.filter.toQueryParams());
             const data = await this.productService.getProducts(this.filter.toQueryParams());
 
             this.products = append ? [...this.products, ...data.products] : data.products;
@@ -273,7 +272,6 @@ export class ProductContainer {
 
         // Cập nhật lại categoryCheckboxes ngay sau khi render
         this.categoryCheckboxes = document.querySelectorAll('input[name="category"]');
-        console.log("Categories rendered, new checkboxes:", this.categoryCheckboxes);
     }
 
     renderPublishers() {

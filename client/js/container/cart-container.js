@@ -15,6 +15,18 @@ export class CartContainer {
         this.cart = JSON.parse(localStorage.getItem('cart')) || [];
         this.user = JSON.parse(localStorage.getItem('user')) || null;
 
+        // Khởi tạo địa chỉ giao hàng
+        this.addressForm = JSON.parse(localStorage.getItem('shippingAddress')) || null;
+
+        // Kiểm tra xem người dùng đã đăng nhập hay chưa
+        this.isLoggedIn = this.user !== null;
+
+        // Ẩn Delivery address và Coupon nếu người dùng chưa đăng nhập
+        if (!this.isLoggedIn) {
+            document.querySelector('.delivery-address').classList.add('d-none');
+            document.querySelector('.checkout-coupon').classList.add('d-none');
+        }
+
         // Các phần tử DOM
         this.initDOMElements();
 
@@ -45,22 +57,17 @@ export class CartContainer {
 
     async loadCart() {
         try {
-            // Kiểm tra xem user có tồn tại hay không
-            if (this.user) {
-                const userId = this.user.id;
-
-                // Gọi API để lấy giỏ hàng
-                const cartData = await this.cartService.getCart(userId);
-
-                if (cartData && cartData.items) {
-                    this.cart = cartData.items;
-                    this.updateCartUI(true);
-                    this.saveCartToLocalStorage();
+            // Nếu user đã đăng nhập và giỏ hàng trống thì lấy từ server
+            if (this.user && this.cart.length === 0) {
+                const cartData = await this.cartService.getCart();
+                if (cartData.success) {
+                    this.cart = cartData.data;
                 }
-            } else {
-                this.updateCartUI(true);
-                this.saveCartToLocalStorage();
             }
+
+            // Cập nhật UI và lưu vào localStorage
+            this.updateCartUI(true);
+            this.saveCartToLocalStorage();
         } catch (error) {
             console.error('Lỗi khi tải giỏ hàng:', error);
         }
@@ -107,7 +114,7 @@ export class CartContainer {
 
     renderCartItems(trigger = false) {
         if (!this.sellerGroup) return;
-        
+
         // render cart items
         const cartItemsHTML = this.cart.map(item => {
             if (trigger) {
@@ -115,7 +122,7 @@ export class CartContainer {
             }
             return this.createCartItem(item);
         }).join('');
-        
+
         this.sellerGroup.innerHTML = cartItemsHTML;
 
         // add event listener to item checkboxes
@@ -143,10 +150,10 @@ export class CartContainer {
     // Sự kiện cho input số lượng
     quantityInputsListener() {
         if (!this.sellerGroup) return;
-        
+
         this.sellerGroup.addEventListener('click', (event) => {
             let productId = -1;
-            
+
             // Xử lý nút tăng số lượng
             if (event.target.classList.contains('quantity-increase')) {
                 productId = parseInt(event.target.getAttribute('data-item-id'));
@@ -183,15 +190,15 @@ export class CartContainer {
             if (cardItem) {
                 const priceCurrentEl = cardItem.querySelector('.price-current');
                 const priceOriginalEl = cardItem.querySelector('.price-original');
-                
+
                 if (priceCurrentEl) {
                     priceCurrentEl.innerHTML = formatPrice(
                         (product.productPrice * (1 - product.productDiscount / 100) * product.quantity).toFixed(0)
                     );
                 }
-                
+
                 if (priceOriginalEl) {
-                    priceOriginalEl.innerHTML = formatPrice(product.productPrice * product.quantity);
+                    priceOriginalEl.innerHTML = product.productDiscount > 0 ? formatPrice(product.productPrice * product.quantity) : '';
                 }
             }
         }
@@ -226,7 +233,7 @@ export class CartContainer {
                         ${formatPrice((item.productPrice * (1 - item.productDiscount / 100)).toFixed(0) * item.quantity)}
                     </div>
                     <div class="price-original" data-item-id="${item.productId}">
-                        ${formatPrice(item.productPrice * item.quantity)}
+                       ${item.productDiscount > 0 ? formatPrice(item.productPrice * item.quantity) : ''}
                     </div>
                 </div>
                 <div class="item-quantity">
@@ -251,7 +258,7 @@ export class CartContainer {
         const totalPriceEl = document.getElementById('total-price');
         const discountPriceEl = document.getElementById('discount-price');
         const totalPaymentEl = document.getElementById('total-payment');
-        
+
         if (!totalPriceEl || !discountPriceEl || !totalPaymentEl) return;
 
         let totalOriginalPrice = 0;
@@ -271,6 +278,11 @@ export class CartContainer {
         totalPriceEl.innerHTML = formatPrice(totalOriginalPrice);
         discountPriceEl.innerHTML = formatPrice(-totalDiscountPrice);
         totalPaymentEl.innerHTML = formatPrice(totalPayment);
+        return {
+            totalOriginalPrice,
+            totalDiscountPrice,
+            totalPayment,
+        }
     }
 
     saveCartToLocalStorage() {
@@ -305,18 +317,18 @@ export class CartContainer {
     // Sự kiện cho checkbox "Chọn tất cả"
     handleSelectAll() {
         if (!this.selectAllCheckbox || !this.itemCheckboxes) return;
-        
+
         const isChecked = this.selectAllCheckbox.checked;
-        
+
         this.cart.forEach(item => {
             item.checked = isChecked;
         });
-        
+
         // Thay đổi các trang thái checkbox
         this.itemCheckboxes.forEach(checkbox => {
             checkbox.checked = isChecked;
         });
-        
+
         // Cập nhật số lượng sản phẩm trong button mua hàng
         if (this.checkoutButton) {
             this.checkoutButton.textContent = `Mua Hàng (${this.getSelectedItemsCount()})`;
@@ -328,18 +340,19 @@ export class CartContainer {
     // Sự kiện cho nút giảm số lượng
     async handleDecreaseQuantity(productId) {
         const product = this.cart.find(item => item.productId === productId);
-        
+
         if (product && product.quantity > 1) {
-            product.quantity -= 1;
-            this.updateTotalPrice();
-            this.saveCartToLocalStorage();
-            
-            if (this.user) {
-                try {
-                    await this.cartService.updateCartItem(this.user.id, productId, product.quantity);
-                } catch (error) {
-                    console.error('Lỗi khi cập nhật số lượng sản phẩm:', error);
+            try {
+                product.quantity -= 1;
+
+                if (this.user) {
+                    await this.cartService.updateCartItem(product.cartItemId, product.quantity);
                 }
+                this.updateTotalPrice();
+                this.saveCartToLocalStorage();
+            } catch (error) {
+                product.quantity += 1;
+                console.error('Lỗi khi cập nhật số lượng sản phẩm:', error);
             }
         }
     }
@@ -347,34 +360,38 @@ export class CartContainer {
     // Sự kiện cho nút tăng số lượng
     async handleIncreaseQuantity(productId) {
         const product = this.cart.find(item => item.productId === productId);
-        
+
         if (product) {
-            product.quantity += 1;
-            this.updateTotalPrice();
-            this.saveCartToLocalStorage();
-            
-            if (this.user) {
-                try {
-                    await this.cartService.updateCartItem(this.user.id, productId, product.quantity);
-                } catch (error) {
-                    console.error('Lỗi khi cập nhật số lượng sản phẩm:', error);
+            try {
+                product.quantity += 1;
+                if (this.user) {
+                    await this.cartService.updateCartItem(product.cartItemId, product.quantity);
                 }
+                this.updateTotalPrice();
+                this.saveCartToLocalStorage();
+            } catch (error) {
+                product.quantity -= 1;
+                console.error('Lỗi khi cập nhật số lượng sản phẩm:', error);
             }
         }
     }
 
     // Sự kiện cho nút xóa sản phẩm
     async handleRemoveItem(productId) {
-        this.cart = this.cart.filter(item => item.productId !== productId);
-        this.saveCartToLocalStorage();
-        this.updateCartUI();
-        
-        if (this.user) {
-            try {
-                await this.cartService.removeCartItem(this.user.id, productId);
-            } catch (error) {
-                console.error('Lỗi khi xóa sản phẩm:', error);
+        const cartItem = this.cart.find(item => item.productId === productId);
+        try {
+            if (this.user) {
+                const response = await this.cartService.removeCartItem(cartItem.cartItemId);
+                if (!response.success) {
+                    alert(response.message);
+                    return;
+                }
             }
+            this.cart = this.cart.filter(item => item.productId !== productId);
+            this.updateCartUI();
+            this.saveCartToLocalStorage();
+        } catch (error) {
+            console.error('Lỗi khi xóa sản phẩm:', error);
         }
     }
 
@@ -386,17 +403,33 @@ export class CartContainer {
             alert('Vui lòng chọn ít nhất một sản phẩm để mua hàng.');
             return;
         }
-        
+
         // Nếu chưa đăng nhập, hiển thị modal đăng nhập
         if (!this.user) {
             loginModal.show();
             return;
         }
-        
-        // Nếu đã đăng nhập, chuyển đến trang thanh toán
+
+        // Tạo đối tượng cart-order
+        const cartOrderDetail = {
+            cartItems: this.cart.filter(item => item.checked).map(item => ({
+                ...item,
+                totalPrice: item.productPrice * item.quantity,
+                totalPayment: item.productPrice * (1 - item.productDiscount / 100) * item.quantity,
+            })),
+            totalPriceOrder: this.updateTotalPrice().totalOriginalPrice,
+            totalDiscountOrder: this.updateTotalPrice().totalDiscountPrice,
+            totalPaymentOrder: this.updateTotalPrice().totalPayment,
+            address: this.addressForm,
+        }
+        console.log(cartOrderDetail);
+        // lưu cartOrder vào localStorage
+        localStorage.setItem('cartOrderDetail', JSON.stringify(cartOrderDetail));
+
+        // chuyển đến trang thanh toán
         window.location.href = '/client/checkout.html';
     }
-    
+
     handleOpenCouponModal() {
         openCouponModal((selectedCoupons) => {
             console.log('Mã giảm giá đã chọn:', selectedCoupons);
@@ -404,18 +437,18 @@ export class CartContainer {
             // Ví dụ: cập nhật UI, lưu vào localStorage, gửi lên server, v.v.
         });
     }
-    
+
     handleOpenAddressModal() {
         // Lấy địa chỉ hiện tại từ localStorage
         const currentAddress = JSON.parse(localStorage.getItem('shippingAddress')) || null;
-        
+
         openAddressModal(currentAddress, (newAddress) => {
             console.log('Địa chỉ mới:', newAddress);
             // Cập nhật UI với địa chỉ mới
             this.updateAddressUI(newAddress);
         });
     }
-    
+
     updateAddressUI(address) {
         const customerNameEl = document.getElementById('customer-name');
         const customerPhoneEl = document.getElementById('customer-phone');
@@ -430,8 +463,18 @@ export class CartContainer {
         if (addressTagEl) {
             addressTagEl.textContent = address.addressType === 'company' ? 'Công ty' : 'Nhà';
         }
+        
+        this.addressForm = {
+            fullname: address.fullname,
+            phone: address.phone,
+            address: address.address,
+            ward: address.ward,
+            district: address.district,
+            province: address.province,
+            addressType: address.addressType,
+        }
     }
-    
+
     initPopoversAndModals() {
         // Khởi tạo popover cho icon thông tin khuyến mãi
         initCouponInfoPopovers();

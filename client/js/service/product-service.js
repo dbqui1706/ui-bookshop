@@ -53,14 +53,12 @@ export class ProductService {
             
             const queryParams = new URLSearchParams(filters).toString();
             const url = `${API_URL.PRODUCTS}?${queryParams}`;
-            console.log("Get products:", url);
             
             // Trong trường hợp không có API thực tế, trả về dữ liệu mẫu
             // Trong môi trường thực tế, bỏ comment đoạn code dưới đây và xóa phần mockResponse
             
             const response = await fetch(url);
             const data = await response.json();
-            console.log("Get products:", data);
             return data;
             
             // Mock response cho mục đích phát triển

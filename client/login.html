@@ -39,15 +39,34 @@
                             <i class="fas fa-home"></i>
                             <span>Trang chủ</span>
                         </a>
-                        <a href="/client/login.html" title="Tài khoản" class="menu-item">
-                            <i class="fas fa-user-circle"></i>
-                            <span>Tài khoản</span>
-                        </a>
-                        <a href="/client/cart.html" class="cart-icon menu-item" title="Giỏ hàng">
-                            <i class="fas fa-shopping-cart"></i>
-                            <span class="cart-count">0</span>
-                            <span>Giỏ hàng</span>
-                        </a>
+                        <div class="account-dropdown">
+                            <a href="/client/login.html" class="menu-item dropdown-toggle" id="accountMenu">
+                                <i class="fas fa-user-circle"></i>
+                                <span>Tài khoản</span>
+                            </a>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" href="/client/account-info.html">Thông tin tài khoản</a>
+                                <a class="dropdown-item" href="/client/order-info.html">Đơn hàng của tôi</a>
+                                <a class="dropdown-item" href="#">Trung tâm hỗ trợ</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="#">Đăng xuất</a>
+                            </div>
+                        </div>
+                        <!-- Giỏ hàng -->
+                        <div class="cart-container">
+                            <a href="/client/cart.html" class="cart-icon menu-item" title="Giỏ hàng">
+                                <i class="fas fa-shopping-cart"></i>
+                                <span class="cart-count" id="cart-count">0</span>
+                                <span>Giỏ hàng</span>
+                            </a>
+
+                            <!-- Thông báo thêm vào giỏ hàng thành công -->
+                            <div class="cart-success-message" id="cart-success-message">
+                                <i class="fas fa-check-circle"></i>
+                                <span>Thêm vào giỏ hàng thành công!</span>
+                                <div class="message-arrow"></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -345,7 +364,8 @@
                                                             aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
                                                         </div>
                                                     </div>
-                                                    <small class="text-muted">Reset Mật khẩu phải có ít nhất 8 ký tự, bao gồm
+                                                    <small class="text-muted">Reset Mật khẩu phải có ít nhất 8 ký tự,
+                                                        bao gồm
                                                         chữ hoa, chữ thường và số</small>
                                                 </div>
                                             </div>
@@ -502,7 +522,9 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <!-- JavaScript -->
+    <script src="js/app/header.js" type="module"></script>
     <script src="js/app/login.js" type="module"></script>
+
 </body>
 
 </html>

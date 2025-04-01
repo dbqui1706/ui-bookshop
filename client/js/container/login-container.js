@@ -1,9 +1,10 @@
 import { SWAL_STYLE } from '../constants/login-contats.js';
 import { UserService } from '../service/user-service.js';
-
+import { CartService } from '../service/cart-service.js';
 export class LoginContainer {
     constructor() {
         this.userService = new UserService();
+        this.cartService = new CartService();
 
         // Các form
         this.loginForm = null;
@@ -30,6 +31,10 @@ export class LoginContainer {
         // Sidebar
         this.sidebarTitle = null;
         this.sidebarDescription = null;
+
+        // Local storage
+        this.cart = JSON.parse(localStorage.getItem('cart')) || [];
+        this.user = null;
     }
 
     init() {
@@ -276,6 +281,14 @@ export class LoginContainer {
                 localStorage.setItem('user', JSON.stringify(response.user));
                 localStorage.setItem('token', response.token);
 
+                this.user = response.user;
+
+                // Xem giỏ hàng có sản phẩm không
+                // nếu có thì call api save cart
+                if (this.cart.length > 0) {
+                    this.saveCart();
+                }
+                
                 // Chuyển hướng
                 window.location.href = '/client/index.html';
             } else {
@@ -284,6 +297,17 @@ export class LoginContainer {
         } catch (error) {
             console.error('Lỗi đăng nhập:', error);
             this.showNotification('Có lỗi xảy ra khi đăng nhập', 'error');
+        }
+    }
+
+    // Lưu giỏ hàng vào database
+    async saveCart() {
+        const response = await this.cartService.saveCart(
+            this.user.id,
+            this.cart
+        );
+        if (!response.success) {
+            this.showNotification(response.message || 'Lưu giỏ hàng thất bại', 'error');
         }
     }
 

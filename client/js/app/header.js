@@ -1,3 +1,5 @@
+import { CartService } from "../service/cart-service.js";
+
 document.addEventListener('DOMContentLoaded', async function () {
 
     const accountMenu = document.getElementById('accountMenu');
@@ -7,7 +9,6 @@ document.addEventListener('DOMContentLoaded', async function () {
     // Lấy thông tin tài khoản từ sessionStorage
     let userSession = localStorage.getItem('user');
     let user = userSession ? JSON.parse(userSession) : null;
-    console.log("userSession:", userSession);
     if (user) {
         // Nếu đã đăng nhập, hiển thị hover dropdown
         accountMenu.innerHTML = `
@@ -71,9 +72,21 @@ document.addEventListener('DOMContentLoaded', async function () {
     // Cập nhật số lượng sản phẩm trong giỏ hàng
     const cartCountElement = document.getElementById('cart-count');
     const cart = JSON.parse(localStorage.getItem('cart'));
-    if (cart) {
-        cartCountElement.textContent = cart.length;
-    } else {
-        cartCountElement.textContent = 0;
+
+    if (user) {
+        const cartService = new CartService();
+        const response = await cartService.getCart();
+        if (response.success) {
+            cartCountElement.textContent = response.data.length;
+            localStorage.setItem('cart', JSON.stringify(response.data));
+        } else {
+            cartCountElement.textContent = 0;
+        }
+        return;
     }
+
+    if (cart && cart.length > 0) {
+        cartCountElement.textContent = cart.length;
+    }
+    
 });

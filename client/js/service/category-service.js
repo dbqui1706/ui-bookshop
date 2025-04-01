@@ -22,7 +22,6 @@ export class CategoryService {
         try {
             const response = await fetch(API_URL.CATEGORIES);
             const data = await response.json();
-            console.log("Get all categories:", data);
             return data.map(category => ({
                 id: category.id,
                 name: category.name,
@@ -89,7 +88,6 @@ export class CategoryService {
         try {
             const response = await fetch(API_URL.PUBLISHERS);
             const data = await response.json();
-            console.log("Get all publishers:", data);
             return data;
         } catch (error) {
             console.error('Lỗi khi tải danh mục:', error);
