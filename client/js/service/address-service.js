@@ -1,4 +1,12 @@
 // service/address-service.js
+import { STORAGE_KEYS } from "../constants/index.js";
+
+const API_BASE_URL = {
+    GET_USER_ADDRESS: 'http://localhost:8080/api/address',
+    UPDATE_USER_ADDRESS: 'http://localhost:8080/api/address/update',
+    DELETE_USER_ADDRESS: 'http://localhost:8080/api/address/delete',
+    ADD_USER_ADDRESS: 'http://localhost:8080/api/address/add',
+}
 export class AddressService {
     constructor() {
         this.apiBaseUrl = 'https://provinces.open-api.vn/api';
@@ -178,6 +186,57 @@ export class AddressService {
         } catch (error) {
             console.error('Lỗi khi đọc danh sách địa chỉ:', error);
             return [];
+        }
+    }
+    
+
+    async getAddressByUserId(userId) {
+        try {
+            const response = await fetch(`${API_BASE_URL.GET_USER_ADDRESS}?userId=${userId}`);
+            if (!response.ok) {
+                return {
+                    success: false,
+                    message: 'Không thể tải danh sách địa chỉ'
+                }
+            }
+            return {
+                success: true,
+                data: await response.json()
+            }
+        } catch (error) {
+            console.error('Lỗi khi lấy danh sách địa chỉ:', error);
+            return {
+                success: false,
+                message: 'Lỗi khi lấy danh sách địa chỉ'
+            }
+        }
+    }
+
+    async updateAddress(address) {
+        try {
+            const response = await fetch(`${API_BASE_URL.UPDATE_USER_ADDRESS}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'  
+                },
+                body: JSON.stringify(address)
+            });
+            if (!response.ok) {
+                return {
+                    success: false,
+                    message: 'Không thể cập nhật địa chỉ'   
+                }
+            }
+            return {
+                success: true,
+                data: await response.json()
+            }
+        } catch (error) {
+            console.error('Lỗi khi cập nhật địa chỉ:', error);
+            return {
+                success: false,
+                message: 'Lỗi khi cập nhật địa chỉ'
+            }
         }
     }
 }

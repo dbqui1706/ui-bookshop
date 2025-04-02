@@ -6,18 +6,21 @@ export class AddressModal {
         this.modalElement = null;
         this.backdropElement = null;
         this.addressService = new AddressService();
-        this.onAddressUpdated = null;
+        this.onComplete = null;
         this.userAddress = null;
+        this.isUpdateMode = false;
+        this.userId = JSON.parse(localStorage.getItem('user'))?.id || null;
     }
 
     /**
-     * Tạo và hiển thị modal địa chỉ giao hàng
-     * @param {Object} userAddress - Thông tin địa chỉ hiện tại của người dùng
-     * @param {Function} onAddressUpdated - Callback khi người dùng cập nhật địa chỉ
+     * Tạo và hiển thị modal địa chỉ
+     * @param {Object} userAddress - Thông tin địa chỉ hiện tại (null nếu là thêm mới)
+     * @param {Function} onComplete - Callback khi hoàn thành thêm/sửa địa chỉ
      */
-    show(userAddress = null, onAddressUpdated = null) {
+    show(userAddress = null, onComplete = null) {
         this.userAddress = userAddress;
-        this.onAddressUpdated = onAddressUpdated;
+        this.isUpdateMode = !!userAddress; // Nếu có userAddress thì là UPDATE, không thì là ADD
+        this.onComplete = onComplete;
         this.createModal();
         document.head.appendChild(this.createModalCSS());
         this.setupEventListeners();
@@ -35,22 +38,22 @@ export class AddressModal {
         this.modalElement.className = 'address-modal';
         this.modalElement.innerHTML = `
         <div class="modal-header">
-            <h4>Thay đổi địa chỉ giao hàng</h4>
+            <h4>${this.isUpdateMode ? 'Cập nhật địa chỉ' : 'Thêm địa chỉ mới'}</h4>
             <button class="close-modal"><i class="fas fa-times"></i></button>
         </div>
         <div class="modal-body">
             <form class="address-form">
                 <div class="form-row">
-                    <label class="form-label">Họ tên</label>
+                    <label class="form-label">Tên người nhận</label>
                     <div class="form-input">
-                        <input type="text" id="fullname" class="form-control" value="${this.userAddress?.fullname || ''}">
+                        <input type="text" id="recipientName" class="form-control" value="${this.userAddress?.recipientName || ''}">
                     </div>
                 </div>
                 
                 <div class="form-row">
-                    <label class="form-label">Điện thoại di động</label>
+                    <label class="form-label">Số điện thoại</label>
                     <div class="form-input">
-                        <input type="text" id="phone" class="form-control" value="${this.userAddress?.phone || ''}">
+                        <input type="text" id="phoneNumber" class="form-control" value="${this.userAddress?.phoneNumber || ''}">
                     </div>
                 </div>
                 
@@ -93,9 +96,10 @@ export class AddressModal {
                 <div class="form-row">
                     <label class="form-label">Địa chỉ</label>
                     <div class="form-input">
-                        <textarea id="address" class="form-control">${this.userAddress?.address || ''}</textarea>
+                        <input type="text" id="addressLine1" class="form-control" value="${this.userAddress?.addressLine1 || ''}">
                     </div>
                 </div>
+                
                 <div class="address-note">
                     Để nhận hàng thuận tiện hơn, bạn vui lòng cho biết loại địa chỉ.
                 </div>
@@ -105,25 +109,25 @@ export class AddressModal {
                     <div class="form-input">
                         <div class="address-types">
                             <div class="address-type">
-                                <input type="radio" id="home" name="addressType" ${this.userAddress?.addressType !== 'company' ? 'checked' : ''}>
-                                <label for="home">Nhà riêng / Chung cư</label>
+                                <input type="radio" id="homeType" name="addressType" value="HOME" ${this.userAddress?.addressType !== 'COMPANY' ? 'checked' : ''}>
+                                <label for="homeType">Nhà riêng / Chung cư</label>
                             </div>
                             <div class="address-type">
-                                <input type="radio" id="company" name="addressType" ${this.userAddress?.addressType === 'company' ? 'checked' : ''}>
-                                <label for="company">Cơ quan / Công ty</label>
+                                <input type="radio" id="companyType" name="addressType" value="COMPANY" ${this.userAddress?.addressType === 'COMPANY' ? 'checked' : ''}>
+                                <label for="companyType">Cơ quan / Công ty</label>
                             </div>
                         </div>
                     </div>
                 </div>
                 
                 <div class="default-address">
-                    <input type="checkbox" id="defaultAddress" ${this.userAddress?.isDefault ? 'checked' : ''}>
-                    <label for="defaultAddress">Sử dụng địa chỉ này làm mặc định.</label>
+                    <input type="checkbox" id="isDefault" ${this.userAddress?.isDefault ? 'checked' : ''}>
+                    <label for="isDefault">Sử dụng địa chỉ này làm mặc định.</label>
                 </div>
                 
                 <div class="form-actions">
                     <button type="button" class="btn-cancel">Hủy bỏ</button>
-                    <button type="button" class="btn-update">Cập nhật</button>
+                    <button type="button" class="btn-save">${this.isUpdateMode ? 'Cập nhật' : 'Lưu địa chỉ'}</button>
                 </div>
             </form>
         </div>
@@ -157,6 +161,7 @@ export class AddressModal {
                 border-radius: 8px;
                 z-index: 1100;
                 max-height: 90vh;
+                overflow-y: auto;
                 animation: modalFadeIn 0.3s ease-out;
             }
 
@@ -166,6 +171,10 @@ export class AddressModal {
                 align-items: center;
                 padding: 15px 20px;
                 border-bottom: 1px solid #f1f1f1;
+                position: sticky;
+                top: 0;
+                background-color: white;
+                z-index: 10;
             }
 
             .modal-header h4 {
@@ -189,18 +198,20 @@ export class AddressModal {
             .form-row {
                 display: flex;
                 margin-bottom: 15px;
-                align-items: center;
+                align-items: flex-start;
             }
 
             .form-label {
-                width: 130px;
+                width: 140px;
                 font-weight: 500;
                 margin-bottom: 0;
                 font-size: 14px;
+                padding-top: 8px;
             }
 
             .form-input {
                 flex: 1;
+                position: relative;
             }
 
             .form-control, .form-select {
@@ -211,13 +222,37 @@ export class AddressModal {
                 width: 100%;
             }
 
+            .form-control:focus, .form-select:focus {
+                outline: none;
+                border-color: #1a94ff;
+                box-shadow: 0 0 0 2px rgba(26, 148, 255, 0.2);
+            }
+
+            .form-control.error, .form-select.error {
+                border-color: #dc3545;
+            }
+
+            .error-message {
+                color: #dc3545;
+                font-size: 12px;
+                margin-top: 4px;
+            }
+
             textarea.form-control {
                 resize: vertical;
-                min-height: 40px;
+                min-height: 60px;
+            }
+
+            .loading-spinner {
+                position: absolute;
+                right: 10px;
+                top: 50%;
+                transform: translateY(-50%);
+                color: #1a94ff;
             }
 
             .address-note {
-                padding-left: 130px;
+                padding-left: 140px;
                 font-size: 12px;
                 color: #757575;
                 margin-top: 5px;
@@ -239,7 +274,7 @@ export class AddressModal {
             }
 
             .default-address {
-                padding-left: 130px;
+                padding-left: 140px;
                 display: flex;
                 align-items: center;
                 margin-top: 5px;
@@ -270,7 +305,7 @@ export class AddressModal {
                 text-align: center;
             }
 
-            .btn-update {
+            .btn-save {
                 padding: 8px 20px;
                 background-color: #1a94ff;
                 color: white;
@@ -280,6 +315,14 @@ export class AddressModal {
                 cursor: pointer;
                 min-width: 120px;
                 text-align: center;
+            }
+
+            .btn-save:hover {
+                background-color: #0d84e8;
+            }
+
+            .btn-cancel:hover {
+                background-color: #e5e5e5;
             }
 
             @keyframes modalFadeIn {
@@ -302,6 +345,7 @@ export class AddressModal {
                 .form-label {
                     width: 100%;
                     margin-bottom: 5px;
+                    padding-top: 0;
                 }
                 
                 .form-input {
@@ -319,45 +363,11 @@ export class AddressModal {
                 
                 .form-actions {
                     flex-direction: column;
+                    margin-top: 30px;
                 }
                 
-                .btn-cancel, .btn-update {
+                .btn-cancel, .btn-save {
                     width: 100%;
-                }
-            }
-
-            /* Animation for modals */
-            .coupon-modal, .address-modal {
-                animation: modalFadeIn 0.3s ease-out;
-            }
-
-            @keyframes modalFadeIn {
-                from {
-                    opacity: 0;
-                    transform: translate(-50%, -60%);
-                }
-                to {
-                    opacity: 1;
-                    transform: translate(-50%, -50%);
-                }
-            }
-
-            /* Responsive adjustments */
-            @media (max-width: 767.98px) {
-                .coupon-modal, .address-modal {
-                    width: 95%;
-                    max-width: none;
-                }
-                
-                .coupon-card-right {
-                    flex-direction: column;
-                    align-items: flex-start;
-                }
-                
-                .coupon-status {
-                    margin-top: 10px;
-                    width: 100%;
-                    justify-content: flex-end;
                 }
             }
         `;
@@ -400,9 +410,9 @@ export class AddressModal {
             }
         });
 
-        // Xử lý nút Cập nhật
-        const updateBtn = this.modalElement.querySelector('.btn-update');
-        updateBtn.addEventListener('click', () => this.handleUpdateAddress());
+        // Xử lý nút Lưu/Cập nhật
+        const saveBtn = this.modalElement.querySelector('.btn-save');
+        saveBtn.addEventListener('click', () => this.handleSaveAddress());
     }
 
     async loadProvinces() {
@@ -433,7 +443,7 @@ export class AddressModal {
             }
         } catch (error) {
             console.error('Lỗi khi tải dữ liệu tỉnh/thành phố:', error);
-            alert('Không thể tải dữ liệu tỉnh/thành phố. Vui lòng thử lại sau.');
+            this.showError(provinceSelect, 'Không thể tải dữ liệu tỉnh/thành phố. Vui lòng thử lại sau.');
         } finally {
             spinner.style.display = 'none';
         }
@@ -469,7 +479,7 @@ export class AddressModal {
             }
         } catch (error) {
             console.error('Lỗi khi tải dữ liệu quận/huyện:', error);
-            alert('Không thể tải dữ liệu quận/huyện. Vui lòng thử lại sau.');
+            this.showError(districtSelect, 'Không thể tải dữ liệu quận/huyện. Vui lòng thử lại sau.');
         } finally {
             spinner.style.display = 'none';
         }
@@ -504,55 +514,172 @@ export class AddressModal {
             }
         } catch (error) {
             console.error('Lỗi khi tải dữ liệu phường/xã:', error);
-            alert('Không thể tải dữ liệu phường/xã. Vui lòng thử lại sau.');
+            this.showError(wardSelect, 'Không thể tải dữ liệu phường/xã. Vui lòng thử lại sau.');
         } finally {
             spinner.style.display = 'none';
         }
     }
 
-    handleUpdateAddress() {
-        // Lấy dữ liệu từ form
-        const fullname = this.modalElement.querySelector('#fullname').value;
-        const phone = this.modalElement.querySelector('#phone').value;
-        const provinceSelect = this.modalElement.querySelector('#province');
-        const districtSelect = this.modalElement.querySelector('#district');
-        const wardSelect = this.modalElement.querySelector('#ward');
-        const address = this.modalElement.querySelector('#address').value;
-        const isDefault = this.modalElement.querySelector('#defaultAddress').checked;
-        const addressType = this.modalElement.querySelector('#company').checked ? 'company' : 'home';
+    showError(element, message) {
+        // Thêm class error vào element
+        element.classList.add('error');
+        
+        // Kiểm tra và xóa thông báo lỗi cũ nếu có
+        const existingError = element.parentElement.querySelector('.error-message');
+        if (existingError) {
+            existingError.remove();
+        }
+        
+        // Tạo thông báo lỗi mới
+        const errorMessage = document.createElement('div');
+        errorMessage.className = 'error-message';
+        errorMessage.textContent = message;
+        
+        // Thêm vào sau element
+        element.parentElement.appendChild(errorMessage);
+    }
 
-        // Validate dữ liệu
-        if (!fullname || !phone || !provinceSelect.value || !districtSelect.value ||
-            !wardSelect.value || !address) {
-            alert('Vui lòng điền đầy đủ thông tin.');
+    clearError(element) {
+        // Xóa class error
+        element.classList.remove('error');
+        
+        // Xóa thông báo lỗi nếu có
+        const errorMessage = element.parentElement.querySelector('.error-message');
+        if (errorMessage) {
+            errorMessage.remove();
+        }
+    }
+
+    validateForm() {
+        let isValid = true;
+        const requiredFields = [
+            { id: 'recipientName', message: 'Vui lòng nhập tên người nhận' },
+            { id: 'phoneNumber', message: 'Vui lòng nhập số điện thoại' },
+            { id: 'province', message: 'Vui lòng chọn Tỉnh/Thành phố' },
+            { id: 'district', message: 'Vui lòng chọn Quận/Huyện' },
+            { id: 'ward', message: 'Vui lòng chọn Phường/Xã' },
+            { id: 'addressLine1', message: 'Vui lòng nhập địa chỉ' }
+        ];
+
+        requiredFields.forEach(field => {
+            const element = this.modalElement.querySelector(`#${field.id}`);
+            const value = element.value.trim();
+            
+            // Xóa lỗi cũ
+            this.clearError(element);
+            
+            // Kiểm tra giá trị
+            if (!value) {
+                this.showError(element, field.message);
+                isValid = false;
+            }
+        });
+
+        // Kiểm tra định dạng số điện thoại
+        const phoneNumber = this.modalElement.querySelector('#phoneNumber').value.trim();
+        if (phoneNumber && !/^(0|\+84|\(\+84\))[3|5|7|8|9][0-9]{8}$/.test(phoneNumber)) {
+            this.showError(this.modalElement.querySelector('#phoneNumber'), 'Số điện thoại không hợp lệ');
+            isValid = false;
+        }
+
+        return isValid;
+    }
+
+    async handleSaveAddress() {
+        // Validate form
+        if (!this.validateForm()) {
             return;
         }
 
-        // Tạo đối tượng địa chỉ mới
-        const newAddress = {
-            fullname,
-            phone,
-            provinceCode: provinceSelect.value,
-            province: provinceSelect.options[provinceSelect.selectedIndex].text,
-            districtCode: districtSelect.value,
-            district: districtSelect.options[districtSelect.selectedIndex].text,
-            wardCode: wardSelect.value,
-            ward: wardSelect.options[wardSelect.selectedIndex].text,
-            address,
+        // Lấy dữ liệu từ form
+        const recipientName = this.modalElement.querySelector('#recipientName').value.trim();
+        const phoneNumber = this.modalElement.querySelector('#phoneNumber').value.trim();
+        const provinceSelect = this.modalElement.querySelector('#province');
+        const districtSelect = this.modalElement.querySelector('#district');
+        const wardSelect = this.modalElement.querySelector('#ward');
+        const addressLine1 = this.modalElement.querySelector('#addressLine1').value.trim();
+        const isDefault = this.modalElement.querySelector('#isDefault').checked;
+        const addressType = this.modalElement.querySelector('input[name="addressType"]:checked').value;
+
+        // Tạo đối tượng địa chỉ mới theo cấu trúc của UserAddress
+        const addressData = {
+            id: this.isUpdateMode ? this.userAddress.id : null,
+            userId: this.userId,
+            recipientName,
+            phoneNumber,
+            addressLine1,
+            provinceCode: parseInt(provinceSelect.value),
+            districtCode: parseInt(districtSelect.value),
+            wardCode: parseInt(wardSelect.value),
+            provinceName: provinceSelect.options[provinceSelect.selectedIndex].text,
+            districtName: districtSelect.options[districtSelect.selectedIndex].text,
+            wardName: wardSelect.options[wardSelect.selectedIndex].text,
             isDefault,
             addressType
         };
+        console.log(addressData);
+        try {
+            // Hiển thị loading state
+            const saveBtn = this.modalElement.querySelector('.btn-save');
+            const originalText = saveBtn.textContent;
+            saveBtn.disabled = true;
+            saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang xử lý...';
 
-        // Lưu địa chỉ vào localStorage
-        localStorage.setItem('shippingAddress', JSON.stringify(newAddress));
+            // Xác định endpoint dựa vào mode
+            const endpoint = this.isUpdateMode 
+                ? 'http://localhost:8080/api/address/update' 
+                : 'http://localhost:8080/api/address/add';
 
-        // Gọi callback nếu có
-        if (this.onAddressUpdated) {
-            this.onAddressUpdated(newAddress);
+            // Gọi API để lưu địa chỉ
+            const response = await fetch(endpoint, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(addressData)
+            });
+
+            // Xử lý kết quả
+            if (response.ok) {
+                const result = await response.json();
+                
+                // Lưu địa chỉ vào localStorage để fallback
+                if (this.isUpdateMode) {
+                    // Cập nhật địa chỉ hiện tại
+                    const addresses = this.addressService.getUserAddresses();
+                    const index = addresses.findIndex(addr => addr.id === addressData.id);
+                    if (index !== -1) {
+                        addresses[index] = addressData;
+                    }
+                    this.addressService.saveUserAddresses(addresses);
+                } else {
+                    // Thêm địa chỉ mới
+                    const addresses = this.addressService.getUserAddresses();
+                    addressData.id = result.id || Date.now().toString(); // Sử dụng ID từ API hoặc tạo ID tạm
+                    addresses.push(addressData);
+                    this.addressService.saveUserAddresses(addresses);
+                }
+
+                // Gọi callback nếu có
+                if (this.onComplete) {
+                    this.onComplete(addressData);
+                }
+
+                // Đóng modal
+                this.close();
+            } else {
+                const errorData = await response.json();
+                throw new Error(errorData.message || 'Không thể lưu địa chỉ.');
+            }
+        } catch (error) {
+            console.error('Lỗi khi lưu địa chỉ:', error);
+            alert(error.message || 'Đã xảy ra lỗi khi lưu địa chỉ. Vui lòng thử lại sau.');
+            
+            // Khôi phục trạng thái nút
+            const saveBtn = this.modalElement.querySelector('.btn-save');
+            saveBtn.disabled = false;
+            saveBtn.textContent = originalText;
         }
-
-        // Đóng modal
-        this.close();
     }
 
     close() {
@@ -564,11 +691,11 @@ export class AddressModal {
 }
 
 /**
- * Hiển thị modal địa chỉ giao hàng
- * @param {Object} userAddress - Thông tin địa chỉ hiện tại của người dùng
- * @param {Function} onAddressUpdated - Callback khi người dùng cập nhật địa chỉ
+ * Hiển thị modal để thêm/cập nhật địa chỉ
+ * @param {Object} userAddress - Thông tin địa chỉ hiện tại (null nếu là thêm mới)
+ * @param {Function} onComplete - Callback khi hoàn thành thêm/sửa địa chỉ
  */
-export function openAddressModal(userAddress = null, onAddressUpdated = null) {
+export function openAddressModal(userAddress = null, onComplete = null) {
     const modal = new AddressModal();
-    modal.show(userAddress, onAddressUpdated);
+    modal.show(userAddress, onComplete);
 }

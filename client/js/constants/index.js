@@ -11,6 +11,7 @@ export const STORAGE_KEYS = {
     TOKEN: 'token',
     THEME: 'theme',
     LANGUAGE: 'language',
+    ADDRESS_LIST: 'address',
 };
 
 export const VALIDATION = {

@@ -1,0 +1,234 @@
+/* Address Section Styling */
+.address-section {
+    margin: 20px 0 50px;
+}
+
+.address-content {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    padding: 24px;
+    height: 100%;
+}
+
+.address-info-wrapper {
+    margin-top: 20px;
+}
+
+.address-title {
+    font-size: 20px;
+    font-weight: 500;
+    margin-bottom: 20px;
+    color: #333;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* Address Card Styling - Fixed Height */
+.address-card {
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    position: relative;
+    transition: all 0.3s ease;
+    height: 220px; /* Thiết lập chiều cao cố định */
+    display: flex;
+    flex-direction: column;
+}
+
+.address-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.address-card.default {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 1px #0d6efd;
+}
+
+.default-badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: #0d6efd;
+    color: white;
+    font-size: 12px;
+    padding: 3px 8px;
+    border-radius: 4px;
+}
+
+.address-info {
+    margin-bottom: 15px;
+    flex-grow: 1; /* Cho phép phần thông tin mở rộng */
+}
+
+.address-type {
+    font-size: 14px;
+    color: #6c757d;
+    margin-bottom: 5px;
+}
+
+.recipient-name {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+.address-details, .phone-number {
+    font-size: 14px;
+    color: #495057;
+    margin-bottom: 5px;
+}
+
+.address-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: auto; /* Đẩy xuống dưới cùng */
+}
+
+.address-actions button {
+    border: none;
+    background: none;
+    color: #0d6efd;
+    font-size: 14px;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+}
+
+.address-actions button:hover {
+    background-color: #f1f8ff;
+}
+
+.address-actions button.delete-btn {
+    color: #dc3545;
+}
+
+.address-actions button.delete-btn:hover {
+    background-color: #fff5f5;
+}
+
+/* Add Address Card - Same Height as Address Card */
+.add-address-card {
+    border: 1px dashed #adb5bd;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    height: 220px; /* Chiều cao giống với address card */
+    transition: all 0.3s ease;
+}
+
+.add-address-card:hover {
+    border-color: #0d6efd;
+    background-color: #f8f9fa;
+}
+
+.add-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: #e9ecef;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 15px;
+    color: #6c757d;
+    font-size: 20px;
+    transition: all 0.3s ease;
+}
+
+.add-address-card:hover .add-icon {
+    background-color: #0d6efd;
+    color: white;
+}
+
+.add-address-text {
+    font-size: 15px;
+    color: #6c757d;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.add-address-card:hover .add-address-text {
+    color: #0d6efd;
+}
+
+/* Empty State */
+.empty-state {
+    padding: 30px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    border: 1px dashed #dee2e6;
+}
+
+/* Modal Styling */
+.modal-title {
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.modal-body {
+    padding: 20px;
+}
+
+.form-label {
+    font-weight: 500;
+    margin-bottom: 5px;
+}
+
+.form-select, .form-control {
+    border-radius: 4px;
+    font-size: 14px;
+    padding: 8px 12px;
+    border: 1px solid #ced4da;
+    transition: all 0.3s ease;
+}
+
+.form-select:focus, .form-control:focus {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+
+.btn-primary {
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+    padding: 8px 16px;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+    border-color: #6c757d;
+    padding: 8px 16px;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.btn-danger {
+    background-color: #dc3545;
+    border-color: #dc3545;
+    padding: 8px 16px;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+@media (max-width: 768px) {
+    .address-title {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    
+    .address-actions {
+        flex-wrap: wrap;
+    }
+}

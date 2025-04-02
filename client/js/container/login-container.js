@@ -280,6 +280,7 @@ export class LoginContainer {
                 // Lưu thông tin người dùng
                 localStorage.setItem('user', JSON.stringify(response.user));
                 localStorage.setItem('token', response.token);
+                localStorage.setItem('address', JSON.stringify(response.address));
 
                 this.user = response.user;
 

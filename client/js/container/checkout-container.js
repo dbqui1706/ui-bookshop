@@ -40,6 +40,7 @@ export class CheckoutContainer {
     loadData() {
         // Lấy dữ liệu từ localStorage
         this.cartOrderDetail = JSON.parse(localStorage.getItem('cartOrderDetail')) || null;
+        this.cartOrderDetail.address = JSON.parse(localStorage.getItem('address')) || [];
         this.user = JSON.parse(localStorage.getItem('user')) || null;
 
         // Kiểm tra dữ liệu đơn hàng
@@ -312,7 +313,7 @@ export class CheckoutContainer {
         const deliveryAddressTextEl = document.getElementById('delivery-address-text');
         const addressTagEl = document.querySelector('.address-tag');
 
-        if (!this.cartOrderDetail.address) {
+        if (this.cartOrderDetail.address.length === 0) {
             // Hiển thị thông báo nếu chưa có địa chỉ
             if (deliveryAddressTextEl) {
                 deliveryAddressTextEl.innerHTML = '<span class="text-danger">Vui lòng cung cấp địa chỉ giao hàng</span>';
@@ -441,7 +442,6 @@ export class CheckoutContainer {
             }
         });
 
-        // Phần code còn lại giữ nguyên
         this.selectedDeliveryMethod = methodId;
 
         const selectedMethod = this.deliveryMethods.find(method => parseInt(method.id) === parseInt(methodId));
