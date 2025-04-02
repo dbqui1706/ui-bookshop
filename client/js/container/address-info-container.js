@@ -301,7 +301,7 @@ export class AddressInfoContainer {
 
         // Tìm và xóa địa chỉ
         const addresses = this.addressService.getUserAddresses();
-        const addressIndex = addresses.findIndex(addr => addr.id === addressId);
+        const addressIndex = addresses.findIndex(addr => parseInt(addr.id) === parseInt(addressId));
 
         if (addressIndex === -1) {
             alert('Không tìm thấy địa chỉ.');

@@ -4,13 +4,15 @@ import { formatPrice } from "../utils/formatter.js";
 import { openAddressModal } from "../components/address-modal.js";
 import { openCouponModal } from "../components/coupon-modal.js";
 import { DialogComponent } from "../components/dialog-component.js";
-
+import { AddressService } from "../service/address-service.js";
+import { openAddressSelectorModal } from "../components/address-selector-modal.js";
 export class CheckoutContainer {
     constructor() {
         // Khởi tạo các thuộc tính dữ liệu
         this.cartOrderDetail = null;
         this.user = null;
         this.orderService = new OrderService();
+        this.addressService = new AddressService();
         this.deliveryMethods = [];
         this.paymentMethods = [];
 
@@ -40,7 +42,6 @@ export class CheckoutContainer {
     loadData() {
         // Lấy dữ liệu từ localStorage
         this.cartOrderDetail = JSON.parse(localStorage.getItem('cartOrderDetail')) || null;
-        this.cartOrderDetail.address = JSON.parse(localStorage.getItem('address')) || [];
         this.user = JSON.parse(localStorage.getItem('user')) || null;
 
         // Kiểm tra dữ liệu đơn hàng
@@ -48,6 +49,12 @@ export class CheckoutContainer {
             console.error('Không tìm thấy dữ liệu giỏ hàng.');
             window.location.href = '/client/cart.html';
             return;
+        }
+
+        // Đảm bảo giữ nguyên địa chỉ đã chọn (nếu có)
+        if (!this.cartOrderDetail.address) {
+            // Nếu không có, khởi tạo object rỗng thay vì mảng
+            this.cartOrderDetail.address = {};
         }
 
         // Cập nhật orderData ban đầu
@@ -306,14 +313,41 @@ export class CheckoutContainer {
         this.setPaymentMethod('cash-payment');
     }
 
-    renderDeliveryAddress() {
+    async renderDeliveryAddress() {
+        console.log(this.orderData);
+
+        // Lấy danh sách địa chỉ từ localStorage hoặc API
+        let addresses = this.addressService.getUserAddresses();
+
+        if (addresses.length === 0) {
+            const response = await this.addressService.getAddressByUserId(this.user.id);
+            if (response.success) {
+                addresses = response.data;
+                // Lưu vào localStorage để sử dụng sau
+                this.addressService.saveUserAddresses(addresses);
+            }
+        }
+
+        // Kiểm tra xem đã có địa chỉ được chọn chưa
+        if (!this.cartOrderDetail.address || Object.keys(this.cartOrderDetail.address).length === 0) {
+            // Chỉ khi không có địa chỉ nào đã được chọn, mới dùng địa chỉ mặc định
+            const defaultAddress = addresses.find(addr => addr.isDefault);
+            if (defaultAddress) {
+                this.cartOrderDetail.address = defaultAddress;
+                // Cập nhật lại orderData
+                this.orderData.deliveryAddress = defaultAddress;
+                // Lưu lại thông tin đã cập nhật
+                localStorage.setItem('cartOrderDetail', JSON.stringify(this.cartOrderDetail));
+            }
+        }
+
         const customerNameEl = document.getElementById('customer-name');
         const customerPhoneEl = document.getElementById('customer-phone');
         const deliveryEmailEl = document.getElementById('delivery-email');
         const deliveryAddressTextEl = document.getElementById('delivery-address-text');
         const addressTagEl = document.querySelector('.address-tag');
 
-        if (this.cartOrderDetail.address.length === 0) {
+        if (!this.cartOrderDetail.address || Object.keys(this.cartOrderDetail.address).length === 0) {
             // Hiển thị thông báo nếu chưa có địa chỉ
             if (deliveryAddressTextEl) {
                 deliveryAddressTextEl.innerHTML = '<span class="text-danger">Vui lòng cung cấp địa chỉ giao hàng</span>';
@@ -323,14 +357,22 @@ export class CheckoutContainer {
 
         const address = this.cartOrderDetail.address;
 
-        if (customerNameEl) customerNameEl.textContent = address.fullname;
-        if (customerPhoneEl) customerPhoneEl.textContent = address.phone;
+        if (customerNameEl) customerNameEl.textContent = address.recipientName || address.fullname;
+        if (customerPhoneEl) customerPhoneEl.textContent = address.phoneNumber || address.phone;
         if (deliveryEmailEl && this.user) deliveryEmailEl.textContent = this.user.email || '';
+
         if (deliveryAddressTextEl) {
-            deliveryAddressTextEl.textContent = `${address.address}, ${address.ward}, ${address.district}, ${address.province}`;
+            const addressLine = address.addressLine1 || address.address;
+            const ward = address.wardName || address.ward;
+            const district = address.districtName || address.district;
+            const province = address.provinceName || address.province;
+
+            deliveryAddressTextEl.textContent = `${addressLine}, ${ward}, ${district}, ${province}`;
         }
+
         if (addressTagEl) {
-            addressTagEl.textContent = address.addressType === 'company' ? 'Công ty' : 'Nhà';
+            const addressType = (address.addressType || 'HOME').toUpperCase();
+            addressTagEl.textContent = addressType === 'COMPANY' ? 'Công ty' : 'Nhà';
         }
     }
 
@@ -392,7 +434,7 @@ export class CheckoutContainer {
         if (changeAddressLink) {
             changeAddressLink.addEventListener('click', (e) => {
                 e.preventDefault();
-                this.handleOpenAddressModal();
+                this.handleChooseDeliveryAddress();
             });
         }
 
@@ -498,6 +540,22 @@ export class CheckoutContainer {
             this.renderDeliveryAddress();
         });
     }
+
+    // Chọn địa chỉ giao hàng
+    handleChooseDeliveryAddress() {
+        openAddressSelectorModal((selectedAddress) => {
+            // Cập nhật địa chỉ giao hàng trong đơn hàng
+            this.cartOrderDetail.address = selectedAddress;
+            localStorage.setItem('cartOrderDetail', JSON.stringify(this.cartOrderDetail));
+
+            // Cập nhật orderData
+            this.orderData.deliveryAddress = selectedAddress;
+
+            // Render lại địa chỉ
+            this.renderDeliveryAddress();
+        }, this.cartOrderDetail.address?.id);
+    }
+
 
     handleOpenCouponModal() {
         openCouponModal((selectedCoupons) => {
