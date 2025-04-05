@@ -323,6 +323,43 @@ export class OrderService {
         
         return filteredOrders;
     }
+
+    async createOrder (orderData) {
+        try {
+            // Trong thực tế, URL có thể được thêm từ API_URL.CREATE_ORDER
+            const url = `http://localhost:8080/api/orders`;
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(orderData)
+            });
+            
+            // Xử lý lỗi HTTP
+            if (!response.ok) {
+                const errorData = await response.json();
+                return {
+                    success: false,
+                    message: errorData.message || 'Không thể tạo đơn hàng'
+                };
+            }
+            const data = await response.json();
+            // Mô phỏng dữ liệu trả về từ API
+            return {
+                success: true,
+                message: 'Đặt hàng thành công',
+                data: data,
+                redirectToOrderDetail: true
+            };
+        } catch (error) {
+            console.error('Lỗi khi tạo đơn hàng:', error);
+            return {
+                success: false,
+                message: 'Có lỗi xảy ra khi tạo đơn hàng'
+            };
+        }
+    }
     
     /**
      * Lấy chi tiết đơn hàng

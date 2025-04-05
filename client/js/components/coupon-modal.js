@@ -18,8 +18,8 @@ export class CouponModal {
      */
     show(onCouponSelected) {
         this.onCouponSelected = onCouponSelected;
-        this.createModal();
         document.head.appendChild(this.createModalCSS());
+        this.createModal();
         this.setupEventListeners();
     }
 
