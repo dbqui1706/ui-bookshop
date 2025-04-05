@@ -340,7 +340,7 @@ export class ProductContainer {
         const discountBadge = product.discount ? `<span class="discount-tag">-${product.discount}%</span>` : '';
 
         // Xử lý đường dẫn ảnh
-        const imageUrl = product.imageUrl || '/asset/images/image.png';
+        const imageUrl = '/asset/images/' + product.imageName || '/asset/images/image.png';
 
         // Tạo các badge của sản phẩm
         const shippingBadge = product.freeShipping ?

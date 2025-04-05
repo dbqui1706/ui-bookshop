@@ -2,10 +2,11 @@
 import { OrderService } from "../service/order-service.js";
 import { formatPrice } from "../utils/formatter.js";
 import { openAddressModal } from "../components/address-modal.js";
-import { openCouponModal } from "../components/coupon-modal.js";
+import { openCouponModal } from "../components/coupon-checkout-modal.js";
 import { DialogComponent } from "../components/dialog-component.js";
 import { AddressService } from "../service/address-service.js";
 import { openAddressSelectorModal } from "../components/address-selector-modal.js";
+
 export class CheckoutContainer {
     constructor() {
         // Khởi tạo các thuộc tính dữ liệu
@@ -25,7 +26,7 @@ export class CheckoutContainer {
             deliveryMethod: null,
             paymentMethod: null,
             deliveryPrice: 0,
-            discountAmount: 0,
+            discountPromotionAmount: 0,
             couponCode: null
         };
 
@@ -35,8 +36,16 @@ export class CheckoutContainer {
         this.deliveryPrice = 0;
         this.discountPrice = 0;
 
+        this.priceSummary = {
+            subtotal: 0,
+            deliveryPrice: 0,
+            discountAmount: 0,
+            totalAmount: 0,
+        };
+
         // Load dữ liệu và khởi tạo giao diện
         this.loadData();
+        console.log("Order Data", this.orderData);
     }
 
     loadData() {
@@ -71,6 +80,7 @@ export class CheckoutContainer {
 
         this.orderData.userId = this.user.id;
         this.orderData.cartItems = this.cartOrderDetail.cartItems.map(item => ({
+            cartItemId: item.cartItemId,
             productId: item.productId,
             quantity: item.quantity,
             price: item.productPrice * (1 - item.productDiscount / 100),
@@ -84,7 +94,7 @@ export class CheckoutContainer {
         this.orderData.deliveryMethod = this.selectedDeliveryMethod;
         this.orderData.paymentMethod = this.selectedPaymentMethod;
         this.orderData.deliveryPrice = this.deliveryPrice;
-        this.orderData.discountAmount = this.discountPrice;
+        this.orderData.discountPromotionAmount = this.discountPrice;
     }
 
     async init() {
@@ -400,7 +410,7 @@ export class CheckoutContainer {
         totalPayment -= this.discountPrice;
 
         // Tổng tiết kiệm
-        const totalSaving = totalDiscountPrice + this.discountPrice;
+        const totalSaving = totalDiscountPrice + parseFloat(this.discountPrice || 0);
 
         // Cập nhật giao diện
         totalPriceEl.innerHTML = formatPrice(totalOriginalPrice);
@@ -412,8 +422,8 @@ export class CheckoutContainer {
             shippingPriceEl.innerHTML = `+${formatPrice(this.deliveryPrice)}`;
         }
 
-        totalPaymentEl.innerHTML = formatPrice(totalPayment);
-        savingPriceEl.innerHTML = `Tiết kiệm ${formatPrice(totalSaving)}`;
+        totalPaymentEl.innerHTML = formatPrice(totalPayment);   
+        savingPriceEl.innerHTML = `Tiết kiệm ${formatPrice(totalSaving.toFixed(0))}`;
 
         // Cập nhật số lượng sản phẩm trên nút đặt hàng
         const checkoutButton = document.getElementById('checkout-button');
@@ -425,7 +435,15 @@ export class CheckoutContainer {
         // Cập nhật dữ liệu đơn hàng
         this.orderData.totalAmount = totalPayment;
         this.orderData.deliveryPrice = this.deliveryPrice;
-        this.orderData.discountAmount = this.discountPrice;
+        this.orderData.discountPromotionAmount = this.discountPrice;
+
+        
+        this.priceSummary = {
+            subtotal: totalOriginalPrice,
+            deliveryPrice: this.deliveryPrice,
+            discountAmount: totalSaving,
+            totalAmount: totalPayment,
+        };
     }
 
     setupEventListeners() {
@@ -558,30 +576,31 @@ export class CheckoutContainer {
 
 
     handleOpenCouponModal() {
-        openCouponModal((selectedCoupons) => {
-            if (!selectedCoupons) return;
+        const orderValue = this.cartOrderDetail.totalPaymentOrder || 0;
 
+        // Tạo đối tượng coupon hiện tại nếu có
+        const currentCoupon = this.orderData.couponCode ? {
+            code: this.orderData.couponCode,
+            discount: this.discountPrice
+        } : null;
+
+        openCouponModal(orderValue, currentCoupon, (selectedCoupons) => {
+            if (!selectedCoupons || !selectedCoupons.success) return;
             // Cập nhật trạng thái mã giảm giá
             if (selectedCoupons.discount) {
                 const discount = selectedCoupons.discount;
 
-                // Lưu mã coupon nếu có
-                if (discount.code) {
-                    this.orderData.couponCode = discount.code;
-                }
+                // Lưu mã coupon
+                this.orderData.couponCode = discount.code;
 
-                // Tính toán giảm giá
-                if (discount.value.endsWith('%')) {
-                    const percentage = parseFloat(discount.value);
-                    this.discountPrice = this.cartOrderDetail.totalPaymentOrder * (percentage / 100);
-
-                    // Giới hạn giảm tối đa nếu có
-                    if (discount.maxDiscount && this.discountPrice > discount.maxDiscount) {
-                        this.discountPrice = discount.maxDiscount;
-                    }
+                // Lưu số tiền giảm giá
+                const typeDiscount = discount.discountType; // "fixed" || "percentage"
+                if (typeDiscount === 'fixed') {
+                    this.discountPrice = parseFloat(discount.discountValue) || 0;
                 } else {
-                    // Mã giảm cố định
-                    this.discountPrice = parseFloat(discount.value);
+                    const maxDiscount = discount.maxDiscount || 0;
+                    const currentDiscount = (parseFloat(discount.discountValue) / 100 * orderValue).toFixed(0) || 0;
+                    this.discountPrice = Math.min(currentDiscount, maxDiscount);
                 }
             } else {
                 this.discountPrice = 0;
@@ -589,11 +608,35 @@ export class CheckoutContainer {
             }
 
             // Cập nhật orderData
-            this.orderData.discountAmount = this.discountPrice;
+            this.orderData.discountPromotionAmount = this.discountPrice;
 
             // Cập nhật lại tổng tiền
             this.updateTotalPrice();
+
+            console.log("Order Data with Coupon", this.orderData);
+            // render lại mã giảm giá
+            this.renderCouponCode(selectedCoupons);
         });
+    }
+
+    renderCouponCode(coupons) {
+        const couponOptEl = document.getElementById('coupon-options');
+        couponOptEl.innerHTML = '';
+
+        couponOptEl.innerHTML = `
+            <div class="coupon-item-checkout" id=${coupons.code}>
+                <div class="coupon-icon">
+                    <i class="fa-solid fa-ticket"></i>
+                </div>
+                <div class="coupon-detail">
+                    <div class="coupon-value">Giảm ${coupons.discount.discountValue}${coupons.discount.discountType === 'percentage' ? '%' : 'đ'}
+                    </div>
+                    <div class="coupon-info-icon">
+                        <i class="fas fa-info-circle"></i>
+                    </div>
+                </div>
+            </div>    
+        `
     }
 
     validateOrder() {
@@ -666,20 +709,29 @@ export class CheckoutContainer {
     async submitOrder() {
         try {
             // Trong thực tế, gọi API đặt hàng
-            // return await this.orderService.createOrder(this.orderData);
+            const submitOrder = {
+                userId: this.orderData.userId,
+                cartItems: this.orderData.cartItems,
+                deliveryAddress: this.orderData.deliveryAddress,
+                deliveryMethod: this.orderData.deliveryMethod,
+                paymentMethod: this.orderData.paymentMethod,
+                couponCode: this.orderData.couponCode,
+                priceSummary: this.priceSummary
+            }
+            return await this.orderService.createOrder(submitOrder);
 
-            // Giả lập API call để demo
-            await new Promise(resolve => setTimeout(resolve, 1500));
+            // // Giả lập API call để demo
+            // await new Promise(resolve => setTimeout(resolve, 1500));
 
-            // Giả lập response thành công
-            return {
-                success: true,
-                data: {
-                    orderId: Date.now().toString().slice(-8),
-                    status: 'pending'
-                },
-                message: 'Đặt hàng thành công'
-            };
+            // // Giả lập response thành công
+            // return {
+            //     success: true,
+            //     data: {
+            //         orderId: Date.now().toString().slice(-8),
+            //         status: 'pending'
+            //     },
+            //     message: 'Đặt hàng thành công'
+            // };
         } catch (error) {
             console.error('Lỗi khi gửi đơn hàng:', error);
             throw error;
@@ -695,7 +747,7 @@ export class CheckoutContainer {
                     <i class="fas fa-check-circle text-success" style="font-size: 48px;"></i>
                 </div>
                 <p class="text-center">Đơn hàng của bạn đã được đặt thành công.</p>
-                <p class="text-center">Mã đơn hàng: <strong>DH${orderData.orderId}</strong></p>
+                <p class="text-center">Mã đơn hàng: <strong>DH${orderData.orderCode}</strong></p>
                 <p class="text-center">Cảm ơn bạn đã mua sắm tại BookStore!</p>
             `,
             buttons: [

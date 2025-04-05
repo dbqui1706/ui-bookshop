@@ -275,7 +275,8 @@ export class ProductDetailContainer {
             this.cart = cart;
         } else {
             // Nếu có user thì gọi API thêm vào giỏ hàng
-            this.cartService.addToCart(productId, quantity, this.user.id);
+            const response = this.cartService.addToCart(productId, quantity, this.user.id);
+            console.log(response);
         }
 
         // Cập nhật số lượng sản phẩm trong giỏ hàng
