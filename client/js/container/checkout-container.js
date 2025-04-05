@@ -758,6 +758,8 @@ export class CheckoutContainer {
                     dismiss: true,
                     onClick: () => {
                         window.location.href = '/client/order-info.html';
+                        localStorage.removeItem('cartOrderDetail');
+                        window.history.pushState(null, '', '/client/index.html');
                     }
                 },
                 {

@@ -2,6 +2,7 @@ import { ProductDetailService } from '../service/product-detail-service.js';
 import { UserService } from '../service/user-service.js';
 import { CartService } from '../service/cart-service.js';
 import { Utils } from '../utils/index.js';
+import { updateCartFromServer } from '../app/header.js';
 
 
 export class ProductDetailContainer {
@@ -273,14 +274,30 @@ export class ProductDetailContainer {
 
             localStorage.setItem('cart', JSON.stringify(cart));
             this.cart = cart;
+            // Cập nhật số lượng sản phẩm trong giỏ hàng
+            this.updateCartCount();
         } else {
             // Nếu có user thì gọi API thêm vào giỏ hàng
-            const response = this.cartService.addToCart(productId, quantity, this.user.id);
-            console.log(response);
+            const response = await this.cartService.saveCart(
+                this.user.id,
+                [{
+                    productId: productId,
+                    productName: this.product.name,
+                    productImage: this.product.image || "/asset/images/image.png",
+                    productPrice: this.product.price,
+                    productDiscount: this.product.discount || 0,
+                    quantity: quantity
+                }]
+            );
+            if (!response.success) {
+                this.showError(response.message);
+                return;
+            }
+            // Cập nhật giỏ hàng
+            updateCartFromServer(document.getElementById('cart-count'))
         }
 
-        // Cập nhật số lượng sản phẩm trong giỏ hàng
-        this.updateCartCount();
+
         // Hiển thị thông báo thêm vào giỏ hàng thành công
         this.showAddToCartNotification();
     }
