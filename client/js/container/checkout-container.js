@@ -422,7 +422,7 @@ export class CheckoutContainer {
             shippingPriceEl.innerHTML = `+${formatPrice(this.deliveryPrice)}`;
         }
 
-        totalPaymentEl.innerHTML = formatPrice(totalPayment);   
+        totalPaymentEl.innerHTML = formatPrice(totalPayment);
         savingPriceEl.innerHTML = `Tiết kiệm ${formatPrice(totalSaving.toFixed(0))}`;
 
         // Cập nhật số lượng sản phẩm trên nút đặt hàng
@@ -437,7 +437,7 @@ export class CheckoutContainer {
         this.orderData.deliveryPrice = this.deliveryPrice;
         this.orderData.discountPromotionAmount = this.discountPrice;
 
-        
+
         this.priceSummary = {
             subtotal: totalOriginalPrice,
             deliveryPrice: this.deliveryPrice,
@@ -719,37 +719,35 @@ export class CheckoutContainer {
                 priceSummary: this.priceSummary
             }
             return await this.orderService.createOrder(submitOrder);
-
-            // // Giả lập API call để demo
-            // await new Promise(resolve => setTimeout(resolve, 1500));
-
-            // // Giả lập response thành công
-            // return {
-            //     success: true,
-            //     data: {
-            //         orderId: Date.now().toString().slice(-8),
-            //         status: 'pending'
-            //     },
-            //     message: 'Đặt hàng thành công'
-            // };
         } catch (error) {
             console.error('Lỗi khi gửi đơn hàng:', error);
             throw error;
         }
     }
 
+    // Bổ sung vào phương thức showOrderSuccess của bạn để xử lý trường hợp thanh toán VNPay
     showOrderSuccess(orderData) {
-        // Hiển thị thông báo thành công
+        // Kiểm tra nếu đơn hàng yêu cầu thanh toán VNPay và có URL thanh toán
+        if (orderData.requirePayment && orderData.paymentUrl) {
+            // Lưu ID đơn hàng vào localStorage để xử lý sau khi thanh toán
+            localStorage.setItem('pendingOrderId', orderData.id);
+
+            // Chuyển hướng đến trang thanh toán VNPay
+            window.location.href = orderData.paymentUrl;
+            return;
+        }
+
+        // Xử lý bình thường cho các trường hợp khác (như COD)
         const successDialog = new DialogComponent({
             title: 'Đặt hàng thành công',
             content: `
-                <div class="text-center mb-3">
-                    <i class="fas fa-check-circle text-success" style="font-size: 48px;"></i>
-                </div>
-                <p class="text-center">Đơn hàng của bạn đã được đặt thành công.</p>
-                <p class="text-center">Mã đơn hàng: <strong>DH${orderData.orderCode}</strong></p>
-                <p class="text-center">Cảm ơn bạn đã mua sắm tại BookStore!</p>
-            `,
+            <div class="text-center mb-3">
+                <i class="fas fa-check-circle text-success" style="font-size: 48px;"></i>
+            </div>
+            <p class="text-center">Đơn hàng của bạn đã được đặt thành công.</p>
+            <p class="text-center">Mã đơn hàng: <strong>DH${orderData.orderCode}</strong></p>
+            <p class="text-center">Cảm ơn bạn đã mua sắm tại BookStore!</p>
+        `,
             buttons: [
                 {
                     text: 'Xem đơn hàng',
