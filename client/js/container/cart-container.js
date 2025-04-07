@@ -37,7 +37,7 @@ export class CartContainer {
         this.loadCart();
 
         // Khởi tạo các popover và modal
-        this.initPopoversAndModals();
+        // this.initPopoversAndModals();
     }
 
     initDOMElements() {

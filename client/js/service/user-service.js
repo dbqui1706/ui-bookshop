@@ -1,3 +1,6 @@
+import { STORAGE_KEYS } from "../constants/index.js";
+
+
 const API_URL = {
     LOGIN: 'http://localhost:8080/api/auth/login',
     REGISTER: 'http://localhost:8080/api/auth/register',
@@ -5,6 +8,12 @@ const API_URL = {
     FORGOT_PASSWORD: 'http://localhost:8080/api/auth/forgot-password',
     GOOGLE_LOGIN: 'http://localhost:8080/api/auth/google',
     FACEBOOK_LOGIN: 'http://localhost:8080/api/auth/facebook'
+}
+
+const HEADERS = {
+    "Accept": "application/json",
+    "Content-Type": "application/json",
+    "Authorization": `Bearer ${localStorage.getItem(STORAGE_KEYS.TOKEN)}`,
 }
 
 export class UserService {
@@ -17,8 +26,10 @@ export class UserService {
         try {
             const response = await fetch(API_URL.LOGIN, {
                 method: 'POST',
+                credentials: 'include', // Quan trọng để nhận cookie
                 body: formData
             });
+
             // Xử lý lỗi HTTP
             if (!response.ok) {
                 const errorData = await response.json();
@@ -27,7 +38,7 @@ export class UserService {
                     message: errorData.message || 'Đăng nhập thất bại'
                 };
             }
-            
+
             const data = await response.json();
             console.log(data);
             return {
@@ -54,7 +65,7 @@ export class UserService {
                 method: 'POST',
                 body: formData
             });
-            
+
             // Xử lý lỗi HTTP
             if (!response.ok) {
                 const errorData = await response.json();
@@ -63,7 +74,7 @@ export class UserService {
                     message: errorData.message || 'Đăng ký thất bại'
                 };
             }
-            
+
             const data = await response.json();
             return {
                 success: true,
@@ -87,12 +98,12 @@ export class UserService {
         try {
             const formData = new FormData();
             formData.append('email', email);
-            
+
             const response = await fetch(API_URL.FORGOT_PASSWORD, {
                 method: 'POST',
                 body: formData
             });
-            
+
             // Xử lý lỗi HTTP
             if (!response.ok) {
                 const errorData = await response.json();
@@ -101,7 +112,7 @@ export class UserService {
                     message: errorData.message || 'Yêu cầu đặt lại mật khẩu thất bại'
                 };
             }
-            
+
             const data = await response.json();
             return {
                 success: true,
@@ -128,13 +139,13 @@ export class UserService {
                     'Authorization': `Bearer ${localStorage.getItem('token')}`
                 }
             });
-            
+
             if (response.ok) {
                 // Xóa thông tin đăng nhập khỏi localStorage
                 localStorage.removeItem('user');
                 localStorage.removeItem('token');
             }
-            
+
             return {
                 success: response.ok
             };
@@ -158,7 +169,7 @@ export class UserService {
             const response = await fetch(API_URL.GOOGLE_LOGIN, {
                 method: 'POST'
             });
-            
+
             // Xử lý lỗi HTTP
             if (!response.ok) {
                 const errorData = await response.json();
@@ -167,7 +178,7 @@ export class UserService {
                     message: errorData.message || 'Đăng nhập bằng Google thất bại'
                 };
             }
-            
+
             const data = await response.json();
             return {
                 success: true,
@@ -193,7 +204,7 @@ export class UserService {
             const response = await fetch(API_URL.FACEBOOK_LOGIN, {
                 method: 'POST'
             });
-            
+
             // Xử lý lỗi HTTP
             if (!response.ok) {
                 const errorData = await response.json();
@@ -202,7 +213,7 @@ export class UserService {
                     message: errorData.message || 'Đăng nhập bằng Facebook thất bại'
                 };
             }
-            
+
             const data = await response.json();
             return {
                 success: true,
@@ -215,5 +226,5 @@ export class UserService {
                 message: 'Có lỗi xảy ra khi đăng nhập bằng Facebook'
             };
         }
-    }   
+    }
 }

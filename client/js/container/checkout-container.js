@@ -710,7 +710,6 @@ export class CheckoutContainer {
         try {
             // Trong thực tế, gọi API đặt hàng
             const submitOrder = {
-                userId: this.orderData.userId,
                 cartItems: this.orderData.cartItems,
                 deliveryAddress: this.orderData.deliveryAddress,
                 deliveryMethod: this.orderData.deliveryMethod,

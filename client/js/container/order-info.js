@@ -1,16 +1,19 @@
 import { OrderService } from '../service/order-service.js';
 import { DialogComponent } from '../components/dialog-component.js';
 import { showToast } from '../utils/common-utils.js';
+import { formatPrice } from '../utils/formatter.js';
 
 export class OrderInfo {
     constructor() {
         this.orderService = new OrderService();
         this.currentStatus = 'all';
         this.currentPage = 1;
-        this.limit = 10;
+        this.limit = 5;
         this.keyword = '';
+        this.sortBy = 'newest';
         this.totalPages = 1;
         this.orders = [];
+        this.statusCounts = {};
 
         this.init();
     }
@@ -71,8 +74,6 @@ export class OrderInfo {
             });
         }
 
-        // Sự kiện cho các nút ở footer của đơn hàng sẽ được thêm động khi render đơn hàng
-
         // Sự kiện cho phân trang
         this.setupPagination();
     }
@@ -126,7 +127,8 @@ export class OrderInfo {
                 this.currentStatus,
                 this.currentPage,
                 this.limit,
-                this.keyword
+                this.keyword,
+                this.sortBy
             );
 
             // Ẩn loading
@@ -135,6 +137,10 @@ export class OrderInfo {
             if (response.success) {
                 this.orders = response.orders;
                 this.totalPages = response.pagination.totalPages;
+                this.statusCounts = response.orderStatusCounts;
+
+                // Cập nhật số lượng đơn hàng trên các tab
+                this.updateStatusCountBadges();
 
                 // Render danh sách đơn hàng
                 this.renderOrders(this.orders);
@@ -166,12 +172,53 @@ export class OrderInfo {
     }
 
     /**
+     * Cập nhật số lượng đơn hàng trên các tab
+     */
+    updateStatusCountBadges() {
+        // Thêm badge với số lượng cho các tab
+        const addBadge = (tabId, count) => {
+            const tab = document.getElementById(tabId);
+            if (tab) {
+                const link = tab.querySelector('a');
+                
+                // Xóa badge cũ nếu có
+                const oldBadge = link.querySelector('.badge');
+                if (oldBadge) {
+                    oldBadge.remove();
+                }
+                
+                // Thêm badge mới nếu có số lượng > 0
+                if (count && count > 0) {
+                    const badge = document.createElement('span');
+                    badge.className = 'badge';
+                    badge.textContent = count;
+                    link.appendChild(badge);
+                }
+            }
+        };
+        
+        // Tổng số đơn hàng (tất cả trạng thái)
+        let totalCount = 0;
+        for (const status in this.statusCounts) {
+            totalCount += this.statusCounts[status];
+        }
+        
+        // Cập nhật badge cho tab "Tất cả đơn"
+        addBadge('all-orders', totalCount);
+        
+        // Cập nhật badge cho các tab trạng thái cụ thể
+        addBadge('pending-orders', this.statusCounts.pending || this.statusCounts.waiting_payment);
+        addBadge('processing-orders', this.statusCounts.processing);
+        addBadge('shipping-orders', this.statusCounts.shipping);
+        addBadge('delivered-orders', this.statusCounts.delivered);
+        addBadge('cancelled-orders', this.statusCounts.cancelled);
+    }
+
+    /**
      * Hiển thị/ẩn trạng thái loading
      * @param {boolean} show Hiển thị hay ẩn
      */
     showLoading(show) {
-        // Trong thực tế, cần tạo một spinner loading
-        // Tại đây chỉ mô phỏng việc loading
         const orderList = document.getElementById('order-list');
 
         if (orderList) {
@@ -226,25 +273,18 @@ export class OrderInfo {
      * @returns {HTMLElement} Element của đơn hàng
      */
     createOrderElement(order, index) {
+        console.log('Creating order element for order:', order);
         const orderElement = document.createElement('div');
         orderElement.className = 'order-item';
         orderElement.id = `order-item-${order.id}`;
-
-        // Format ngày tháng
-        const orderDate = new Date(order.orderDate);
-        const formattedDate = orderDate.toLocaleDateString('vi-VN', {
-            day: '2-digit',
-            month: '2-digit',
-            year: 'numeric'
-        });
 
         // Tạo header
         const orderHeader = document.createElement('div');
         orderHeader.className = 'order-header';
         orderHeader.innerHTML = `
             <div class="order-info">
-                <span class="order-id">Đơn hàng: #${order.id}</span>
-                <span class="order-date">Ngày đặt: ${formattedDate}</span>
+                <span class="order-id">Đơn hàng: ${order.orderCode}</span>
+                <span class="order-date">Ngày đặt: ${order.orderDate}</span>
             </div>
             <div class="order-status">
                 <span class="status-badge ${order.status}">${order.statusText}</span>
@@ -267,13 +307,13 @@ export class OrderInfo {
                     </div>
                     <div class="product-details">
                         <h4 class="product-title">${product.title}</h4>
-                        <p class="product-variant">Phiên bản: ${product.variant}</p>
+                        <p class="product-variant">${product.variant}</p>
                         <p class="product-quantity">Số lượng: ${product.quantity}</p>
                     </div>
                 </div>
                 <div class="order-price">
                     <p class="price-label">Thành tiền:</p>
-                    <p class="price-value">${this.formatCurrency(product.price)}</p>
+                    <p class="price-value">${formatPrice(product.price.toFixed(0))}</p>
                 </div>
             `;
 
@@ -312,7 +352,7 @@ export class OrderInfo {
         }
 
         // Thêm nút Hủy đơn nếu đơn hàng đang xử lý hoặc chờ thanh toán
-        if (order.status === 'processing' || order.status === 'pending') {
+        if (order.status === 'processing' || order.status === 'pending' || order.status === 'waiting_payment') {
             orderFooter.innerHTML += `<button class="btn-cancel" data-order-id="${order.id}">Hủy đơn</button>`;
         }
 
@@ -329,6 +369,9 @@ export class OrderInfo {
         const paginationElement = document.getElementById('pagination');
 
         if (!paginationElement) return;
+
+        // remove d-none class
+        paginationElement.classList.remove('d-none');
 
         // Hiển thị phân trang nếu có nhiều hơn 1 trang
         if (pagination.totalPages > 1) {
@@ -370,7 +413,7 @@ export class OrderInfo {
             `;
         } else {
             // Ẩn phân trang nếu chỉ có 1 trang
-            paginationElement.style.display = 'none';
+            paginationElement.classList.add('d-none');
         }
     }
 
@@ -414,7 +457,7 @@ export class OrderInfo {
                 this.trackOrder(orderId);
             });
         });
-
+        
         // Sự kiện nút Hủy đơn
         const cancelButtons = document.querySelectorAll('.btn-cancel');
         cancelButtons.forEach(button => {
@@ -454,21 +497,22 @@ export class OrderInfo {
                     <div class="order-detail">
                         <div class="order-detail-header mb-3">
                             <div class="d-flex justify-content-between align-items-center">
-                                <h5 class="m-0">Thông tin đơn hàng #${order.id}</h5>
+                                <h5 class="m-0">Thông tin đơn hàng #${order.orderCode}</h5>
                                 <span class="status-badge ${order.status}">${order.statusText}</span>
                             </div>
-                            <div class="text-muted mt-2">Ngày đặt: ${new Date(order.orderDate).toLocaleDateString('vi-VN')}</div>
+                            <div class="text-muted mt-2">Ngày đặt: ${order.orderDate}</div>
                         </div>
                         
                         <div class="order-detail-section mb-3">
                             <h6 class="section-title">Thông tin người nhận</h6>
                             <div class="row">
                                 <div class="col-md-6">
-                                    <p><strong>Họ tên:</strong> ${order.shippingAddress.fullName}</p>
-                                    <p><strong>Số điện thoại:</strong> ${order.shippingAddress.phone}</p>
+                                    <p><strong>Họ tên:</strong> ${order.shippingInfo.receiverName}</p>
+                                    <p><strong>Số điện thoại:</strong> ${order.shippingInfo.receiverPhone}</p>
                                 </div>
                                 <div class="col-md-6">
-                                    <p><strong>Địa chỉ:</strong> ${order.shippingAddress.address}</p>
+                                    <p><strong>Địa chỉ:</strong> ${order.shippingInfo.address}</p>
+                                    <p><strong>Khu vực:</strong> ${order.shippingInfo.district}, ${order.shippingInfo.city}</p>
                                 </div>
                             </div>
                         </div>
@@ -480,7 +524,8 @@ export class OrderInfo {
                                     <p><strong>Phương thức thanh toán:</strong> ${order.paymentMethod}</p>
                                 </div>
                                 <div class="col-md-6">
-                                    <p><strong>Phương thức vận chuyển:</strong> ${order.shippingMethod}</p>
+                                    <p><strong>Phương thức vận chuyển:</strong> ${order.shippingCarrier || 'Giao hàng tiêu chuẩn'}</p>
+                                    ${order.trackingNumber ? `<p><strong>Mã vận đơn:</strong> ${order.trackingNumber}</p>` : ''}
                                 </div>
                             </div>
                         </div>
@@ -515,7 +560,7 @@ export class OrderInfo {
                                     </div>
                                 </div>
                             </td>
-                            <td class="text-center">${this.formatCurrency(product.price / product.quantity)}</td>
+                            <td class="text-center">${this.formatCurrency(product.unitPrice)}</td>
                             <td class="text-center">${product.quantity}</td>
                             <td class="text-end">${this.formatCurrency(product.price)}</td>
                         </tr>
@@ -546,34 +591,43 @@ export class OrderInfo {
                                 </table>
                             </div>
                         </div>
-                
+                `;
+
+                // Hiển thị thông tin timeline nếu có
+                if (order.timeline && order.timeline.length > 0) {
+                    content += `
                         <div class="order-detail-section">
                             <h6 class="section-title">Lịch sử đơn hàng</h6>
                             <div class="timeline">
-                `;
+                    `;
 
-                // Thêm lịch sử trạng thái đơn hàng
-                order.timeline.forEach((item, index) => {
-                    const time = new Date(item.time);
-                    const formattedTime = time.toLocaleString('vi-VN');
+                    // Thêm lịch sử trạng thái đơn hàng
+                    order.timeline.forEach((item, index) => {
+                        const formattedTime = new Date(item.time).toLocaleString('vi-VN');
+
+                        content += `
+                            <div class="timeline-item">
+                                <div class="timeline-icon ${item.status}">
+                                    <i class="fas ${this.getStatusIcon(item.status)}"></i>
+                                </div>
+                                <div class="timeline-content">
+                                    <div class="timeline-time">${formattedTime}</div>
+                                    <div class="timeline-title">${item.description}</div>
+                                </div>
+                            </div>
+                        `;
+
+                        // Thêm đường nối giữa các mốc thời gian, trừ mốc cuối cùng
+                        if (index < order.timeline.length - 1) {
+                            content += '<div class="timeline-line"></div>';
+                        }
+                    });
 
                     content += `
-                        <div class="timeline-item">
-                            <div class="timeline-icon ${item.status}">
-                                <i class="fas ${this.getStatusIcon(item.status)}"></i>
-                            </div>
-                            <div class="timeline-content">
-                                <div class="timeline-time">${formattedTime}</div>
-                                <div class="timeline-title">${item.description}</div>
                             </div>
                         </div>
                     `;
-
-                    // Thêm đường nối giữa các mốc thời gian, trừ mốc cuối cùng
-                    if (index < order.timeline.length - 1) {
-                        content += '<div class="timeline-line"></div>';
-                    }
-                });
+                }
 
                 // Nếu đơn đã hủy, hiển thị lý do hủy
                 if (order.status === 'cancelled' && order.cancelReason) {
@@ -584,11 +638,7 @@ export class OrderInfo {
                     `;
                 }
 
-                content += `
-                            </div>
-                        </div>
-                    </div>
-                `;
+                content += `</div>`;
 
                 // Tạo các nút hành động cho dialog
                 const buttons = [];
@@ -634,108 +684,108 @@ export class OrderInfo {
     /**
      * Thêm CSS cho timeline
      */
-    addTimelineStyles() {
-        const styleId = 'timeline-styles';
+    // addTimelineStyles() {
+    //     const styleId = 'timeline-styles';
 
-        // Kiểm tra xem đã thêm style chưa
-        if (!document.getElementById(styleId)) {
-            const style = document.createElement('style');
-            style.id = styleId;
-            style.textContent = `
-                .timeline {
-                    position: relative;
-                    padding: 20px 0;
-                }
+    //     // Kiểm tra xem đã thêm style chưa
+    //     if (!document.getElementById(styleId)) {
+    //         const style = document.createElement('style');
+    //         style.id = styleId;
+    //         style.textContent = `
+    //             .timeline {
+    //                 position: relative;
+    //                 padding: 20px 0;
+    //             }
                 
-                .timeline-item {
-                    display: flex;
-                    align-items: flex-start;
-                    position: relative;
-                    margin-bottom: 15px;
-                }
+    //             .timeline-item {
+    //                 display: flex;
+    //                 align-items: flex-start;
+    //                 position: relative;
+    //                 margin-bottom: 15px;
+    //             }
                 
-                .timeline-icon {
-                    width: 32px;
-                    height: 32px;
-                    border-radius: 50%;
-                    background-color: #e9ecef;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    z-index: 2;
-                    margin-right: 15px;
-                }
+    //             .timeline-icon {
+    //                 width: 32px;
+    //                 height: 32px;
+    //                 border-radius: 50%;
+    //                 background-color: #e9ecef;
+    //                 display: flex;
+    //                 align-items: center;
+    //                 justify-content: center;
+    //                 z-index: 2;
+    //                 margin-right: 15px;
+    //             }
                 
-                .timeline-icon.pending {
-                    background-color: #ffc107;
-                    color: #fff;
-                }
+    //             .timeline-icon.pending, .timeline-icon.waiting_payment {
+    //                 background-color: #ffc107;
+    //                 color: #fff;
+    //             }
                 
-                .timeline-icon.processing {
-                    background-color: #0dcaf0;
-                    color: #fff;
-                }
+    //             .timeline-icon.processing {
+    //                 background-color: #0dcaf0;
+    //                 color: #fff;
+    //             }
                 
-                .timeline-icon.shipping {
-                    background-color: #0d6efd;
-                    color: #fff;
-                }
+    //             .timeline-icon.shipping {
+    //                 background-color: #0d6efd;
+    //                 color: #fff;
+    //             }
                 
-                .timeline-icon.delivered {
-                    background-color: #198754;
-                    color: #fff;
-                }
+    //             .timeline-icon.delivered {
+    //                 background-color: #198754;
+    //                 color: #fff;
+    //             }
                 
-                .timeline-icon.cancelled {
-                    background-color: #dc3545;
-                    color: #fff;
-                }
+    //             .timeline-icon.cancelled, .timeline-icon.payment_failed {
+    //                 background-color: #dc3545;
+    //                 color: #fff;
+    //             }
                 
-                .timeline-content {
-                    flex: 1;
-                }
+    //             .timeline-content {
+    //                 flex: 1;
+    //             }
                 
-                .timeline-time {
-                    font-size: 12px;
-                    color: #6c757d;
-                    margin-bottom: 5px;
-                }
+    //             .timeline-time {
+    //                 font-size: 12px;
+    //                 color: #6c757d;
+    //                 margin-bottom: 5px;
+    //             }
                 
-                .timeline-title {
-                    font-weight: 500;
-                }
+    //             .timeline-title {
+    //                 font-weight: 500;
+    //             }
                 
-                .timeline-line {
-                    position: absolute;
-                    left: 16px;
-                    height: 25px;
-                    width: 2px;
-                    background-color: #e9ecef;
-                    z-index: 1;
-                }
+    //             .timeline-line {
+    //                 position: absolute;
+    //                 left: 16px;
+    //                 height: 25px;
+    //                 width: 2px;
+    //                 background-color: #e9ecef;
+    //                 z-index: 1;
+    //             }
                 
-                .order-detail-section {
-                    margin-bottom: 20px;
-                    border-bottom: 1px solid #e9ecef;
-                    padding-bottom: 20px;
-                }
+    //             .order-detail-section {
+    //                 margin-bottom: 20px;
+    //                 border-bottom: 1px solid #e9ecef;
+    //                 padding-bottom: 20px;
+    //             }
                 
-                .order-detail-section:last-child {
-                    border-bottom: none;
-                    margin-bottom: 0;
-                    padding-bottom: 0;
-                }
+    //             .order-detail-section:last-child {
+    //                 border-bottom: none;
+    //                 margin-bottom: 0;
+    //                 padding-bottom: 0;
+    //             }
                 
-                .section-title {
-                    margin-bottom: 15px;
-                    font-weight: 600;
-                    color: #495057;
-                }
-            `;
+    //             .section-title {
+    //                 margin-bottom: 15px;
+    //                 font-weight: 600;
+    //                 color: #495057;
+    //             }
+    //         `;
 
-            document.head.appendChild(style);
-        }
-    }
+    //         document.head.appendChild(style);
+    //     }
+    // }
 
     /**
      * Lấy icon cho trạng thái đơn hàng
@@ -745,6 +795,7 @@ export class OrderInfo {
     getStatusIcon(status) {
         switch (status) {
             case 'pending':
+            case 'waiting_payment':
                 return 'fa-clock';
             case 'processing':
                 return 'fa-cog';
@@ -753,7 +804,10 @@ export class OrderInfo {
             case 'delivered':
                 return 'fa-check-circle';
             case 'cancelled':
+            case 'payment_failed':
                 return 'fa-times-circle';
+            case 'refunded':
+                return 'fa-undo';
             default:
                 return 'fa-circle';
         }
@@ -928,18 +982,5 @@ export class OrderInfo {
             console.error('Lỗi khi hủy đơn hàng:', error);
             showToast('Có lỗi xảy ra khi hủy đơn hàng', 'error');
         }
-    }
-
-    /**
-     * Format số tiền thành định dạng tiền tệ
-     * @param {number} amount Số tiền
-     * @returns {string} Chuỗi tiền đã định dạng
-     */
-    formatCurrency(amount) {
-        return new Intl.NumberFormat('vi-VN', {
-            style: 'currency',
-            currency: 'VND',
-            maximumFractionDigits: 0
-        }).format(amount);
     }
 }
