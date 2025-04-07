@@ -8,34 +8,47 @@ const API_URL = {
     REMOVE_CART_ITEM: 'http://localhost:8080/api/cart/remove'
 }
 
-const headers = {
+const HEADERS = {
     "Accept": "application/json",
     "Content-Type": "application/json",
+    "Authorization": `Bearer ${localStorage.getItem(STORAGE_KEYS.TOKEN)}`,
 }
 
 export class CartService {
     async getCart() {
         try {
             const userId = JSON.parse(localStorage.getItem(STORAGE_KEYS.USER)).id;
+            const token = localStorage.getItem(STORAGE_KEYS.TOKEN);
             const response = await fetch(API_URL.CART + `?userId=${userId}`, {
-                headers: headers
+                method: 'GET',
+                credentials: 'include', 
+                headers: HEADERS,
             });
 
+            console.log('Response status:', response.status);
+
             if (!response.ok) {
+                console.error('Error fetching cart:', response.status, response.statusText);
+                const errorText = await response.text();
+                console.error('Error response:', errorText);
+
                 return {
                     success: false,
-                    message: 'Lấy giỏ hàng thất bại'
-                }
+                    message: `Lấy giỏ hàng thất bại: ${response.status} ${response.statusText}`
+                };
             }
 
             const data = await response.json();
+            console.log('Cart data received:', data);
+
             return {
                 success: true,
                 data: data
-            }
+            };
         } catch (error) {
             console.error('Lỗi khi tải giỏ hàng:', error);
             return {
+                success: false,
                 items: [],
                 total: 0
             };
@@ -44,13 +57,14 @@ export class CartService {
 
     async saveCart(userId, cart) {
         try {
+            const token = localStorage.getItem(STORAGE_KEYS.TOKEN);
             const response = await fetch(API_URL.SAVE_CART, {
+                credentials: 'include',
                 method: 'POST',
-                headers: headers,
-                body: JSON.stringify({ 
-                    userId: userId, 
-                    cartItems: cart 
-                 })
+                headers: HEADERS,
+                body: JSON.stringify({
+                    cartItems: cart
+                })
             });
             if (!response.ok) {
                 return {
@@ -72,8 +86,8 @@ export class CartService {
         try {
             const response = await fetch(API_URL.ADD_TO_CART, {
                 method: 'POST',
-                headers: headers,
-                body: JSON.stringify({ productId, quantity, userId })
+                headers: HEADERS,
+                body: JSON.stringify({ productId, quantity})
             });
             const data = await response.json();
             return data;
@@ -87,10 +101,10 @@ export class CartService {
         try {
             const response = await fetch(API_URL.UPDATE_CART_ITEM, {
                 method: 'POST',
-                headers: headers,
+                headers: HEADERS,
                 body: JSON.stringify({ cartItemId, quantity })
             });
-            
+
             if (!response.ok) {
                 return {
                     success: false,
@@ -111,7 +125,7 @@ export class CartService {
         try {
             const response = await fetch(API_URL.REMOVE_CART_ITEM, {
                 method: 'POST',
-                headers: headers,
+                headers: HEADERS,
                 body: itemId
             });
             if (!response.ok) {

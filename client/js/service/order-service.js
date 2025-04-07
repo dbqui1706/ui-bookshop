@@ -9,6 +9,12 @@ const API_URL = {
     GET_PAYMENT_METHODS: 'http://localhost:8080/api/payment-methods',
 }
 
+const HEADERS = {
+    "Accept": "application/json",
+    "Content-Type": "application/json",
+    "Authorization": `Bearer ${localStorage.getItem(STORAGE_KEYS.TOKEN)}`,
+}
+
 export class OrderService {
     /**
      * Lấy danh sách đơn hàng theo trạng thái
@@ -330,9 +336,7 @@ export class OrderService {
             const url = `http://localhost:8080/api/orders`;
             const response = await fetch(url, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
+                headers: HEADERS,
                 body: JSON.stringify(orderData)
             });
             
@@ -362,133 +366,267 @@ export class OrderService {
     }
     
     /**
-     * Lấy chi tiết đơn hàng
-     * @param {string} orderId ID của đơn hàng
-     * @returns {Object} Kết quả và dữ liệu chi tiết đơn hàng
+     * Lấy danh sách đơn hàng với các tham số lọc
+     * @param {string} status Trạng thái đơn hàng (all hoặc specific status)
+     * @param {number} page Số trang hiện tại
+     * @param {number} pageSize Số lượng đơn hàng mỗi trang
+     * @param {string} searchTerm Từ khóa tìm kiếm
+     * @param {string} sortBy Trường sắp xếp (newest, oldest, highest, lowest)
+     * @returns {Promise} Promise chứa kết quả
      */
-    async getOrderDetail(orderId) {
+    async getOrders(status, page, pageSize, searchTerm, sortBy = 'newest') {
         try {
-            const token = localStorage.getItem(STORAGE_KEYS.TOKEN);
+            // Xây dựng URL với các tham số
+            let url = `${API_URL.GET_ORDERS}?page=${page}&limit=${pageSize}`;
             
-            if (!token) {
-                return {
-                    success: false,
-                    message: 'Bạn chưa đăng nhập'
-                };
+            // Thêm tham số status nếu khác 'all'
+            if (status && status !== 'all') {
+                url += `&status=${status}`;
             }
             
-            // Trong thực tế, URL có thể được thêm từ API_URL.GET_ORDER_DETAIL
-            const url = `http://localhost:8080/api/orders/${orderId}`;
+            // Thêm tham số tìm kiếm nếu có
+            if (searchTerm) {
+                url += `&search=${searchTerm}`;
+            }
+            
+            // Thêm tham số sắp xếp
+            if (sortBy) {
+                url += `&sortBy=${sortBy}`;
+            }
             
             const response = await fetch(url, {
                 method: 'GET',
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json'
-                }
+                headers: HEADERS,
+                credentials: 'include' // Để gửi cookie nếu cần xác thực
             });
             
-            // Xử lý lỗi HTTP
-            if (!response.ok) {
-                if (response.status === 401) {
-                    // Token hết hạn hoặc không hợp lệ
-                    localStorage.removeItem(STORAGE_KEYS.TOKEN);
-                    localStorage.removeItem(STORAGE_KEYS.USER);
-                    
-                    return {
-                        success: false,
-                        message: 'Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.',
-                        unauthorized: true
-                    };
-                }
-                
-                if (response.status === 404) {
-                    return {
-                        success: false,
-                        message: 'Không tìm thấy đơn hàng'
-                    };
-                }
-                
-                const errorData = await response.json();
+            const data = await response.json();
+            
+            if (response.ok) {
+                // Định dạng lại dữ liệu phù hợp với frontend
+                return this.formatOrderResponse(data);
+            } else {
                 return {
                     success: false,
-                    message: errorData.message || 'Không thể tải chi tiết đơn hàng'
+                    message: data.message || 'Không thể tải danh sách đơn hàng'
                 };
             }
-            
-            // Mô phỏng dữ liệu trả về từ API
-            // Trong thực tế, dữ liệu này sẽ được trả về từ server
-            const orders = this.getMockOrders('all', '');
-            const order = orders.find(o => o.id === orderId);
-            
-            if (!order) {
-                return {
-                    success: false,
-                    message: 'Không tìm thấy đơn hàng'
-                };
-            }
-            
-            // Thêm thông tin chi tiết đơn hàng
-            const orderDetail = {
-                ...order,
-                shippingAddress: {
-                    fullName: "Quý Đặng",
-                    phone: "0975688272",
-                    address: "123 Đường ABC, Phường XYZ, Quận 1, TP. Hồ Chí Minh"
-                },
-                paymentMethod: "COD (Thanh toán khi nhận hàng)",
-                shippingMethod: "Giao hàng tiêu chuẩn",
-                subtotal: order.totalAmount - 30000, // Giả định phí vận chuyển là 30,000đ
-                shippingFee: 30000,
-                discount: 0,
-                timeline: [
-                    {
-                        time: "2025-02-15T08:30:00",
-                        status: "pending",
-                        description: "Đơn hàng đã được tạo"
-                    },
-                    {
-                        time: "2025-02-15T09:15:00",
-                        status: "processing",
-                        description: "Đơn hàng đang được xử lý"
-                    },
-                    {
-                        time: "2025-02-16T14:20:00",
-                        status: "shipping",
-                        description: "Đơn hàng đang được vận chuyển"
-                    }
-                ]
-            };
-            
-            // Nếu đơn đã giao, thêm thông tin giao hàng
-            if (order.status === 'delivered') {
-                orderDetail.timeline.push({
-                    time: "2025-02-18T10:45:00",
-                    status: "delivered",
-                    description: "Đơn hàng đã được giao thành công"
-                });
-                orderDetail.deliveredDate = "2025-02-18";
-            }
-            
-            // Nếu đơn đã hủy, thêm thông tin hủy
-            if (order.status === 'cancelled') {
-                orderDetail.timeline.push({
-                    time: "2025-02-16T11:30:00",
-                    status: "cancelled",
-                    description: "Đơn hàng đã bị hủy theo yêu cầu của khách hàng"
-                });
-                orderDetail.cancelReason = "Khách hàng yêu cầu hủy";
-            }
-            
-            return {
-                success: true,
-                order: orderDetail
-            };
         } catch (error) {
-            console.error('Lỗi khi lấy chi tiết đơn hàng:', error);
+            console.error('Error in getOrders:', error);
             return {
                 success: false,
-                message: 'Có lỗi xảy ra khi tải chi tiết đơn hàng'
+                message: 'Có lỗi xảy ra khi tải danh sách đơn hàng'
+            };
+        }
+    }
+    
+    /**
+     * Định dạng lại dữ liệu đơn hàng từ API response
+     * @param {Object} data Dữ liệu từ API
+     * @returns {Object} Dữ liệu đã định dạng
+     */
+    formatOrderResponse(data) {
+        if (!data || !data.orders) {
+            return {
+                success: false,
+                message: 'Dữ liệu không hợp lệ'
+            };
+        }
+        // Map các trạng thái thành text hiển thị
+        const statusTextMap = {
+            'pending': 'Chờ xác nhận',
+            'waiting_payment': 'Chờ thanh toán',
+            'payment_failed': 'Thanh toán thất bại',
+            'processing': 'Đang xử lý',
+            'shipping': 'Đang vận chuyển',
+            'delivered': 'Đã giao',
+            'cancelled': 'Đã hủy',
+            'refunded': 'Đã hoàn tiền'
+        };
+        
+        // Chuyển đổi dữ liệu đơn hàng
+        const formattedOrders = data.orders.map(order => {
+            // Chuyển đổi order items từ API thành định dạng products cho frontend
+            const products = order.orderItems.map(item => {
+                return {
+                    id: item.id,
+                    productId: item.productId,
+                    title: item.productName,
+                    image: '/asset/images/' + item.productImage || '/asset/images/image.png',
+                    variant: item.productVariant,
+                    quantity: item.quantity,
+                    price: parseFloat(item.subtotal),
+                    unitPrice: parseFloat(item.price)
+                };
+            });
+            
+            return {
+                id: order.id,
+                orderCode: order.orderCode,
+                status: order.status,
+                statusText: statusTextMap[order.status] || order.status,
+                orderDate: order.orderDate,
+                subtotal: parseFloat(order.subtotal),
+                shippingFee: parseFloat(order.deliveryPrice),
+                discount: parseFloat(order.discountAmount),
+                totalAmount: parseFloat(order.totalAmount),
+                products: products,
+                paymentMethod: order.paymentMethod,
+                shippingInfo: {
+                    receiverName: order.receiverName,
+                    receiverPhone: order.receiverPhone,
+                    address: order.address,
+                    district: order.district,
+                    city: order.city
+                },
+                trackingNumber: order.trackingNumber,
+                shippingCarrier: order.shippingCarrier
+            };
+        });
+        
+        // Trả về đối tượng response
+        return {
+            success: true,
+            orders: formattedOrders,
+            pagination: {
+                totalOrders: data.totalOrders,
+                totalPages: data.totalPages,
+                currentPage: data.currentPage,
+                pageSize: data.pageSize
+            },
+            orderStatusCounts: data.orderStatusCounts
+        };
+    }
+    
+    /**
+     * Lấy chi tiết đơn hàng
+     * @param {string} orderId ID của đơn hàng
+     * @returns {Promise} Promise chứa kết quả
+     */
+    async getOrderDetail(orderId) {
+        try {
+            const response = await fetch(`${this.baseUrl}/${orderId}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                credentials: 'include'
+            });
+            
+            const data = await response.json();
+            
+            if (response.ok) {
+                return {
+                    success: true,
+                    order: this.formatOrderDetail(data.order)
+                };
+            } else {
+                return {
+                    success: false,
+                    message: data.message || 'Không thể tải thông tin đơn hàng'
+                };
+            }
+        } catch (error) {
+            console.error('Error in getOrderDetail:', error);
+            return {
+                success: false,
+                message: 'Có lỗi xảy ra khi tải thông tin đơn hàng'
+            };
+        }
+    }
+    
+    /**
+     * Định dạng chi tiết đơn hàng
+     * @param {Object} orderData Dữ liệu đơn hàng
+     * @returns {Object} Dữ liệu đã định dạng
+     */
+    formatOrderDetail(orderData) {
+        // Tương tự như formatOrderResponse nhưng có thêm thông tin chi tiết
+        // ...
+        
+        // Mẫu timeline đơn hàng dựa trên trạng thái
+        const timeline = this.generateTimeline(orderData);
+        
+        return {
+            // ... (thông tin cơ bản đơn hàng)
+            timeline: timeline
+        };
+    }
+    
+    /**
+     * Tạo timeline cho đơn hàng dựa trên lịch sử trạng thái
+     * @param {Object} orderData Dữ liệu đơn hàng
+     * @returns {Array} Mảng các mốc thời gian
+     */
+    generateTimeline(orderData) {
+        // Nếu có lịch sử trạng thái từ API, sử dụng nó
+        if (orderData.statusHistory && orderData.statusHistory.length > 0) {
+            return orderData.statusHistory.map(history => {
+                return {
+                    time: history.createdAt,
+                    status: history.status,
+                    description: this.getStatusDescription(history.status, history.note)
+                };
+            });
+        }
+        
+        // Nếu không có, tạo timeline dựa trên trạng thái hiện tại
+        // ...
+        
+        return [];
+    }
+    
+    /**
+     * Lấy mô tả cho trạng thái đơn hàng
+     * @param {string} status Trạng thái đơn hàng
+     * @param {string} note Ghi chú (nếu có)
+     * @returns {string} Mô tả trạng thái
+     */
+    getStatusDescription(status, note) {
+        if (note) return note;
+        
+        const descriptions = {
+            'pending': 'Đơn hàng đã được tạo, đang chờ thanh toán',
+            'waiting_payment': 'Đơn hàng đang chờ thanh toán',
+            'payment_failed': 'Thanh toán đơn hàng thất bại',
+            'processing': 'Đơn hàng đã được xác nhận, đang chuẩn bị hàng',
+            'shipping': 'Đơn hàng đang được vận chuyển',
+            'delivered': 'Đơn hàng đã giao thành công',
+            'cancelled': 'Đơn hàng đã bị hủy',
+            'refunded': 'Đơn hàng đã được hoàn tiền'
+        };
+        
+        return descriptions[status] || `Trạng thái: ${status}`;
+    }
+    
+    /**
+     * Hủy đơn hàng
+     * @param {string} orderId ID của đơn hàng
+     * @param {string} reason Lý do hủy đơn
+     * @returns {Promise} Promise chứa kết quả
+     */
+    async cancelOrder(orderId, reason) {
+        try {
+            const response = await fetch(`${this.baseUrl}/${orderId}/cancel`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ reason: reason }),
+                credentials: 'include'
+            });
+            
+            const data = await response.json();
+            
+            return {
+                success: response.ok,
+                message: data.message || (response.ok ? 'Hủy đơn hàng thành công' : 'Không thể hủy đơn hàng')
+            };
+        } catch (error) {
+            console.error('Error in cancelOrder:', error);
+            return {
+                success: false,
+                message: 'Có lỗi xảy ra khi hủy đơn hàng'
             };
         }
     }
@@ -496,157 +634,30 @@ export class OrderService {
     /**
      * Mua lại đơn hàng
      * @param {string} orderId ID của đơn hàng
-     * @returns {Object} Kết quả mua lại
+     * @returns {Promise} Promise chứa kết quả
      */
     async rebuyOrder(orderId) {
         try {
-            const token = localStorage.getItem(STORAGE_KEYS.TOKEN);
-            
-            if (!token) {
-                return {
-                    success: false,
-                    message: 'Bạn chưa đăng nhập'
-                };
-            }
-            
-            // Lấy thông tin đơn hàng
-            const orderResponse = await this.getOrderDetail(orderId);
-            
-            if (!orderResponse.success) {
-                return orderResponse;
-            }
-            
-            const order = orderResponse.order;
-            
-            // Thêm tất cả sản phẩm vào giỏ hàng
-            // Trong thực tế, URL có thể được thêm từ API_URL.ADD_TO_CART
-            const url = `http://localhost:8080/api/cart/add-multiple`;
-            
-            const cartItems = order.products.map(product => ({
-                productId: product.id,
-                quantity: product.quantity,
-                variant: product.variant
-            }));
-            
-            const response = await fetch(url, {
+            const response = await fetch(`${this.baseUrl}/${orderId}/rebuy`, {
                 method: 'POST',
                 headers: {
-                    'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ items: cartItems })
+                credentials: 'include'
             });
             
-            // Xử lý lỗi HTTP
-            if (!response.ok) {
-                if (response.status === 401) {
-                    // Token hết hạn hoặc không hợp lệ
-                    localStorage.removeItem(STORAGE_KEYS.TOKEN);
-                    localStorage.removeItem(STORAGE_KEYS.USER);
-                    
-                    return {
-                        success: false,
-                        message: 'Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.',
-                        unauthorized: true
-                    };
-                }
-                
-                const errorData = await response.json();
-                return {
-                    success: false,
-                    message: errorData.message || 'Không thể thêm sản phẩm vào giỏ hàng'
-                };
-            }
+            const data = await response.json();
             
-            // Mô phỏng dữ liệu trả về từ API
             return {
-                success: true,
-                message: 'Đã thêm tất cả sản phẩm vào giỏ hàng',
-                redirectToCart: true
+                success: response.ok,
+                message: data.message || (response.ok ? 'Đã thêm sản phẩm vào giỏ hàng' : 'Không thể mua lại đơn hàng'),
+                redirectToCart: response.ok
             };
         } catch (error) {
-            console.error('Lỗi khi mua lại đơn hàng:', error);
+            console.error('Error in rebuyOrder:', error);
             return {
                 success: false,
                 message: 'Có lỗi xảy ra khi mua lại đơn hàng'
-            };
-        }
-    }
-    
-    /**
-     * Hủy đơn hàng
-     * @param {string} orderId ID của đơn hàng
-     * @param {string} reason Lý do hủy
-     * @returns {Object} Kết quả hủy đơn hàng
-     */
-    async cancelOrder(orderId, reason) {
-        try {
-            const token = localStorage.getItem(STORAGE_KEYS.TOKEN);
-            
-            if (!token) {
-                return {
-                    success: false,
-                    message: 'Bạn chưa đăng nhập'
-                };
-            }
-            
-            // Trong thực tế, URL có thể được thêm từ API_URL.CANCEL_ORDER
-            const url = `http://localhost:8080/api/orders/${orderId}/cancel`;
-            
-            const response = await fetch(url, {
-                method: 'PUT',
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ reason })
-            });
-            
-            // Xử lý lỗi HTTP
-            if (!response.ok) {
-                if (response.status === 401) {
-                    // Token hết hạn hoặc không hợp lệ
-                    localStorage.removeItem(STORAGE_KEYS.TOKEN);
-                    localStorage.removeItem(STORAGE_KEYS.USER);
-                    
-                    return {
-                        success: false,
-                        message: 'Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.',
-                        unauthorized: true
-                    };
-                }
-                
-                if (response.status === 404) {
-                    return {
-                        success: false,
-                        message: 'Không tìm thấy đơn hàng'
-                    };
-                }
-                
-                if (response.status === 400) {
-                    return {
-                        success: false,
-                        message: 'Không thể hủy đơn hàng này'
-                    };
-                }
-                
-                const errorData = await response.json();
-                return {
-                    success: false,
-                    message: errorData.message || 'Không thể hủy đơn hàng'
-                };
-            }
-            
-            // Mô phỏng dữ liệu trả về từ API
-            return {
-                success: true,
-                message: 'Hủy đơn hàng thành công'
-            };
-        } catch (error) {
-            console.error('Lỗi khi hủy đơn hàng:', error);
-            return {
-                success: false,
-                message: 'Có lỗi xảy ra khi hủy đơn hàng'
             };
         }
     }

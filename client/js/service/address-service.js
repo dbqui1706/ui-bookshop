@@ -7,6 +7,13 @@ const API_BASE_URL = {
     DELETE_USER_ADDRESS: 'http://localhost:8080/api/address/delete',
     ADD_USER_ADDRESS: 'http://localhost:8080/api/address/add',
 }
+
+const HEADERS = {
+    "Accept": "application/json",
+    "Content-Type": "application/json",
+    "Authorization": `Bearer ${localStorage.getItem(STORAGE_KEYS.TOKEN)}`,
+}
+
 export class AddressService {
     constructor() {
         this.apiBaseUrl = 'https://provinces.open-api.vn/api';
@@ -192,7 +199,10 @@ export class AddressService {
 
     async getAddressByUserId(userId) {
         try {
-            const response = await fetch(`${API_BASE_URL.GET_USER_ADDRESS}?userId=${userId}`);
+            const response = await fetch(`${API_BASE_URL.GET_USER_ADDRESS}`, {
+                method: 'GET',
+                headers: HEADERS,
+            });
             if (!response.ok) {
                 return {
                     success: false,
