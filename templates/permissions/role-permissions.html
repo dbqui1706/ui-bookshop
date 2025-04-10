@@ -1,0 +1,156 @@
+<div class="mb-4">
+    <h4 class="mb-3">Gán quyền cho vai trò</h4>
+    <p>Chọn vai trò và gán các quyền tương ứng.</p>
+
+    <div class="row">
+        <div class="col-md-4 mb-3">
+            <label for="selectRole" class="form-label">Chọn vai trò</label>
+            <select class="form-select" id="selectRole">
+                <option value="" selected disabled>-- Chọn vai trò --</option>
+                <!-- Dữ liệu sẽ được thêm bằng JavaScript -->
+            </select>
+        </div>
+    </div>
+</div>
+
+<div id="permissionsList" class="d-none">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5 class="mb-0">Danh sách quyền</h5>
+        <div>
+            <button id="btnSelectAllPermissions" class="btn btn-outline-primary btn-sm me-2">
+                <i class="bi bi-check-all me-1"></i>Chọn tất cả
+            </button>
+            <button id="btnDeselectAllPermissions" class="btn btn-outline-secondary btn-sm">
+                <i class="bi bi-x-lg me-1"></i>Bỏ chọn tất cả
+            </button>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-md-4">
+            <div class="input-group">
+                <span class="input-group-text"><i class="bi bi-search"></i></span>
+                <input type="text" class="form-control" id="searchPermissions" placeholder="Tìm kiếm quyền...">
+            </div>
+        </div>
+    </div>
+
+    <div class="accordion" id="permissionsAccordion">
+        <!-- Module User -->
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="headingUser">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseUser" aria-expanded="true" aria-controls="collapseUser">
+                    <i class="bi bi-person me-2"></i>Người dùng
+                    <span class="badge bg-primary rounded-pill ms-2">0</span>
+                </button>
+            </h2>
+            <div id="collapseUser" class="accordion-collapse collapse show" aria-labelledby="headingUser" data-bs-parent="#permissionsAccordion">
+                <div class="accordion-body">
+                    <div class="permission-group" data-module="user">
+                        <!-- Quyền sẽ được thêm bằng JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Module Product -->
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="headingProduct">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseProduct" aria-expanded="false" aria-controls="collapseProduct">
+                    <i class="bi bi-box-seam me-2"></i>Sản phẩm
+                    <span class="badge bg-primary rounded-pill ms-2">0</span>
+                </button>
+            </h2>
+            <div id="collapseProduct" class="accordion-collapse collapse" aria-labelledby="headingProduct" data-bs-parent="#permissionsAccordion">
+                <div class="accordion-body">
+                    <div class="permission-group" data-module="product">
+                        <!-- Quyền sẽ được thêm bằng JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Các module khác tương tự -->
+        <!-- Module Order -->
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="headingOrder">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOrder" aria-expanded="false" aria-controls="collapseOrder">
+                    <i class="bi bi-cart3 me-2"></i>Đơn hàng
+                    <span class="badge bg-primary rounded-pill ms-2">0</span>
+                </button>
+            </h2>
+            <div id="collapseOrder" class="accordion-collapse collapse" aria-labelledby="headingOrder" data-bs-parent="#permissionsAccordion">
+                <div class="accordion-body">
+                    <div class="permission-group" data-module="order">
+                        <!-- Quyền sẽ được thêm bằng JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Module Shipping -->
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="headingShipping">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseShipping" aria-expanded="false" aria-controls="collapseShipping">
+                    <i class="bi bi-truck me-2"></i>Vận chuyển
+                    <span class="badge bg-primary rounded-pill ms-2">0</span>
+                </button>
+            </h2>
+            <div id="collapseShipping" class="accordion-collapse collapse" aria-labelledby="headingShipping" data-bs-parent="#permissionsAccordion">
+                <div class="accordion-body">
+                    <div class="permission-group" data-module="shipping">
+                        <!-- Quyền sẽ được thêm bằng JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Module Report -->
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="headingReport">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseReport" aria-expanded="false" aria-controls="collapseReport">
+                    <i class="bi bi-graph-up me-2"></i>Báo cáo
+                    <span class="badge bg-primary rounded-pill ms-2">0</span>
+                </button>
+            </h2>
+            <div id="collapseReport" class="accordion-collapse collapse" aria-labelledby="headingReport" data-bs-parent="#permissionsAccordion">
+                <div class="accordion-body">
+                    <div class="permission-group" data-module="report">
+                        <!-- Quyền sẽ được thêm bằng JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Module System -->
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="headingSystem">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSystem" aria-expanded="false" aria-controls="collapseSystem">
+                    <i class="bi bi-gear me-2"></i>Hệ thống
+                    <span class="badge bg-primary rounded-pill ms-2">0</span>
+                </button>
+            </h2>
+            <div id="collapseSystem" class="accordion-collapse collapse" aria-labelledby="headingSystem" data-bs-parent="#permissionsAccordion">
+                <div class="accordion-body">
+                    <div class="permission-group" data-module="system">
+                        <!-- Quyền sẽ được thêm bằng JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="text-end mt-4">
+        <button id="btnSaveRolePermissions" class="btn btn-primary">
+            <i class="bi bi-save me-2"></i>Lưu thay đổi
+        </button>
+    </div>
+</div>
+
+<div id="roleSelectPrompt" class="text-center p-5">
+    <div class="p-4 border rounded bg-light">
+        <i class="bi bi-arrow-up-circle display-4 text-muted"></i>
+        <h5 class="mt-3">Vui lòng chọn vai trò từ danh sách</h5>
+        <p class="text-muted">Danh sách quyền sẽ được hiển thị sau khi bạn chọn vai trò.</p>
+    </div>
+</div>

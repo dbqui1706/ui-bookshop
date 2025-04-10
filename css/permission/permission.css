@@ -1,0 +1,100 @@
+/* CSS cho phần phân quyền */
+
+/* Styles cho tab */
+.nav-tabs .nav-link {
+    color: #555;
+    border: 1px solid transparent;
+    border-top-left-radius: .25rem;
+    border-top-right-radius: .25rem;
+    padding: 0.5rem 1rem;
+}
+
+.nav-tabs .nav-link.active {
+    color: #0d6efd;
+    background-color: #fff;
+    border-color: #dee2e6 #dee2e6 #fff;
+    font-weight: 500;
+}
+
+/* Styles cho checkbox của permissions */
+.permission-item {
+    margin-bottom: 0.75rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.25rem;
+    transition: background-color 0.2s;
+}
+
+.permission-item:hover {
+    background-color: rgba(13, 110, 253, 0.05);
+}
+
+.permission-item .form-check-input:checked ~ .form-check-label {
+    font-weight: 500;
+    color: #0d6efd;
+}
+
+.permission-description {
+    font-size: 0.8rem;
+    color: #6c757d;
+    margin-top: 0.25rem;
+    margin-left: 1.8rem;
+}
+
+/* Styles cho accordion */
+.accordion-button:not(.collapsed) {
+    background-color: rgba(13, 110, 253, 0.1);
+    color: #0d6efd;
+}
+
+.accordion-button:focus {
+    box-shadow: none;
+    border-color: rgba(13, 110, 253, 0.25);
+}
+
+/* Styles cho search */
+#searchPermissions {
+    border-top-right-radius: 0.25rem;
+    border-bottom-right-radius: 0.25rem;
+}
+
+/* Highlight for search results */
+.highlight-permission {
+    background-color: rgba(255, 193, 7, 0.2);
+}
+
+/* Styles cho table */
+#rolesTable th, #permissionsTable th, #usersTable th {
+    white-space: nowrap;
+}
+
+/* Styles cho role badges trong user-roles */
+.role-badge {
+    display: inline-block;
+    padding: 0.25em 0.6em;
+    font-size: 0.75em;
+    font-weight: 500;
+    line-height: 1;
+    color: #fff;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: 0.25rem;
+    margin-right: 0.25rem;
+    margin-bottom: 0.25rem;
+}
+
+.role-badge-admin {
+    background-color: #dc3545;
+}
+
+.role-badge-customer {
+    background-color: #0d6efd;
+}
+
+.role-badge-employee {
+    background-color: #198754;
+}
+
+.role-badge-shipping {
+    background-color: #6610f2;
+}

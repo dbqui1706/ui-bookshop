@@ -1,0 +1,139 @@
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h4 class="mb-0">Quản lý quyền hạn</h4>
+    <button id="btnAddPermission" class="btn btn-primary">
+        <i class="bi bi-plus-circle me-2"></i>Thêm quyền mới
+    </button>
+</div>
+
+<ul class="nav nav-pills mb-3" id="permissionModuleTabs" role="tablist">
+    <li class="nav-item" role="presentation">
+        <button class="nav-link active" id="all-module-tab" data-bs-toggle="pill" data-bs-target="#all-module" type="button" role="tab" aria-controls="all-module" aria-selected="true">
+            Tất cả
+        </button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link" id="user-module-tab" data-bs-toggle="pill" data-bs-target="#user-module" type="button" role="tab" aria-controls="user-module" aria-selected="false">
+            Người dùng
+        </button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link" id="product-module-tab" data-bs-toggle="pill" data-bs-target="#product-module" type="button" role="tab" aria-controls="product-module" aria-selected="false">
+            Sản phẩm
+        </button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link" id="order-module-tab" data-bs-toggle="pill" data-bs-target="#order-module" type="button" role="tab" aria-controls="order-module" aria-selected="false">
+            Đơn hàng
+        </button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link" id="shipping-module-tab" data-bs-toggle="pill" data-bs-target="#shipping-module" type="button" role="tab" aria-controls="shipping-module" aria-selected="false">
+            Vận chuyển
+        </button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link" id="report-module-tab" data-bs-toggle="pill" data-bs-target="#report-module" type="button" role="tab" aria-controls="report-module" aria-selected="false">
+            Báo cáo
+        </button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link" id="system-module-tab" data-bs-toggle="pill" data-bs-target="#system-module" type="button" role="tab" aria-controls="system-module" aria-selected="false">
+            Hệ thống
+        </button>
+    </li>
+</ul>
+
+<div class="tab-content" id="permissionModuleTabContent">
+    <div class="tab-pane fade show active" id="all-module" role="tabpanel" aria-labelledby="all-module-tab">
+        <div class="table-responsive">
+            <table id="permissionsTable" class="table table-striped table-hover" style="width: 100%">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Tên quyền</th>
+                        <th>Mã quyền</th>
+                        <th>Module</th>
+                        <th>Mô tả</th>
+                        <th>Loại quyền</th>
+                        <th>Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Dữ liệu sẽ được thêm bằng JavaScript -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <!-- Các tab module khác sẽ được tạo động bằng JavaScript -->
+</div>
+
+<!-- Modal Thêm/Sửa Quyền -->
+<div class="modal fade" id="permissionModal" tabindex="-1" aria-labelledby="permissionModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="permissionModalLabel">Thêm quyền mới</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="permissionForm">
+                    <input type="hidden" id="permissionId">
+                    <div class="mb-3">
+                        <label for="permissionName" class="form-label">Tên quyền <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="permissionName" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="permissionCode" class="form-label">Mã quyền <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="permissionCode" placeholder="module.action" required>
+                        <div class="form-text">Ví dụ: user.create, product.edit</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="permissionModule" class="form-label">Module <span class="text-danger">*</span></label>
+                        <select class="form-select" id="permissionModule" required>
+                            <option value="">Chọn module</option>
+                            <option value="user">Người dùng</option>
+                            <option value="product">Sản phẩm</option>
+                            <option value="order">Đơn hàng</option>
+                            <option value="shipping">Vận chuyển</option>
+                            <option value="report">Báo cáo</option>
+                            <option value="system">Hệ thống</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="permissionDescription" class="form-label">Mô tả</label>
+                        <textarea class="form-control" id="permissionDescription" rows="3"></textarea>
+                    </div>
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" class="form-check-input" id="isSystemPermission">
+                        <label class="form-check-label" for="isSystemPermission">Quyền hệ thống</label>
+                        <div class="form-text">Quyền hệ thống không thể bị xóa.</div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-primary" id="btnSavePermission">Lưu</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Xác nhận xóa -->
+<div class="modal fade" id="deletePermissionModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Xác nhận xóa</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Bạn có chắc chắn muốn xóa quyền <span id="deletePermissionName" class="fw-bold"></span>?</p>
+                <p class="text-danger">Lưu ý: Quyền hệ thống không thể bị xóa.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-danger" id="btnConfirmDeletePermission">Xóa</button>
+            </div>
+        </div>
+    </div>
+</div>

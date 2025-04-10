@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Báo Cáo Thống Kê - Hệ Thống Quản Lý</title>
+
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" />
+
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.bootstrap5.min.css">
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Thêm Select2 CSS và JS -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/inventory/inventory.css" />
+</head>
+
+<body>
+    <div class="wrapper">
+        <!-- Sidebar -->
+        <nav id="sidebar">
+            <div class="sidebar-header">
+                <h5 class="mb-0 d-flex align-items-center">
+                    <i class="bi bi-boxes me-2 text-primary"></i>
+                    <span>Hệ Thống Quản Lý</span>
+                </h5>
+            </div>
+
+            <ul class="components">
+                <li>
+                    <a href="index.html" class="">
+                        <i class="bi bi-speedometer2"></i>
+                        <span>Trang Chủ</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#productSubmenu" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+                        <i class="bi bi-box-seam"></i>
+                        <span>Sản Phẩm</span>
+                    </a>
+                    <ul class="collapse submenu" id="productSubmenu">
+                        <li>
+                            <a href="product-list.html" class="">
+                                Danh Sách Sản Phẩm
+                            </a>
+                        </li>
+                        <li>
+                            <a href="product-categories.html" class="">
+                                Danh Mục Sản Phẩm
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#inventorySubmenu" data-bs-toggle="collapse" aria-expanded="true"
+                        class="dropdown-toggle active">
+                        <i class="bi bi-stack"></i>
+                        <span>Quản Lý Kho</span>
+                    </a>
+                    <ul class="collapse show submenu" id="inventorySubmenu">
+                        <li>
+                            <a href="inventory-dashboard.html" class="">
+                                Tổng Quan Tồn Kho
+                            </a>
+                        </li>
+                        <li>
+                            <a href="inventory-import.html" class="">
+                                Nhập Kho
+                            </a>
+                        </li>
+                        <li>
+                            <a href="inventory-export.html" class="">
+                                Xuất Kho
+                            </a>
+                        </li>
+                        <li>
+                            <a href="inventory-history.html" class="">
+                                Lịch Sử Kho
+                            </a>
+                        </li>
+                        <li>
+                            <a href="inventory-reports.html" class="active">
+                                Báo Cáo Thống Kê
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#orderSubmenu" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+                        <i class="bi bi-cart3"></i>
+                        <span>Đơn Hàng</span>
+                        <span class="badge bg-danger rounded-pill">5</span>
+                    </a>
+                    <ul class="collapse submenu" id="orderSubmenu">
+                        <li>
+                            <a href="#">Tất Cả Đơn Hàng</a>
+                        </li>
+                        <li>
+                            <a href="#">Đơn Hàng Mới</a>
+                        </li>
+                        <li>
+                            <a href="#">Đơn Đang Xử Lý</a>
+                        </li>
+                        <li>
+                            <a href="#">Đơn Đã Hoàn Thành</a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#customerSubmenu" data-bs-toggle="collapse" aria-expanded="false" class="">
+                        <i class="bi bi-people"></i>
+                        <span>Khách Hàng</span>
+                    </a>
+                    <ul class="collapse submenu" id="customerSubmenu">
+                        <li>
+                            <a href="#" class="">
+                                Danh Sách Khách Hàng
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="">
+                                Phản Hồi Khách Hàng
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <div class="sidebar-heading">Báo Cáo</div>
+                <li>
+                    <a href="#">
+                        <i class="bi bi-graph-up"></i>
+                        <span>Báo Cáo Doanh Thu</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <i class="bi bi-bar-chart"></i>
+                        <span>Thống Kê Bán Hàng</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <i class="bi bi-pie-chart"></i>
+                        <span>Phân Tích Xu Hướng</span>
+                    </a>
+                </li>
+
+                <div class="sidebar-heading">Hệ Thống</div>
+                <li>
+                    <a href="#">
+                        <i class="bi bi-gear"></i>
+                        <span>Thiết Lập Hệ Thống</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <i class="bi bi-person-badge"></i>
+                        <span>Quản Lý Người Dùng</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <i class="bi bi-shield-lock"></i>
+                        <span>Phân Quyền</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+        <!-- Page Content -->
+        <div id="content">
+            <!-- Navbar -->
+            <nav class="navbar navbar-expand-lg mb-4">
+                <div class="container-fluid">
+                    <button type="button" id="sidebarCollapse" class="btn btn-primary">
+                        <i class="bi bi-list"></i>
+                    </button>
+                    <button class="btn btn-dark d-inline-block d-lg-none ms-auto" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                        <i class="bi bi-three-dots"></i>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="nav navbar-nav ms-auto">
+                            <li class="nav-item">
+                                <a class="nav-link" href="#" title="Thông báo">
+                                    <i class="bi bi-bell position-relative">
+                                        <span
+                                            class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle">
+                                            <span class="visually-hidden">Thông báo mới</span>
+                                        </span>
+                                    </i>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#" title="Tin nhắn">
+                                    <i class="bi bi-envelope"></i>
+                                </a>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle d-flex align-items-center" href="#"
+                                    id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <img src="https://via.placeholder.com/30" class="rounded-circle me-2" alt="Admin" />
+                                    <span>Admin</span>
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                    <li>
+                                        <a class="dropdown-item" href="#"><i class="bi bi-person me-2"></i>Hồ sơ</a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" href="#"><i class="bi bi-gear me-2"></i>Cài đặt</a>
+                                    </li>
+                                    <li>
+                                        <hr class="dropdown-divider" />
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" href="#"><i class="bi bi-box-arrow-right me-2"></i>Đăng
+                                            xuất</a>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+
+            <!-- Dashboard Header -->
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="bg-primary text-white rounded p-3">
+                        <div class="row align-items-center">
+                            <div class="col-md-6">
+                                <h2>Báo cáo thống kê tồn kho</h2>
+                            </div>
+                            <div class="col-md-6 text-md-end">
+                                <div class="btn-group" role="group">
+                                    <button type="button" class="btn btn-light" id="reportDay">Ngày</button>
+                                    <button type="button" class="btn btn-outline-light" id="reportWeek">Tuần</button>
+                                    <button type="button" class="btn btn-outline-light" id="reportMonth">Tháng</button>
+                                    <button type="button" class="btn btn-outline-light" id="reportQuarter">Quý</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filter Section -->
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title mb-3">Thông số báo cáo</h5>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <div class="form-floating">
+                                                <input type="date" class="form-control" id="reportStartDate">
+                                                <label for="reportStartDate">Từ ngày</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="form-floating">
+                                                <input type="date" class="form-control" id="reportEndDate">
+                                                <label for="reportEndDate">Đến ngày</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-floating">
+                                        <select class="form-select" id="reportType">
+                                            <option value="inventory_value">Giá trị tồn kho</option>
+                                            <option value="inventory_turnover">Vòng quay tồn kho</option>
+                                            <option value="inventory_days">Số ngày tồn kho</option>
+                                            <option value="stock_movement">Biến động tồn kho</option>
+                                            <option value="out_of_stock">Tình trạng hết hàng</option>
+                                        </select>
+                                        <label for="reportType">Loại báo cáo</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <button class="btn btn-primary h-100 w-100" id="generateReport">
+                                        <i class="bi bi-bar-chart"></i> Tạo báo cáo
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Reports Stats Cards -->
+            <div class="row mb-4">
+                <div class="col-md-3">
+                    <div class="stat-card p-3">
+                        <div class="card-icon bg-primary-subtle text-primary">
+                            <i class="bi bi-currency-dollar"></i>
+                        </div>
+                        <h3 class="card-value" id="totalInventoryValue">2.34 tỷ</h3>
+                        <p class="card-title">Tổng giá trị tồn kho</p>
+                        <div class="trend up">
+                            <i class="bi bi-arrow-up-short"></i> 3.2% so với kỳ trước
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stat-card p-3">
+                        <div class="card-icon bg-success-subtle text-success">
+                            <i class="bi bi-arrow-repeat"></i>
+                        </div>
+                        <h3 class="card-value" id="inventoryTurnover">4.5</h3>
+                        <p class="card-title">Vòng quay tồn kho</p>
+                        <div class="trend up">
+                            <i class="bi bi-arrow-up-short"></i> 0.8 lần so với kỳ trước
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stat-card p-3">
+                        <div class="card-icon bg-warning-subtle text-warning">
+                            <i class="bi bi-calendar3"></i>
+                        </div>
+                        <h3 class="card-value" id="inventoryDays">21</h3>
+                        <p class="card-title">Số ngày tồn kho</p>
+                        <div class="trend down">
+                            <i class="bi bi-arrow-down-short"></i> 3 ngày so với kỳ trước
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stat-card p-3">
+                        <div class="card-icon bg-danger-subtle text-danger">
+                            <i class="bi bi-exclamation-triangle"></i>
+                        </div>
+                        <h3 class="card-value" id="stockOutRate">2.5%</h3>
+                        <p class="card-title">Tỷ lệ hết hàng</p>
+                        <div class="trend down">
+                            <i class="bi bi-arrow-down-short"></i> 1.2% so với kỳ trước
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Report Chart -->
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="chart-card">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h5 class="mb-0">Biểu đồ giá trị tồn kho</h5>
+                            <div class="btn-group btn-group-sm">
+                                <button class="btn btn-outline-primary active" data-period="day">Ngày</button>
+                                <button class="btn btn-outline-primary" data-period="week">Tuần</button>
+                                <button class="btn btn-outline-primary" data-period="month">Tháng</button>
+                                <button class="btn btn-outline-primary" data-period="quarter">Quý</button>
+                            </div>
+                        </div>
+                        <div>
+                            <canvas id="mainReportChart" height="300"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Inventory Value by Category Chart -->
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <div class="chart-card">
+                        <h5 class="mb-3">Giá trị tồn kho theo danh mục</h5>
+                        <div>
+                            <canvas id="inventoryValueByCategory" height="300"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="chart-card">
+                        <h5 class="mb-3">Top 10 sản phẩm có giá trị tồn kho cao nhất</h5>
+                        <div>
+                            <canvas id="topInventoryValueProducts" height="300"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Inventory Movement & Turnover -->
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <div class="chart-card">
+                        <h5 class="mb-3">Biến động nhập/xuất kho</h5>
+                        <div>
+                            <canvas id="inventoryMovementChart" height="300"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="chart-card">
+                        <h5 class="mb-3">Vòng quay tồn kho theo danh mục</h5>
+                        <div>
+                            <canvas id="turnoverByCategoryChart" height="300"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Top Slow Moving and Fast Moving Products -->
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <ul class="nav nav-tabs" id="productMovementTabs" role="tablist">
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link active" id="slow-moving-tab" data-bs-toggle="tab"
+                                        data-bs-target="#slow-moving" type="button" role="tab" aria-controls="slow-moving"
+                                        aria-selected="true">Hàng chậm luân chuyển</button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="fast-moving-tab" data-bs-toggle="tab"
+                                        data-bs-target="#fast-moving" type="button" role="tab" aria-controls="fast-moving"
+                                        aria-selected="false">Hàng nhanh luân chuyển</button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="stock-out-tab" data-bs-toggle="tab"
+                                        data-bs-target="#stock-out" type="button" role="tab" aria-controls="stock-out"
+                                        aria-selected="false">Hàng thường xuyên hết</button>
+                                </li>
+                            </ul>
+                            <div class="tab-content mt-3" id="productMovementTabContent">
+                                <div class="tab-pane fade show active" id="slow-moving" role="tabpanel"
+                                    aria-labelledby="slow-moving-tab">
+                                    <div class="table-responsive">
+                                        <table class="table table-hover align-middle">
+                                            <thead>
+                                                <tr>
+                                                    <th>Mã SP</th>
+                                                    <th>Sản phẩm</th>
+                                                    <th>Danh mục</th>
+                                                    <th>Tồn kho</th>
+                                                    <th>Số ngày tồn kho</th>
+                                                    <th>Vòng quay</th>
+                                                    <th>Giá trị tồn</th>
+                                                    <th>Đề xuất</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="slowMovingTbody">
+                                                <!-- Dữ liệu sẽ được tải bằng JavaScript -->
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="tab-pane fade" id="fast-moving" role="tabpanel"
+                                    aria-labelledby="fast-moving-tab">
+                                    <div class="table-responsive">
+                                        <table class="table table-hover align-middle">
+                                            <thead>
+                                                <tr>
+                                                    <th>Mã SP</th>
+                                                    <th>Sản phẩm</th>
+                                                    <th>Danh mục</th>
+                                                    <th>Tồn kho</th>
+                                                    <th>Số ngày tồn kho</th>
+                                                    <th>Vòng quay</th>
+                                                    <th>Xu hướng bán</th>
+                                                    <th>Đề xuất</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="fastMovingTbody">
+                                                <!-- Dữ liệu sẽ được tải bằng JavaScript -->
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="tab-pane fade" id="stock-out" role="tabpanel" aria-labelledby="stock-out-tab">
+                                    <div class="table-responsive">
+                                        <table class="table table-hover align-middle">
+                                            <thead>
+                                                <tr>
+                                                    <th>Mã SP</th>
+                                                    <th>Sản phẩm</th>
+                                                    <th>Danh mục</th>
+                                                    <th>Tồn kho</th>
+                                                    <th>Số lần hết hàng</th>
+                                                    <th>Tổng ngày hết hàng</th>
+                                                    <th>Mức dự trữ an toàn</th>
+                                                    <th>Đề xuất</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="stockOutTbody">
+                                                <!-- Dữ liệu sẽ được tải bằng JavaScript -->
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Export Reports -->
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title mb-3">Xuất báo cáo</h5>
+                            <div class="row g-3">
+                                <div class="col-md-4">
+                                    <div class="form-floating">
+                                        <select class="form-select" id="exportReportType">
+                                            <option value="inventory_value">Báo cáo giá trị tồn kho</option>
+                                            <option value="inventory_turnover">Báo cáo vòng quay tồn kho</option>
+                                            <option value="inventory_days">Báo cáo số ngày tồn kho</option>
+                                            <option value="stock_movement">Báo cáo biến động tồn kho</option>
+                                            <option value="out_of_stock">Báo cáo tình trạng hết hàng</option>
+                                            <option value="all">Tất cả báo cáo</option>
+                                        </select>
+                                        <label for="exportReportType">Loại báo cáo</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-floating">
+                                        <select class="form-select" id="exportFormat">
+                                            <option value="excel">Excel (.xlsx)</option>
+                                            <option value="pdf">PDF (.pdf)</option>
+                                            <option value="csv">CSV (.csv)</option>
+                                        </select>
+                                        <label for="exportFormat">Định dạng</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <button class="btn btn-success h-100 w-100">
+                                        <i class="bi bi-download"></i> Xuất báo cáo
+                                    </button>
+                                </div>
+                                <div class="col-md-2">
+                                    <button class="btn btn-info h-100 w-100">
+                                        <i class="bi bi-envelope"></i> Gửi email
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <footer class="bg-white text-center py-3 mt-2 rounded">
+                <p class="mb-0 text-muted">
+                    © 2025 Hệ Thống Quản Lý. Thiết kế bởi
+                    <a href="#" class="text-decoration-none">BookShopTeam</a>
+                </p>
+            </footer>
+        </div>
+    </div>
+
+    <!-- Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- DataTables JS -->
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.5.0/js/responsive.bootstrap5.min.js"></script>
+
+    <!-- Alert Sweet -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <!-- Custom JS -->
+    <script src="js/app/index.js"></script>
+    <script src="js/app/inventory/reports.js" type="module"></script>
+</body>
+
+</html>

@@ -1,6 +1,6 @@
-import { OrderInfo } from "../container/order-info.js";
+import { OrdersContainer } from "../container/orders-container.js";
 
 document.addEventListener('DOMContentLoaded', async () => {
     // Khởi tạo OrderInfo
-    const orderInfo = new OrderInfo();
+    const ordersContainer = new OrdersContainer();
 });

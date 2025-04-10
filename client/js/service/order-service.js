@@ -2,7 +2,7 @@ import { STORAGE_KEYS } from '../constants/index.js';
 
 const API_URL = {
     GET_ORDERS: 'http://localhost:8080/api/orders',
-    GET_ORDER_DETAIL: 'http://localhost:8080/api/orders?orderId=${orderId}',
+    GET_ORDER_DETAIL: 'http://localhost:8080/api/orders/detail',
     ADD_TO_CART: 'http://localhost:8080/api/cart/add-multiple',
     CANCEL_ORDER: 'http://localhost:8080/api/orders/${orderId}/cancel',
     GET_DELIVERY_METHODS: 'http://localhost:8080/api/delivery-methods',
@@ -420,6 +420,7 @@ export class OrderService {
         }
     }
     
+
     /**
      * Định dạng lại dữ liệu đơn hàng từ API response
      * @param {Object} data Dữ liệu từ API
@@ -500,16 +501,14 @@ export class OrderService {
     
     /**
      * Lấy chi tiết đơn hàng
-     * @param {string} orderId ID của đơn hàng
+     * @param {string} orderCode code của đơn hàng
      * @returns {Promise} Promise chứa kết quả
      */
-    async getOrderDetail(orderId) {
+    async getOrderDetail(orderCode) {
         try {
-            const response = await fetch(`${this.baseUrl}/${orderId}`, {
+            const response = await fetch(`${API_URL.GET_ORDER_DETAIL}?code=${orderCode}`, {
                 method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
+                headers: HEADERS,
                 credentials: 'include'
             });
             
@@ -518,7 +517,7 @@ export class OrderService {
             if (response.ok) {
                 return {
                     success: true,
-                    order: this.formatOrderDetail(data.order)
+                    data: data
                 };
             } else {
                 return {
@@ -533,24 +532,6 @@ export class OrderService {
                 message: 'Có lỗi xảy ra khi tải thông tin đơn hàng'
             };
         }
-    }
-    
-    /**
-     * Định dạng chi tiết đơn hàng
-     * @param {Object} orderData Dữ liệu đơn hàng
-     * @returns {Object} Dữ liệu đã định dạng
-     */
-    formatOrderDetail(orderData) {
-        // Tương tự như formatOrderResponse nhưng có thêm thông tin chi tiết
-        // ...
-        
-        // Mẫu timeline đơn hàng dựa trên trạng thái
-        const timeline = this.generateTimeline(orderData);
-        
-        return {
-            // ... (thông tin cơ bản đơn hàng)
-            timeline: timeline
-        };
     }
     
     /**

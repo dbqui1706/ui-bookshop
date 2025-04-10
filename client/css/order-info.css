@@ -189,7 +189,8 @@
     gap: 20px;
 }
 
-.order-id, .order-date {
+.order-id,
+.order-date {
     font-size: 14px;
     color: #666;
 }
@@ -203,42 +204,62 @@
 }
 
 .status-badge.processing {
-    background-color: #ffec99;  /* Vàng sáng nổi bật */
-    color: #e6a800;  /* Vàng đậm nổi bật */
+    background-color: #ffec99;
+    /* Vàng sáng nổi bật */
+    color: #e6a800;
+    /* Vàng đậm nổi bật */
 }
 
 .status-badge.shipping {
-    background-color: #a2d9ff;  /* Xanh dương sáng */
-    color: #006699;  /* Xanh dương đậm */
+    background-color: #a2d9ff;
+    /* Xanh dương sáng */
+    color: #006699;
+    /* Xanh dương đậm */
 }
 
 .status-badge.delivered {
-    background-color: #c8e6c9;  /* Xanh lá cây nhạt nổi bật */
-    color: #2e7d32;  /* Xanh lá cây đậm nổi bật */
+    background-color: #c8e6c9;
+    /* Xanh lá cây nhạt nổi bật */
+    color: #2e7d32;
+    /* Xanh lá cây đậm nổi bật */
 }
 
 .status-badge.cancelled {
-    background-color: #ffcccc;  /* Đỏ sáng nổi bật */
-    color: #d32f2f;  /* Đỏ đậm nổi bật */
+    background-color: #ffcccc;
+    /* Đỏ sáng nổi bật */
+    color: #d32f2f;
+    /* Đỏ đậm nổi bật */
 }
 
 .status-badge.pending {
-    background-color: #fff3e0;  /* Cam nhạt nổi bật */
-    color: #ff8f00;  /* Cam đậm nổi bật */
+    background-color: #fff3e0;
+    /* Cam nhạt nổi bật */
+    color: #ff8f00;
+    /* Cam đậm nổi bật */
 }
+
 .btn-cancel {
-    background-color: #f44336;  /* Đỏ tươi */
-    color: white;  /* Chữ màu trắng */
-    border: none;  /* Không có đường viền */
-    padding: 5px 10px;  /* Padding để tạo không gian xung quanh chữ */
-    font-size: 12px;  /* Kích thước chữ */
-    border-radius: 5px;  /* Bo tròn góc */
-    cursor: pointer;  /* Con trỏ khi hover lên button */
-    transition: background-color 0.3s ease;  /* Hiệu ứng chuyển màu khi hover */
+    background-color: #f44336;
+    /* Đỏ tươi */
+    color: white;
+    /* Chữ màu trắng */
+    border: none;
+    /* Không có đường viền */
+    padding: 5px 10px;
+    /* Padding để tạo không gian xung quanh chữ */
+    font-size: 12px;
+    /* Kích thước chữ */
+    border-radius: 5px;
+    /* Bo tròn góc */
+    cursor: pointer;
+    /* Con trỏ khi hover lên button */
+    transition: background-color 0.3s ease;
+    /* Hiệu ứng chuyển màu khi hover */
 }
 
 .btn-cancel:hover {
-    background-color: #d32f2f;  /* Đỏ đậm hơn khi hover */
+    background-color: #d32f2f;
+    /* Đỏ đậm hơn khi hover */
 }
 
 
@@ -289,7 +310,8 @@
     overflow: hidden;
 }
 
-.product-variant, .product-quantity {
+.product-variant,
+.product-quantity {
     font-size: 13px;
     color: #666;
     margin: 4px 0;
@@ -320,9 +342,9 @@
     gap: 12px;
 }
 
-.remaining-products{
+.remaining-products {
     margin-top: 20px;
-    display: block; 
+    display: block;
     width: fit-content;
     margin-left: auto;
     margin-right: auto;
@@ -334,7 +356,10 @@
     color: #fff;
 }
 
-.btn-detail, .btn-rebuy, .btn-review, .btn-track {
+.btn-detail,
+.btn-rebuy,
+.btn-review,
+.btn-track {
     padding: 6px 12px;
     font-size: 13px;
     border-radius: 4px;
@@ -370,26 +395,27 @@
     .order-body {
         flex-direction: column;
     }
-    
+
     .order-price {
         text-align: left;
         margin-top: 16px;
-        padding-left: 96px; /* Align with product details */
+        padding-left: 96px;
+        /* Align with product details */
     }
-    
+
     .order-footer {
         justify-content: flex-start;
     }
-    
+
     .nav-tabs {
         padding-bottom: 4px;
     }
-    
+
     .order-info {
         flex-direction: column;
         gap: 4px;
     }
-    
+
     .search-button {
         padding: 10px 12px;
     }

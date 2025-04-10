@@ -10,12 +10,6 @@ const API_URL = {
     FACEBOOK_LOGIN: 'http://localhost:8080/api/auth/facebook'
 }
 
-const HEADERS = {
-    "Accept": "application/json",
-    "Content-Type": "application/json",
-    "Authorization": `Bearer ${localStorage.getItem(STORAGE_KEYS.TOKEN)}`,
-}
-
 export class UserService {
     /**
      * Đăng nhập

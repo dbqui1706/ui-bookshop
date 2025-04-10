@@ -3,7 +3,7 @@ import { DialogComponent } from '../components/dialog-component.js';
 import { showToast } from '../utils/common-utils.js';
 import { formatPrice } from '../utils/formatter.js';
 
-export class OrderInfo {
+export class OrdersContainer {
     constructor() {
         this.orderService = new OrderService();
         this.currentStatus = 'all';
@@ -306,7 +306,9 @@ export class OrderInfo {
                         <img src="${product.image}" alt="${product.title}">
                     </div>
                     <div class="product-details">
-                        <h4 class="product-title">${product.title}</h4>
+                        <h4 class="product-title">
+                            <a href="/client/product.html?id=${product.id}" target="_blank" class="a-poduct-title text-decoration-none">${product.title}</a>
+                        </h4>
                         <p class="product-variant">${product.variant}</p>
                         <p class="product-quantity">Số lượng: ${product.quantity}</p>
                     </div>
@@ -334,7 +336,9 @@ export class OrderInfo {
         orderFooter.className = 'order-footer';
 
         // Luôn hiển thị nút Xem chi tiết
-        orderFooter.innerHTML = `<button class="btn-detail" data-order-id="${order.id}">Xem chi tiết</button>`;
+        orderFooter.innerHTML = `
+            <button class="btn-detail" data-order-id="${order.orderCode}">Xem chi tiết</button>
+        `;
 
         // Thêm nút Mua lại nếu đơn hàng đã giao hoặc đã hủy
         if (order.status === 'delivered' || order.status === 'cancelled') {
@@ -426,7 +430,7 @@ export class OrderInfo {
         detailButtons.forEach(button => {
             button.addEventListener('click', () => {
                 const orderId = button.getAttribute('data-order-id');
-                this.showOrderDetail(orderId);
+                window.location.href = `/client/order-detail.html?code=${orderId}`; // Chuyển đến trang chi tiết đơn hàng
             });
         });
 
@@ -467,325 +471,6 @@ export class OrderInfo {
             });
         });
     }
-
-    /**
-     * Hiển thị dialog chi tiết đơn hàng
-     * @param {string} orderId ID của đơn hàng
-     */
-    async showOrderDetail(orderId) {
-        try {
-            // Hiển thị loading dialog
-            const loadingDialog = new DialogComponent({
-                title: 'Đang tải...',
-                content: '<div class="text-center my-3"><div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div></div>',
-                closeButton: false,
-                buttons: []
-            });
-            loadingDialog.show();
-
-            // Gọi API để lấy chi tiết đơn hàng
-            const response = await this.orderService.getOrderDetail(orderId);
-
-            // Đóng loading dialog
-            loadingDialog.hide();
-
-            if (response.success) {
-                const order = response.order;
-
-                // Tạo nội dung chi tiết đơn hàng
-                let content = `
-                    <div class="order-detail">
-                        <div class="order-detail-header mb-3">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <h5 class="m-0">Thông tin đơn hàng #${order.orderCode}</h5>
-                                <span class="status-badge ${order.status}">${order.statusText}</span>
-                            </div>
-                            <div class="text-muted mt-2">Ngày đặt: ${order.orderDate}</div>
-                        </div>
-                        
-                        <div class="order-detail-section mb-3">
-                            <h6 class="section-title">Thông tin người nhận</h6>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <p><strong>Họ tên:</strong> ${order.shippingInfo.receiverName}</p>
-                                    <p><strong>Số điện thoại:</strong> ${order.shippingInfo.receiverPhone}</p>
-                                </div>
-                                <div class="col-md-6">
-                                    <p><strong>Địa chỉ:</strong> ${order.shippingInfo.address}</p>
-                                    <p><strong>Khu vực:</strong> ${order.shippingInfo.district}, ${order.shippingInfo.city}</p>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="order-detail-section mb-3">
-                            <h6 class="section-title">Thông tin thanh toán & vận chuyển</h6>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <p><strong>Phương thức thanh toán:</strong> ${order.paymentMethod}</p>
-                                </div>
-                                <div class="col-md-6">
-                                    <p><strong>Phương thức vận chuyển:</strong> ${order.shippingCarrier || 'Giao hàng tiêu chuẩn'}</p>
-                                    ${order.trackingNumber ? `<p><strong>Mã vận đơn:</strong> ${order.trackingNumber}</p>` : ''}
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="order-detail-section mb-3">
-                            <h6 class="section-title">Sản phẩm</h6>
-                            <div class="table-responsive">
-                                <table class="table">
-                                    <thead>
-                                        <tr>
-                                            <th style="width: 50%">Sản phẩm</th>
-                                            <th class="text-center">Giá</th>
-                                            <th class="text-center">Số lượng</th>
-                                            <th class="text-end">Thành tiền</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                `;
-
-                // Thêm từng sản phẩm
-                order.products.forEach(product => {
-                    content += `
-                        <tr>
-                            <td>
-                                <div class="d-flex align-items-center">
-                                    <div class="product-image me-2" style="width: 60px; height: 60px;">
-                                        <img src="${product.image}" alt="${product.title}" style="max-width: 100%; max-height: 100%;">
-                                    </div>
-                                    <div>
-                                        <div class="product-title">${product.title}</div>
-                                        <div class="text-muted small">Phiên bản: ${product.variant}</div>
-                                    </div>
-                                </div>
-                            </td>
-                            <td class="text-center">${this.formatCurrency(product.unitPrice)}</td>
-                            <td class="text-center">${product.quantity}</td>
-                            <td class="text-end">${this.formatCurrency(product.price)}</td>
-                        </tr>
-                    `;
-                });
-
-                // Tổng tiền, phí vận chuyển, giảm giá và thành tiền
-                content += `
-                                    </tbody>
-                                    <tfoot>
-                                        <tr>
-                                            <td colspan="3" class="text-end">Tạm tính:</td>
-                                            <td class="text-end">${this.formatCurrency(order.subtotal)}</td>
-                                        </tr>
-                                        <tr>
-                                            <td colspan="3" class="text-end">Phí vận chuyển:</td>
-                                            <td class="text-end">${this.formatCurrency(order.shippingFee)}</td>
-                                        </tr>
-                                        <tr>
-                                            <td colspan="3" class="text-end">Giảm giá:</td>
-                                            <td class="text-end">-${this.formatCurrency(order.discount)}</td>
-                                        </tr>
-                                        <tr>
-                                            <td colspan="3" class="text-end"><strong>Tổng cộng:</strong></td>
-                                            <td class="text-end"><strong>${this.formatCurrency(order.totalAmount)}</strong></td>
-                                        </tr>
-                                    </tfoot>
-                                </table>
-                            </div>
-                        </div>
-                `;
-
-                // Hiển thị thông tin timeline nếu có
-                if (order.timeline && order.timeline.length > 0) {
-                    content += `
-                        <div class="order-detail-section">
-                            <h6 class="section-title">Lịch sử đơn hàng</h6>
-                            <div class="timeline">
-                    `;
-
-                    // Thêm lịch sử trạng thái đơn hàng
-                    order.timeline.forEach((item, index) => {
-                        const formattedTime = new Date(item.time).toLocaleString('vi-VN');
-
-                        content += `
-                            <div class="timeline-item">
-                                <div class="timeline-icon ${item.status}">
-                                    <i class="fas ${this.getStatusIcon(item.status)}"></i>
-                                </div>
-                                <div class="timeline-content">
-                                    <div class="timeline-time">${formattedTime}</div>
-                                    <div class="timeline-title">${item.description}</div>
-                                </div>
-                            </div>
-                        `;
-
-                        // Thêm đường nối giữa các mốc thời gian, trừ mốc cuối cùng
-                        if (index < order.timeline.length - 1) {
-                            content += '<div class="timeline-line"></div>';
-                        }
-                    });
-
-                    content += `
-                            </div>
-                        </div>
-                    `;
-                }
-
-                // Nếu đơn đã hủy, hiển thị lý do hủy
-                if (order.status === 'cancelled' && order.cancelReason) {
-                    content += `
-                        <div class="alert alert-danger mt-3">
-                            <strong>Lý do hủy:</strong> ${order.cancelReason}
-                        </div>
-                    `;
-                }
-
-                content += `</div>`;
-
-                // Tạo các nút hành động cho dialog
-                const buttons = [];
-
-                // Nút đóng luôn hiển thị
-                buttons.push({
-                    text: 'Đóng',
-                    class: 'btn-secondary',
-                    dismiss: true
-                });
-
-                // Nút mua lại nếu đơn đã giao hoặc đã hủy
-                if (order.status === 'delivered' || order.status === 'cancelled') {
-                    buttons.push({
-                        text: 'Mua lại',
-                        class: 'btn-primary',
-                        id: 'btn-detail-rebuy',
-                        onClick: () => this.rebuyOrder(orderId)
-                    });
-                }
-
-                // Hiển thị dialog chi tiết đơn hàng
-                const detailDialog = new DialogComponent({
-                    title: 'Chi tiết đơn hàng',
-                    content: content,
-                    buttons: buttons,
-                    size: 'modal-lg'
-                });
-
-                detailDialog.show();
-
-                // Thêm CSS cho timeline
-                this.addTimelineStyles();
-            } else {
-                showToast(response.message, 'error');
-            }
-        } catch (error) {
-            console.error('Lỗi khi hiển thị chi tiết đơn hàng:', error);
-            showToast('Có lỗi xảy ra khi tải chi tiết đơn hàng', 'error');
-        }
-    }
-
-    /**
-     * Thêm CSS cho timeline
-     */
-    // addTimelineStyles() {
-    //     const styleId = 'timeline-styles';
-
-    //     // Kiểm tra xem đã thêm style chưa
-    //     if (!document.getElementById(styleId)) {
-    //         const style = document.createElement('style');
-    //         style.id = styleId;
-    //         style.textContent = `
-    //             .timeline {
-    //                 position: relative;
-    //                 padding: 20px 0;
-    //             }
-                
-    //             .timeline-item {
-    //                 display: flex;
-    //                 align-items: flex-start;
-    //                 position: relative;
-    //                 margin-bottom: 15px;
-    //             }
-                
-    //             .timeline-icon {
-    //                 width: 32px;
-    //                 height: 32px;
-    //                 border-radius: 50%;
-    //                 background-color: #e9ecef;
-    //                 display: flex;
-    //                 align-items: center;
-    //                 justify-content: center;
-    //                 z-index: 2;
-    //                 margin-right: 15px;
-    //             }
-                
-    //             .timeline-icon.pending, .timeline-icon.waiting_payment {
-    //                 background-color: #ffc107;
-    //                 color: #fff;
-    //             }
-                
-    //             .timeline-icon.processing {
-    //                 background-color: #0dcaf0;
-    //                 color: #fff;
-    //             }
-                
-    //             .timeline-icon.shipping {
-    //                 background-color: #0d6efd;
-    //                 color: #fff;
-    //             }
-                
-    //             .timeline-icon.delivered {
-    //                 background-color: #198754;
-    //                 color: #fff;
-    //             }
-                
-    //             .timeline-icon.cancelled, .timeline-icon.payment_failed {
-    //                 background-color: #dc3545;
-    //                 color: #fff;
-    //             }
-                
-    //             .timeline-content {
-    //                 flex: 1;
-    //             }
-                
-    //             .timeline-time {
-    //                 font-size: 12px;
-    //                 color: #6c757d;
-    //                 margin-bottom: 5px;
-    //             }
-                
-    //             .timeline-title {
-    //                 font-weight: 500;
-    //             }
-                
-    //             .timeline-line {
-    //                 position: absolute;
-    //                 left: 16px;
-    //                 height: 25px;
-    //                 width: 2px;
-    //                 background-color: #e9ecef;
-    //                 z-index: 1;
-    //             }
-                
-    //             .order-detail-section {
-    //                 margin-bottom: 20px;
-    //                 border-bottom: 1px solid #e9ecef;
-    //                 padding-bottom: 20px;
-    //             }
-                
-    //             .order-detail-section:last-child {
-    //                 border-bottom: none;
-    //                 margin-bottom: 0;
-    //                 padding-bottom: 0;
-    //             }
-                
-    //             .section-title {
-    //                 margin-bottom: 15px;
-    //                 font-weight: 600;
-    //                 color: #495057;
-    //             }
-    //         `;
-
-    //         document.head.appendChild(style);
-    //     }
-    // }
 
     /**
      * Lấy icon cho trạng thái đơn hàng

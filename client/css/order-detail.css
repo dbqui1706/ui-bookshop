@@ -44,6 +44,11 @@
     text-align: center;
     min-width: 100px;
 }
+.status-pending {
+    background-color: #fff3e0;
+    color: #ff9800;
+    border: 1px solid #ffe0b2;
+}
 
 .status-completed {
     background-color: #e8f5e9;
@@ -113,6 +118,7 @@
 }
 
 .btn-order-again {
+    margin-right: 64px;
     background-color: #0066cc;
     border: none;
     color: white;
@@ -256,6 +262,8 @@
 .order-summary {
     border-top: 1px solid #f1f1f1;
     padding-top: 16px;
+    padding-left: 16px;
+    padding-right: 64px;
 }
 
 .summary-row {
@@ -340,8 +348,8 @@
 }
 
 .timeline-item.active .timeline-dot {
-    background-color: #0066cc;
-    border-color: #0066cc;
+    background-color: #1b873f;
+    border-color: #1b873f;
 }
 
 .timeline-item.active .timeline-dot i {
@@ -396,21 +404,21 @@
     .order-header {
         flex-direction: column;
     }
-    
+
     .order-actions {
         justify-content: flex-start;
         margin-top: 20px;
     }
-    
+
     .timeline {
         flex-wrap: wrap;
     }
-    
+
     .timeline-item {
         width: 50%;
         margin-bottom: 20px;
     }
-    
+
     .timeline::before {
         display: none;
     }

@@ -1,0 +1,156 @@
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h4 class="mb-0">Gán vai trò cho người dùng</h4>
+</div>
+
+<div class="table-responsive">
+    <table id="usersTable" class="table table-striped table-hover" style="width: 100%">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Tên người dùng</th>
+                <th>Họ tên</th>
+                <th>Email</th>
+                <th>Vai trò</th>
+                <th>Thao tác</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Dữ liệu sẽ được thêm bằng JavaScript -->
+        </tbody>
+    </table>
+</div>
+
+<!-- Modal Gán Vai Trò Cho Người Dùng -->
+<div class="modal fade" id="userRolesModal" tabindex="-1" aria-labelledby="userRolesModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="userRolesModalLabel">Gán vai trò cho <span id="userName"></span></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="userRolesForm">
+                    <input type="hidden" id="userId">
+                    <div class="mb-3">
+                        <label class="form-label">Vai trò</label>
+                        <div id="rolesCheckboxes" class="row">
+                            <!-- Danh sách vai trò sẽ được thêm bằng JavaScript -->
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-primary" id="btnSaveUserRoles">Lưu</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Quyền Đặc Biệt Cho Người Dùng -->
+<div class="modal fade" id="userSpecialPermissionsModal" tabindex="-1" aria-labelledby="userSpecialPermissionsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="userSpecialPermissionsModalLabel">Quyền đặc biệt cho <span id="userNameSpecial"></span></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p class="text-muted">Quyền đặc biệt sẽ ghi đè lên quyền từ vai trò. Sử dụng tính năng này khi bạn muốn cấp hoặc từ chối các quyền cụ thể cho người dùng, bất kể vai trò của họ.</p>
+                
+                <ul class="nav nav-tabs mb-3" id="userPermissionsTabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="grant-tab" data-bs-toggle="tab" data-bs-target="#grant-pane" type="button" role="tab" aria-controls="grant-pane" aria-selected="true">
+                            <i class="bi bi-check-circle me-1"></i>Quyền được cấp
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="deny-tab" data-bs-toggle="tab" data-bs-target="#deny-pane" type="button" role="tab" aria-controls="deny-pane" aria-selected="false">
+                            <i class="bi bi-x-circle me-1"></i>Quyền bị từ chối
+                        </button>
+                    </li>
+                </ul>
+                
+                <div class="tab-content" id="userPermissionsTabContent">
+                    <div class="tab-pane fade show active" id="grant-pane" role="tabpanel" aria-labelledby="grant-tab">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h6 class="mb-0">Quyền được cấp</h6>
+                            <div>
+                                <button id="btnAddGrantPermission" class="btn btn-outline-primary btn-sm">
+                                    <i class="bi bi-plus-circle me-1"></i>Thêm quyền
+                                </button>
+                            </div>
+                        </div>
+                        <div class="table-responsive">
+                            <table id="grantPermissionsTable" class="table table-sm">
+                                <thead>
+                                    <tr>
+                                        <th>Quyền</th>
+                                        <th>Module</th>
+                                        <th>Thao tác</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Dữ liệu sẽ được thêm bằng JavaScript -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="deny-pane" role="tabpanel" aria-labelledby="deny-tab">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h6 class="mb-0">Quyền bị từ chối</h6>
+                            <div>
+                                <button id="btnAddDenyPermission" class="btn btn-outline-primary btn-sm">
+                                    <i class="bi bi-plus-circle me-1"></i>Thêm quyền
+                                </button>
+                            </div>
+                        </div>
+                        <div class="table-responsive">
+                            <table id="denyPermissionsTable" class="table table-sm">
+                                <thead>
+                                    <tr>
+                                        <th>Quyền</th>
+                                        <th>Module</th>
+                                        <th>Thao tác</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Dữ liệu sẽ được thêm bằng JavaScript -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                <button type="button" class="btn btn-primary" id="btnSaveUserSpecialPermissions">Lưu thay đổi</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Thêm Quyền Đặc Biệt -->
+<div class="modal fade" id="addSpecialPermissionModal" tabindex="-1" aria-labelledby="addSpecialPermissionModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addSpecialPermissionModalLabel">Thêm quyền đặc biệt</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label for="selectSpecialPermission" class="form-label">Chọn quyền</label>
+                    <select class="form-select" id="selectSpecialPermission">
+                        <option value="" selected disabled>-- Chọn quyền --</option>
+                        <!-- Dữ liệu sẽ được thêm bằng JavaScript -->
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-primary" id="btnConfirmAddSpecialPermission">Thêm</button>
+            </div>
+        </div>
+    </div>
+</div>
