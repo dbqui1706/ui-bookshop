@@ -1,7 +1,7 @@
 import { RolesContainer } from '../containers/permissions/RolesContainer.js';
 import { PermissionsContainer } from '../containers/permissions/PermissionsContainer.js';
-// import { RolePermissionsContainer } from './containers/permissions/RolePermissionsContainer.js';
-// import { UserRolesContainer } from './containers/permissions/UserRolesContainer.js';
+import { RolePermissionsContainer } from '../containers/permissions/RolePermissionsContainer.js';
+import { UserRolesContainer } from '../containers/permissions/UserRolesContainer.js';
 import { EventBus } from '../core/eventBus.js';
 import { showNotification } from '../core/utils.js';
 

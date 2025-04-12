@@ -19,7 +19,8 @@ export class PermissionService {
             getModules: 'api/admin/permissions/modules',
             create: 'api/admin/permissions/create',
             update: 'api/admin/permissions/update',
-            delete: 'api/admin/permissions/delete'
+            delete: 'api/admin/permissions/delete',
+            getAllRole: 'api/admin/permissions/getAll',
         };
     }
 
@@ -36,6 +37,21 @@ export class PermissionService {
             throw new Error('Không thể tải danh sách quyền');
         }
     }
+
+    /**
+     * Lấy tất cả quyền
+     * @returns {Promise<Permission[]>} - Danh sách quyền
+     */
+    async getAllPermissionsRole() {
+        try {
+            const response = await api.get(this.endpoints.getAllRole);
+            return response.map(permissionData => new Permission(permissionData));
+        } catch (error) {
+            console.error('Error fetching permissions:', error);
+            throw new Error('Không thể tải danh sách quyền');
+        }
+    }
+
 
     /**
      * Lấy quyền theo ID
@@ -87,6 +103,8 @@ export class PermissionService {
      */
     async createPermission(permission) {
         try {
+            permission.createdAt = undefined; // Không gửi trường này
+            permission.updatedAt = undefined; // Không gửi trường này
             const response = await api.post(this.endpoints.create, permission.toJSON());
             const newPermission = new Permission(response);
             

@@ -10,7 +10,6 @@ export class ApiService {
      */
     constructor(baseUrl = 'http://localhost:8080') {
         this.baseUrl = baseUrl;
-        console.log('baseUrl', baseUrl);
         this.headers = {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
@@ -34,9 +33,7 @@ export class ApiService {
             // Thêm query parameters nếu có
             if (params) {
                 const queryParams = new URLSearchParams();
-                console.log('params', params);
                 Object.keys(params).forEach(key => {
-                    console.log('key', key);
                     if (params[key] !== null && params[key] !== undefined) {
                         queryParams.append(key, params[key]);
                     }
