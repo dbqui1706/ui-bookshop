@@ -16,3 +16,4 @@ document.querySelectorAll(".dropdown-toggle").forEach((item) => {
         submenu.classList.toggle("show");
     });
 });
+

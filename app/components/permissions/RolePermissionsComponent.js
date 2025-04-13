@@ -376,7 +376,7 @@ export class RolePermissionsComponent {
     async removePermissionFromRole(permissionId) {
         try {
             // Xác nhận trước khi xóa
-            const confirmed = await showConfirmDialog(
+            const confirmed = showConfirmDialog(
                 'Xác nhận xóa',
                 'Bạn có chắc chắn muốn xóa quyền này khỏi vai trò?',
                 'Xóa',
