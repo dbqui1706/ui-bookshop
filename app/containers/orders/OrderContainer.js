@@ -1,4 +1,4 @@
-import { OrderComponent } from '../../components/orders/OrderComponent.js';
+import {  OrderComponent } from '../../components/orders/OrderComponent.js';
 import { showNotification } from '../../core/utils.js';
 
 /**
@@ -39,17 +39,7 @@ export class OrderContainer {
      */
     async loadTemplate() {
         try {
-            const templatePath = '../templates/order/order.html';
-
-            // Trong thực tế, sẽ tải template từ server
-            // const response = await fetch(templatePath);
-            // if (!response.ok) {
-            //     throw new Error(`HTTP error! status: ${response.status}`);
-            // }
-            // const html = await response.text();
-
-            // Sử dụng template có sẵn
-            this.containerElement.innerHTML = this.getTemplateHTML();
+           
         } catch (error) {
             console.error('Error loading order template:', error);
             throw error;

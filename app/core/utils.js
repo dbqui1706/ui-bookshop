@@ -73,7 +73,7 @@ export function showNotification(icon, title, text, options = {}) {
  * @param {string} confirmButtonText - Nội dung nút xác nhận
  * @param {Function} onConfirm - Hàm xử lý khi người dùng xác nhận
  */
-export function showConfirmDialog(title, text, confirmButtonText, onConfirm) {
+export function showConfirmDialog(title, text, confirmButtonText, onConfirm, html) {
     Swal.fire({
         title,
         text,

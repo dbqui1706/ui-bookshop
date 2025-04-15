@@ -1,4 +1,5 @@
 import { Order } from '../models/order.js';
+import { OrderDetail } from '../models/orderDetail.js';
 import { EventBus } from '../core/eventBus.js';
 import { api } from '../core/api.js';
 import { formatDate } from '../core/utils.js';
@@ -17,12 +18,13 @@ export class OrderService {
         
         // API endpoints
         this.endpoints = {
-            getAll: '/api/admin/orders',
-            getById: '/api/admin/orders/',
-            create: '/api/admin/orders/create',
-            update: '/api/admin/orders/update',
-            updateStatus: '/api/admin/orders/update-status',
-            delete: '/api/admin/orders/delete'
+            getAll: 'api/admin/orders',
+            getById: 'api/admin/orders/',
+            getByCode: 'api/admin/orders',
+            create: 'api/admin/orders/create',
+            update: 'api/admin/orders/update',
+            updateStatus: 'api/admin/orders/update-status',
+            delete: 'api/admin/orders/delete'
         };
         
         // Mock data cho đơn hàng
@@ -280,6 +282,21 @@ export class OrderService {
     }
 
     /**
+     * Lấy đơn hàng theo mã đơn hàng
+     * @param {string} code - Mã đơn hàng
+     * @returns {Promise<OrderDeail|null>} - Đơn hàng tìm thấy hoặc null
+     */
+    async getOrderByCode(code) {
+        try {
+            const response = await api.get(`${this.endpoints.getByCode}`, {code});
+            
+            return new OrderDetail(response);
+        } catch (error) {
+            throw new Error('Không thể tải thông tin đơn hàng');
+        }
+    }
+
+    /**
      * Tạo đơn hàng mới
      * @param {Order} order - Đối tượng đơn hàng
      * @returns {Promise<Order>} - Đơn hàng đã được tạo
@@ -368,54 +385,24 @@ export class OrderService {
      * @returns {Promise<Order>} - Đơn hàng đã được cập nhật
      */
     async updateOrderStatus(id, status, note = '') {
+        console.log('updateOrderStatus', id, status, note);
         try {
-            // Trong môi trường thực tế, sẽ gọi API
-            // const response = await api.put(this.endpoints.updateStatus, { id, status, note });
+            const response = await api.put(this.endpoints.updateStatus, 
+               { id, status, note },
+
+            );
             
-            // Sử dụng mock data
-            const index = this.mockOrders.findIndex(order => order.id === parseInt(id));
-            
-            if (index === -1) {
-                throw new Error('Không tìm thấy đơn hàng');
+            if (!response) {
+                return {
+                    success: false,
+                    message: 'Cập nhật trạng thái đơn hàng thất bại',
+                }
             }
             
-            // Lưu trữ đơn hàng cũ và trạng thái cũ
-            const oldOrder = this.mockOrders[index];
-            const oldStatus = oldOrder.status;
-            
-            // Kiểm tra xem có thể chuyển trạng thái hay không
-            if (!oldOrder.canUpdateStatus(status)) {
-                throw new Error('Không thể chuyển từ trạng thái hiện tại sang trạng thái mới');
+            return {
+                success: true,
+                message: 'Cập nhật trạng thái đơn hàng thành công',
             }
-            
-            // Cập nhật trạng thái
-            const updatedOrder = new Order({
-                ...oldOrder.toJSON(),
-                status: status,
-                updatedAt: new Date()
-            });
-            
-            // Cập nhật trạng thái thanh toán nếu cần
-            if (status === 'delivered' && oldOrder.paymentMethodId === 1) {
-                // Nếu là COD và đã giao hàng thì cập nhật trạng thái thanh toán thành 'completed'
-                updatedOrder.paymentStatus = 'completed';
-            } else if (status === 'cancelled' && oldOrder.paymentStatus === 'completed') {
-                // Nếu hủy đơn hàng và đã thanh toán thì cập nhật thành 'refunded'
-                updatedOrder.paymentStatus = 'refunded';
-            }
-            
-            // Cập nhật vào danh sách
-            this.mockOrders[index] = updatedOrder;
-            
-            // Thông báo thay đổi
-            this.eventBus.emit('order:statusUpdated', {
-                order: updatedOrder,
-                oldStatus,
-                newStatus: status,
-                note
-            });
-            
-            return updatedOrder;
         } catch (error) {
             console.error(`Error updating order status ${id}:`, error);
             throw new Error('Không thể cập nhật trạng thái đơn hàng');

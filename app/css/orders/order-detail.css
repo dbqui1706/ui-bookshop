@@ -1,0 +1,238 @@
+/* Cards */
+.card {
+    border-radius: var(--border-radius);
+    transition: all 0.3s;
+}
+
+.card-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--dark-color);
+}
+
+/* Tables */
+.table th {
+    font-weight: 600;
+    color: var(--dark-color);
+    border-top: none;
+    padding: 1rem 0.75rem;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.5px;
+}
+
+.table-light th {
+    background-color: var(--bg-light);
+}
+
+/* Product Table Styling */
+.product-table {
+    margin-bottom: 0;
+}
+
+.product-table thead {
+    background-color: #f8f9fa;
+    border-bottom: 2px solid #eaecf0;
+}
+
+.product-table thead th {
+    color: #6c757d;
+    font-weight: 600;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    border: none;
+}
+
+.product-table tbody tr {
+    transition: all 0.2s;
+}
+
+.product-table tbody tr:hover {
+    background-color: #f8f9fd;
+}
+
+.product-table tbody td {
+    padding: 1rem 0.75rem;
+    vertical-align: middle;
+    border-bottom: 1px solid #eaecf0;
+}
+
+.product-image-container {
+    width: 60px;
+    height: 80px;
+    border-radius: 6px;
+    overflow: hidden;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    background-color: #fff;
+    padding: 2px;
+    border: 1px solid #eaecf0;
+}
+
+.product-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 4px;
+}
+
+.product-info {
+    max-width: 300px;
+}
+
+.product-name {
+    font-weight: 600;
+    color: #344054;
+    margin-bottom: 4px;
+    line-height: 1.4;
+}
+
+.sku-badge {
+    background-color: #f0f2f5;
+    padding: 0.35rem 0.6rem;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    color: #5a5c69;
+    font-family: 'Courier New', monospace;
+    font-weight: 600;
+}
+
+.quantity-badge {
+    display: inline-block;
+    font-weight: 600;
+    color: #344054;
+    background-color: #f0f2f5;
+    border-radius: 20px;
+    padding: 0.35rem 0.8rem;
+    min-width: 40px;
+    text-align: center;
+}
+
+/* Forms */
+.form-control, .form-select {
+    border-radius: var(--border-radius);
+    padding: 0.5rem 0.75rem;
+    border: 1px solid #d1d3e2;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: #bac8f3;
+    box-shadow: 0 0 0 0.25rem rgba(78, 115, 223, 0.25);
+}
+
+/* Badges */
+.badge {
+    font-weight: 600;
+    font-size: 0.75rem;
+    padding: 0.35em 0.65em;
+    border-radius: 10rem;
+}
+
+/* Enhancements for order detail page */
+.table-borderless td, .table-borderless th {
+    border: none;
+}
+
+.table-responsive {
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    background-color: #fff;
+    overflow: hidden;
+}
+
+/* Timeline styling enhancement */
+.timeline {
+    position: relative;
+    padding-left: 30px;
+    margin-bottom: 30px;
+}
+
+.timeline::before {
+    content: '';
+    position: absolute;
+    left: 6px;
+    top: 0;
+    height: 100%;
+    width: 2px;
+    background-color: #e9ecef;
+}
+
+.timeline-item {
+    position: relative;
+    padding-bottom: 1.5rem;
+}
+
+.timeline-item:last-child {
+    padding-bottom: 0;
+}
+
+.timeline-marker {
+    position: absolute;
+    left: -22px;
+    top: 0;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background-color: var(--primary-color);
+    border: 2px solid #fff;
+    z-index: 1;
+}
+
+.timeline-content {
+    background-color: #fff;
+    padding: 1rem;
+    border-radius: var(--border-radius);
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+}
+
+/* Responsive media queries */
+@media (max-width: 768px) {
+    #sidebar {
+        margin-left: -250px;
+    }
+    #sidebar.active {
+        margin-left: 0;
+    }
+    #content {
+        margin-left: 0;
+    }
+    #sidebar.active + #content {
+        margin-left: 250px;
+    }
+}
+
+@media (max-width: 576px) {
+    #sidebar.active + #content {
+        margin-left: 0;
+        position: relative;
+    }
+    #sidebar.active {
+        width: 100%;
+        position: absolute;
+        z-index: 1000;
+    }
+}
+
+/* Print styles */
+@media print {
+    #sidebar, .navbar, #btnBackToOrders, #btnBackToOrdersBottom, #btnUpdateStatus, #btnPrintOrder, footer {
+        display: none !important;
+    }
+    
+    #content {
+        margin-left: 0;
+        padding: 0;
+    }
+    
+    .card {
+        box-shadow: none !important;
+        border: 1px solid #ddd;
+    }
+    
+    body {
+        font-size: 12pt;
+    }
+    
+    .table-responsive {
+        overflow: visible;
+    }
+}

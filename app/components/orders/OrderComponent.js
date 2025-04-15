@@ -172,7 +172,6 @@ export class OrderComponent {
                     render: function (data) {
                         return `
                             <div class="d-flex align-items-center">
-                                <img src="https://via.placeholder.com/36" class="rounded-circle me-2" alt="">
                                 <div>
                                     <div class="fw-medium">${data.userName}</div>
                                     <div class="small text-muted">${data.userPhone}</div>
@@ -256,20 +255,21 @@ export class OrderComponent {
                     orderable: false,
                     className: 'text-end',
                     render: function (data) {
+                        console.log(data)
                         // Nếu đơn hàng đã hoàn tất hoặc đã hủy, không hiển thị nút cập nhật
                         const updateButton = ['delivered', 'cancelled', 'refunded'].includes(data.status) ?
                             '' :
-                            `<button type="button" class="btn btn-sm btn-outline-success btn-action update-status" data-id="${data.id}" data-bs-toggle="tooltip" title="Cập nhật trạng thái">
+                            `<button type="button" class="btn btn-sm btn-outline-success btn-action update-status" data-id="${data.orderCode}" data-bs-toggle="tooltip" title="Cập nhật trạng thái">
                                 <i class="bi bi-arrow-right"></i>
                             </button>`;
 
                         return `
                             <div class="btn-group">
-                                <button type="button" class="btn btn-sm btn-outline-primary btn-action view-order" data-id="${data.id}" data-bs-toggle="tooltip" title="Xem chi tiết">
+                                <button type="button" class="btn btn-sm btn-outline-primary btn-action view-order" data-id="${data.orderCode}" data-bs-toggle="tooltip" title="Xem chi tiết">
                                     <i class="bi bi-eye"></i>
                                 </button>
                                 ${updateButton}
-                                <button type="button" class="btn btn-sm btn-outline-info btn-action print-order" data-id="${data.id}" data-bs-toggle="tooltip" title="In đơn hàng">
+                                <button type="button" class="btn btn-sm btn-outline-info btn-action print-order" data-id="${data.orderCode}" data-bs-toggle="tooltip" title="In đơn hàng">
                                     <i class="bi bi-printer"></i>
                                 </button>
                             </div>
@@ -364,7 +364,7 @@ export class OrderComponent {
             const viewButton = e.target.closest('.view-order');
             if (viewButton) {
                 const orderId = viewButton.getAttribute('data-id');
-                this.openOrderDetailModal(orderId);
+                window.location.href = `/app/public/order-detail.html?code=${orderId}`
             }
 
             const updateButton = e.target.closest('.update-status');
