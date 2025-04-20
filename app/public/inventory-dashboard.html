@@ -317,7 +317,7 @@
 
             <!-- Charts Row -->
             <div class="row mb-4">
-                <div class="col-md-8">
+                <div class="col-md-7">
                     <div class="chart-card mb-4">
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <h5 class="mb-0">Xu hướng tồn kho</h5>
@@ -333,8 +333,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-4">
-                    <div class="chart-card mb-4">
+                <div class="col-md-5">
+                    <div class="chart-card ">
                         <h5 class="mb-3">Phân bố tồn kho</h5>
                         <div>
                             <canvas id="inventoryDistributionChart" height="300"></canvas>
@@ -346,61 +346,130 @@
             <!-- Inventory Status Table -->
             <div class="row mb-4">
                 <div class="col-12">
+                    <!-- Container cho bảng tồn kho -->
                     <div class="table-container p-3">
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <h5 class="mb-0">Trạng thái tồn kho</h5>
                             <div class="d-flex gap-2">
-                                <div class="input-group">
-                                    <span class="input-group-text"><i class="bi bi-search"></i></span>
-                                    <input type="text" class="form-control" placeholder="Tìm kiếm sản phẩm..."
-                                        id="searchProduct">
-                                </div>
-                                <select class="form-select" style="width: 150px;" id="stockFilter">
-                                    <option value="all">Tất cả</option>
-                                    <option value="low">Sắp hết hàng</option>
-                                    <option value="out">Hết hàng</option>
-                                    <option value="normal">Bình thường</option>
-                                </select>
+                                <button type="button" class="btn btn-outline-primary btn-sm" id="exportInventoryBtn">
+                                    <i class="bi bi-download"></i> Xuất dữ liệu
+                                </button>
                             </div>
                         </div>
+
+                        <!-- Bộ lọc nâng cao -->
+                        <div class="card mb-3">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <span>Bộ lọc tồn kho</span>
+                                <button class="btn btn-sm btn-link" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#filterCollapse">
+                                    <i class="bi bi-funnel"></i> Hiển thị/Ẩn bộ lọc
+                                </button>
+                            </div>
+                            <div class="collapse" id="filterCollapse">
+                                <div class="card-body">
+                                    <form id="inventoryFilterForm">
+                                        <div class="row g-3">
+                                            <div class="col-md-6 col-lg-3">
+                                                <label class="form-label">Trạng thái</label>
+                                                <select class="form-select" id="stockFilter">
+                                                    <option value="">Tất cả</option>
+                                                    <option value="normal">Bình thường</option>
+                                                    <option value="low">Sắp hết hàng</option>
+                                                    <option value="out">Hết hàng</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-6 col-lg-3">
+                                                <label class="form-label">Danh mục</label>
+                                                <select class="form-select" id="categoryFilter">
+                                                    <option value="">Tất cả danh mục</option>
+                                                    <!-- Danh mục sẽ được tải động -->
+                                                </select>
+                                            </div>
+                                            <div class="col-md-6 col-lg-3">
+                                                <label class="form-label">Thời gian tồn kho</label>
+                                                <select class="form-select" id="durationFilter">
+                                                    <option value="">Tất cả</option>
+                                                    <option value="7">Trên 7 ngày</option>
+                                                    <option value="30">Trên 30 ngày</option>
+                                                    <option value="90">Trên 90 ngày</option>
+                                                    <option value="180">Trên 180 ngày</option>
+                                                    <option value="365">Trên 1 năm</option>
+                                                    <option value="custom">Tùy chỉnh...</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-6 col-lg-3" id="customDurationDiv" style="display:none;">
+                                                <label class="form-label">Số ngày tùy chỉnh</label>
+                                                <input type="number" class="form-control" id="customDuration" min="1"
+                                                    placeholder="Nhập số ngày">
+                                            </div>
+
+                                            <div class="col-md-6 col-lg-3">
+                                                <label class="form-label">Khoảng thời gian</label>
+                                                <select class="form-select" id="timeRangeFilter">
+                                                    <option value="all">Tất cả thời gian</option>
+                                                    <option value="day">Hôm nay</option>
+                                                    <option value="week">Tuần này</option>
+                                                    <option value="month">Tháng này</option>
+                                                    <option value="quarter">Quý này</option>
+                                                    <option value="custom">Tùy chỉnh...</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-6 col-lg-3" id="dateRangeDiv" style="display:none;">
+                                                <label class="form-label">Từ ngày</label>
+                                                <input type="date" class="form-control" id="startDate">
+                                            </div>
+                                            <div class="col-md-6 col-lg-3" id="dateRangeEndDiv" style="display:none;">
+                                                <label class="form-label">Đến ngày</label>
+                                                <input type="date" class="form-control" id="endDate">
+                                            </div>
+                                            <div class="col-md-6 col-lg-3">
+                                                <label class="form-label">Tìm kiếm</label>
+                                                <div class="input-group">
+                                                    <span class="input-group-text"><i class="bi bi-search"></i></span>
+                                                    <input type="text" class="form-control" placeholder="Tìm kiếm..."
+                                                        id="searchProduct">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="d-flex justify-content-end mt-3">
+                                            <button type="button" class="btn btn-outline-secondary me-2"
+                                                id="resetFilterBtn">
+                                                <i class="bi bi-x-circle"></i> Đặt lại
+                                            </button>
+                                            <button type="button" class="btn btn-primary" id="applyFilterBtn">
+                                                <i class="bi bi-funnel"></i> Áp dụng bộ lọc
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Bảng DataTable -->
                         <div class="table-responsive">
-                            <table class="table table-hover align-middle" id="inventoryTable">
+                            <table class="table table-hover align-middle" id="inventoryTable" width="100%">
                                 <thead>
                                     <tr>
                                         <th>Mã sản phẩm</th>
                                         <th>Sản phẩm</th>
-                                        <th>Danh mục</th>
                                         <th>Tồn kho</th>
                                         <th>Đã đặt</th>
                                         <th>Có thể bán</th>
-                                        <th>Ngưỡng cảnh báo</th>
-                                        <th>Cập nhật cuối</th>
+                                        <th>Ngưỡng</th>
+                                        <th>Ngày tồn kho</th>
+                                        <th>Bán lần cuối</th>
+                                        <th>Ngày cập nhập</th>
+                                        <th>Giá</th>
+                                        <th>Giá tồn</th>
                                         <th>Trạng thái</th>
                                         <th>Thao tác</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <!-- Dữ liệu sẽ được tải bằng JavaScript -->
+                                    <!-- Dữ liệu sẽ được tải bằng DataTable -->
                                 </tbody>
                             </table>
-                        </div>
-                        <div class="d-flex justify-content-between align-items-center mt-3">
-                            <div>
-                                <span>Hiển thị 1 đến 10 của 124 mục</span>
-                            </div>
-                            <nav>
-                                <ul class="pagination mb-0">
-                                    <li class="page-item disabled">
-                                        <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Trước</a>
-                                    </li>
-                                    <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                                    <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                    <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                    <li class="page-item">
-                                        <a class="page-link" href="#">Sau</a>
-                                    </li>
-                                </ul>
-                            </nav>
                         </div>
                     </div>
                 </div>
@@ -416,9 +485,9 @@
                                 <thead>
                                     <tr>
                                         <th>Mã phiếu</th>
-                                        <th>Ngày nhập</th>
                                         <th>Sản phẩm</th>
                                         <th>Số lượng</th>
+                                        <th>Ngày nhập</th>
                                         <th>Người nhập</th>
                                     </tr>
                                 </thead>
@@ -441,9 +510,9 @@
                                 <thead>
                                     <tr>
                                         <th>Mã phiếu</th>
-                                        <th>Ngày xuất</th>
                                         <th>Sản phẩm</th>
                                         <th>Số lượng</th>
+                                        <th>Ngày xuất</th>
                                         <th>Lý do</th>
                                     </tr>
                                 </thead>
@@ -484,7 +553,8 @@
 
     <!-- Custom JS -->
     <script src="../main/index.js"></script>
-    <script src="../temp/dashboard.js" type="module"></script>
+    <!-- <script src="../temp/dashboard.js" type="module"></script> -->
+    <script src="../main/inventory-dashboard.js" type="module"></script>
 </body>
 
 </html>
