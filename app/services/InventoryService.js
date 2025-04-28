@@ -24,12 +24,15 @@ export class InventoryService {
             distribution: 'api/admin/inventory/distribution',
             recentImports: 'api/admin/inventory/import-recently',
             recentExports: 'api/admin/inventory/export-recently',
-            // Thêm endpoints mới
+            // endpoints Movement, History, CategoryRatio, Summary
             inventoryMovement: 'api/admin/inventory/movement',
             inventoryHistory: 'api/admin/inventory/history',
             categoryMovementRatio: 'api/admin/inventory/category-movement-ratio',
             movementSummary: 'api/admin/inventory/movement-summary',
             topInventory: 'api/admin/inventory/top-10',
+            // endpoints nhập/xuất kho
+            transaction: 'api/admin/inventory/transaction',
+            transactionDetail: 'api/admin/inventory/receipt-detail',
         };
     }
 
@@ -232,7 +235,6 @@ export class InventoryService {
      */
     async getTopInventory() {
         try {
-            // Thử gọi API thực tế
             const response = await api.get(this.endpoints.topInventory);
             // Kiểm tra xem response có dữ liệu không
             if (!response || response.length === 0) {
@@ -242,6 +244,45 @@ export class InventoryService {
         } catch (error) {
             console.error('Error fetching top inventory:', error);
             throw new Error('Không thể tải danh sách sản phẩm tồn kho hàng đầu');
+        }
+    }
+
+    /**
+     * Thực hiện giao dịch nhập/xuất kho
+     * @param {Object} transactionData - Dữ liệu giao dịch
+     * @returns {Promise<Object>} - Kết quả giao dịch
+     */
+    async createReceipt(transactionData) {
+        try {
+            // Thử gọi API thực tế
+            const response = await api.post(this.endpoints.transaction, transactionData);
+            // Kiểm tra xem response có dữ liệu không
+            if (!response || response.length === 0) {
+                throw new Error('Không có dữ liệu giao dịch');
+            }
+            return response;
+        } catch (error) {
+            console.error('Error creating receipt:', error);
+            throw new Error('Không thể tạo giao dịch nhập/xuất kho');
+        }
+    }
+
+    /**
+     * Lấy chi tiết giao dịch nhập/xuất kho
+     * @param {string} code - Mã phiếu nhập/xuất
+     */
+    async getReceiptDetailByCode(code) {
+
+        try{
+            const response = await api.get(`${this.endpoints.transactionDetail}`, { code });
+            // Kiểm tra xem response có dữ liệu không
+            if (!response || response.length === 0) {
+                throw new Error('Không có dữ liệu giao dịch');
+            }
+            return response;
+        }catch (error) {
+            console.error('Error fetching receipt detail:', error);
+            throw new Error('Không thể tải chi tiết giao dịch nhập/xuất kho: ', code);
         }
     }
 
